@@ -7,22 +7,25 @@
     android:background="@color/grey"
     tools:context=".RegisterScreen">
 
+    <!-- Logotipo -->
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="32dp"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
+    <!-- Titulo -->
     <TextView
-        android:id="@+id/textView"
+
+        android:id="@+id/txtRegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#94BF62"
         android:text="@string/register_intro_data"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -31,128 +34,215 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-    <EditText
-        android:id="@+id/txtId"
+    <!-- Id -->
+    <com.google.android.material.textfield.TextInputLayout
+
+
+        android:id="@+id/LayoutRegisterId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
         android:ems="10"
         android:hint="@string/register_id"
-        android:inputType="textPersonName"
-        android:maxLength="10"
         android:minHeight="48dp"
+
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/txtRegisterTitle">
 
-    <EditText
-        android:id="@+id/txtName"
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- Nombre y apellidos -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
         android:ems="10"
         android:hint="@string/register_name"
-        android:inputType="textPersonName"
-        android:maxLength="40"
         android:minHeight="48dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="40"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtId" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterId">
 
-    <EditText
-        android:id="@+id/txtPassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Password -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
-        android:ems="10"
         android:hint="@string/register_password"
-        android:inputType="textPassword"
         android:minHeight="48dp"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtName" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterName"
+        app:passwordToggleEnabled="true">
 
-    <EditText
-        android:id="@+id/txtRePassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Repeticion Password -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterRePassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
-        android:ems="10"
         android:hint="@string/register_rePassword"
-        android:inputType="textPassword"
         android:minHeight="48dp"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterPassword"
+        app:passwordToggleEnabled="true">
 
-    <EditText
-        android:id="@+id/txtMail"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerRePassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Mail -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterMail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
         android:ems="10"
         android:hint="@string/register_mail"
-        android:inputType="textEmailAddress"
         android:minHeight="48dp"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRePassword" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterRePassword">
 
-    <EditText
-        android:id="@+id/txtPhone"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerMail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Telefono -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
         android:ems="10"
         android:hint="@string/register_phone"
-        android:inputType="phone"
         android:maxLength="9"
+
         android:minHeight="48dp"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMail" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterMail"
+        app:prefixText="+34">
 
-    <EditText
-        android:id="@+id/txtAddress"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerPhone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#94BF62"
+            android:inputType="phone"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Direccion -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/LayoutRegisterAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#94BF62"
         android:ems="10"
         android:hint="@string/register_address"
-        android:inputType="textPostalAddress"
         android:maxLength="70"
         android:minHeight="48dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="70"
+        app:endIconMode="clear_text"
+        app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterPhone">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/registerAddress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/green"
+            android:inputType="textPostalAddress"
+            android:textColor="@color/white"
+            android:theme="@style/MyEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Pregunta recibir informacion -->
     <TextView
         android:id="@+id/txtInfo"
         android:layout_width="wrap_content"
@@ -162,30 +252,33 @@
         android:backgroundTint="#94BF62"
         android:text="@string/register_info"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterAddress" />
 
+    <!-- Casilla Pregunta recibir informacion -->
     <CheckBox
         android:id="@+id/checkInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:backgroundTint="#94BF62"
+        android:buttonTint="@color/green"
         android:text="@string/register_check"
         app:layout_constraintBottom_toBottomOf="@+id/txtInfo"
         app:layout_constraintStart_toEndOf="@+id/txtInfo"
         app:layout_constraintTop_toTopOf="@+id/txtInfo" />
 
+    <!-- Boton guardar -->
     <Button
         android:id="@+id/btnRegisterOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/button_rounded"
         android:text="@string/register_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtInfoError" />
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Informacion -->
     <TextView
         android:id="@+id/txtInfoError"
         android:layout_width="0dp"

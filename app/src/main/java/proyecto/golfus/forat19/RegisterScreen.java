@@ -15,12 +15,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class RegisterScreen extends AppCompatActivity {
 
     private String user, password;
-    private TextView txtUser, txtPassword, txtRePassword, txtName, txtMail, txtPhone, txtAddress, txtInfoError;
+    private TextView txtUser,  txtName, txtMail, txtPhone, txtAddress, txtInfoError;
+    private TextInputEditText txtPassword,txtRePassword;
     private Button btnSave;
     private CheckBox checkInfo;
+    private Boolean visiblePassword=false;
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -33,13 +37,13 @@ public class RegisterScreen extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        txtUser = (TextView) findViewById(R.id.txtId);
-        txtPassword = (TextView) findViewById(R.id.txtPassword);
-        txtRePassword = (TextView) findViewById(R.id.txtRePassword);
-        txtName = (TextView) findViewById(R.id.txtName);
-        txtMail = (TextView) findViewById(R.id.txtMail);
-        txtPhone = (TextView) findViewById(R.id.txtPhone);
-        txtAddress = (TextView) findViewById(R.id.txtAddress);
+        txtUser = (TextView) findViewById(R.id.registerId);
+        txtPassword = (TextInputEditText) findViewById(R.id.registerPassword);
+        txtRePassword = (TextInputEditText) findViewById(R.id.registerRePassword);
+        txtName = (TextView) findViewById(R.id.registerName);
+        txtMail = (TextView) findViewById(R.id.registerMail);
+        txtPhone = (TextView) findViewById(R.id.registerPhone);
+        txtAddress = (TextView) findViewById(R.id.registerAddress);
         txtInfoError = (TextView) findViewById(R.id.txtInfoError);
 
         checkInfo = (CheckBox) findViewById(R.id.checkInfo);
@@ -53,6 +57,7 @@ public class RegisterScreen extends AppCompatActivity {
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override

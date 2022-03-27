@@ -1,24 +1,28 @@
 package proyecto.golfus.forat19;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class LoginScreen extends AppCompatActivity {
 
-    private TextView user, password;
+    private TextView user;
+    private TextInputEditText password;
+
     private Button login, register;
-    private Switch openSession;
+    private SwitchCompat openSession;
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
     SharedPreferences preferences;
@@ -30,11 +34,12 @@ public class LoginScreen extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-        user = (TextView) findViewById(R.id.txtUser);
-        password = (TextView) findViewById(R.id.txtName);
+
+        user = (TextView) findViewById(R.id.txtLoginUser);
+        password = (TextInputEditText) findViewById(R.id.txtLoginPassword);
         login = (Button) findViewById(R.id.btnLogin);
         register = (Button) findViewById(R.id.btnRegister);
-        openSession = (Switch) findViewById(R.id.openSession);
+        openSession = (SwitchCompat) findViewById(R.id.openSession);
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -71,6 +76,7 @@ public class LoginScreen extends AppCompatActivity {
                     Bundle extras = new Bundle();
                     extras.putString(EXTRA_USER, user.getText().toString());
                     extras.putString(EXTRA_PASSWORD, password.getText().toString());
+
                     intent.putExtras(extras);
                     startActivity(intent);
                 }

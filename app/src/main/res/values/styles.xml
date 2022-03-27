@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ColorSwitchStyle">
+        <item name="colorControlActivated">@color/green</item>
+    </style>
+    <!--Floating label text style-->
+    <style name="MyHintStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <!--Input field style-->
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/green</item>
+        <item name="colorControlActivated">@color/green</item>
+    </style>
+
+
+</resources>
