@@ -24,7 +24,7 @@ public class RegisterScreen extends AppCompatActivity {
     private TextInputEditText txtPassword,txtRePassword;
     private Button btnSave;
     private CheckBox checkInfo;
-    private Boolean visiblePassword=false;
+
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -72,6 +72,7 @@ public class RegisterScreen extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             createUser();
                             editor.putString("user",txtUser.getText().toString());
+                            editor.putBoolean("openSession",true);
                             editor.apply();
 
                             Intent intent = new Intent(RegisterScreen.this, PrincipalScreen.class);

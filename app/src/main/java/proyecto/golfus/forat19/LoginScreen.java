@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -44,6 +45,7 @@ public class LoginScreen extends AppCompatActivity {
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        Log.d("ERROR.LOGIN",preferences.getString("user", ""));
 
         if (checkToken()) {
             Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
@@ -54,7 +56,7 @@ public class LoginScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    if (checkTokenOnline()) {
+                    if (checkToken()) {
                         editor.putString("user", user.getText().toString());
                         editor.putBoolean("openSession", openSession.isChecked());
                         editor.apply();
@@ -90,8 +92,10 @@ public class LoginScreen extends AppCompatActivity {
 
         if (!preferences.getString("user", "").equals("") && preferences.getBoolean("openSession", false)) {
             return true;
+        }else{
+            return checkTokenOnline();
         }
-        return false;
+
     }
 
     private boolean checkTokenOnline() {

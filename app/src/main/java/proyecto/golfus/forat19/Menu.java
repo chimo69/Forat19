@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +76,14 @@ public class Menu extends Fragment {
         activeUser=preferences.getString("user","");
         editor = preferences.edit();
 
+        Log.d("ERROR", activeUser);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
 
         vista = inflater.inflate(R.layout.fragment_menu, container, false);
         txtActiveUser = (TextView) vista.findViewById(R.id.txtActiveUser);

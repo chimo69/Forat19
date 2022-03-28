@@ -106,7 +106,7 @@
         android:layout_marginEnd="32dp"
         android:hint="@string/register_password"
         android:minHeight="48dp"
-        app:endIconMode="clear_text"
+
         app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,6 @@
         android:layout_marginEnd="32dp"
         android:hint="@string/register_rePassword"
         android:minHeight="48dp"
-        app:endIconMode="clear_text"
         app:hintTextAppearance="@style/MyHintStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
