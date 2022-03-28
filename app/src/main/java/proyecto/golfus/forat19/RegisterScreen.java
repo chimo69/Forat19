@@ -22,8 +22,8 @@ import com.google.android.material.textfield.TextInputEditText;
 public class RegisterScreen extends AppCompatActivity {
 
     private String user, password;
-    private TextView txtUser,  txtName, txtMail, txtPhone, txtAddress, txtInfoError;
-    private TextInputEditText txtPassword,txtRePassword;
+    private TextView txtUser, txtName, txtMail, txtPhone, txtAddress, txtInfoError;
+    private TextInputEditText txtPassword, txtRePassword;
     private Button btnSave;
     private CheckBox checkInfo;
 
@@ -36,7 +36,7 @@ public class RegisterScreen extends AppCompatActivity {
 
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }else{
+        } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         }
@@ -80,8 +80,8 @@ public class RegisterScreen extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             createUser();
-                            editor.putString("user",txtUser.getText().toString());
-                            editor.putBoolean("openSession",true);
+                            editor.putString("user", txtUser.getText().toString());
+                            editor.putBoolean("openSession", true);
                             editor.apply();
 
                             Intent intent = new Intent(RegisterScreen.this, PrincipalScreen.class);
@@ -176,7 +176,7 @@ public class RegisterScreen extends AppCompatActivity {
 
     }
 
-    private void createUser(){
+    private void createUser() {
         User newUser = new User();
 
         newUser.setName(txtName.getText().toString());
