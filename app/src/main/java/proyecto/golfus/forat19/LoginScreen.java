@@ -1,5 +1,7 @@
 package proyecto.golfus.forat19;
 
+import static proyecto.golfus.forat19.utils.services.esTablet;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +35,12 @@ public class LoginScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (esTablet(this)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
@@ -44,8 +52,6 @@ public class LoginScreen extends AppCompatActivity {
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
-
-        Log.d("ERROR.LOGIN",preferences.getString("user", ""));
 
         if (checkToken()) {
             Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
@@ -92,7 +98,7 @@ public class LoginScreen extends AppCompatActivity {
 
         if (!preferences.getString("user", "").equals("") && preferences.getBoolean("openSession", false)) {
             return true;
-        }else{
+        } else {
             return checkTokenOnline();
         }
 

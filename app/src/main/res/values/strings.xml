@@ -4,6 +4,8 @@
     <string name="password">Password</string>
     <string name="login_user">Login</string>
     <string name="login_register">Registro</string>
+    <string name="login_openSession">Permanecer sesion abierta</string>
+    <string name="login_title">Iniciar Sesión</string>
 
     <string name="register_intro_data">Introduce datos para el registro</string>
     <string name="register_id">Id de usuario</string>
@@ -24,7 +26,7 @@
     <string name="error_mail">Error. Formato de email incorrecto.</string>
     <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
     <string name="error_address">Error. La direccion no puede exceder de 70 caracteres</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="login_openSession">Permanecer sesion abierta</string>
+    <string name="register_title">Iniciar Sesión</string>
+
+
 </resources>

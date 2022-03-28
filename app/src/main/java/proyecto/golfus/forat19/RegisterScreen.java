@@ -1,5 +1,7 @@
 package proyecto.golfus.forat19;
 
+import static proyecto.golfus.forat19.utils.services.esTablet;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +33,14 @@ public class RegisterScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        if (esTablet(this)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
         Intent intent = getIntent();
