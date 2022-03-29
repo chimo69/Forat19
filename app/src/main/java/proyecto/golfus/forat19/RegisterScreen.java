@@ -1,6 +1,6 @@
 package proyecto.golfus.forat19;
 
-import static proyecto.golfus.forat19.utils.services.esTablet;
+import static proyecto.golfus.forat19.utils.Services.esTablet;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

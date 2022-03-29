@@ -3,40 +3,32 @@ package proyecto.golfus.forat19.utils;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Comunicaciones extends AsyncTask<String,Void,Void> {
+import proyecto.golfus.forat19.Token;
+
+public class Comunicaciones extends AsyncTask<Token,Void,Void> {
 Socket s;
 PrintWriter salida;
 
 
 
     @Override
-    protected Void doInBackground(String... Voids) {
+    protected Void doInBackground(Token... Voids) {
 
-        String mensaje=Voids[0];
-        PrintWriter pw;
+        Token token=Voids[0];
+
         try {
-            Log.d ("ERROR","Enviando dato: "+mensaje);
-            Socket sk= new Socket("192.168.1.33",7000);
+            Log.d ("ERROR","Enviando dato: "+token.getUser() +" : "+token.getPassword());
 
-            pw = new PrintWriter(sk.getOutputStream());
-            pw.write(mensaje);
-            pw.flush();
-            pw.close();
+            Socket sk = new Socket("192.168.1.33", 7000);
 
-            //BufferedReader entrada = new BufferedReader(new InputStreamReader(sk.getInputStream()));
-            //PrintWriter salida = new PrintWriter(new OutputStreamWriter(sk.getOutputStream()),true);
-            //salida.println(mensaje);
-            //Log.d("ERROR","Recibiendo mensaje: "+entrada.readLine());
-
+            ObjectOutputStream ous = new ObjectOutputStream(sk.getOutputStream());
+            ous.writeObject(token);
+            ous.close();
             sk.close();
 
         } catch (IOException e) {

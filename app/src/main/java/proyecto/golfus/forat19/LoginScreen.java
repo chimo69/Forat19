@@ -1,6 +1,6 @@
 package proyecto.golfus.forat19;
 
-import static proyecto.golfus.forat19.utils.services.*;
+import static proyecto.golfus.forat19.utils.Services.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -9,23 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import proyecto.golfus.forat19.utils.Comunicaciones;
 
@@ -109,6 +100,7 @@ public class LoginScreen extends AppCompatActivity {
         if (!preferences.getString("user", "").equals("") && preferences.getBoolean("openSession", false)) {
             return true;
         } else {
+
             return checkTokenOnline();
         }
 
@@ -118,7 +110,10 @@ public class LoginScreen extends AppCompatActivity {
 
         Comunicaciones com = new Comunicaciones();
         Log.d("ERROR","Enviando datos");
-        com.execute("chimo servidor");
+
+        Token token = new Token("Chimo69","1234");
+
+        com.execute(token);
 
 
         return false; // TODO

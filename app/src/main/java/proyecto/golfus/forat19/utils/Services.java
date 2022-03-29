@@ -3,7 +3,7 @@ package proyecto.golfus.forat19.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 
-public class services {
+public class Services {
     /**
      * Comprueba si el dispositivo es una tablet
      * @param context
