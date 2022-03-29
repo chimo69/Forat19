@@ -1,6 +1,6 @@
 package proyecto.golfus.forat19;
 
-import static proyecto.golfus.forat19.utils.services.esTablet;
+import static proyecto.golfus.forat19.utils.services.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import proyecto.golfus.forat19.utils.Comunicaciones;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -35,6 +44,7 @@ public class LoginScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
@@ -44,11 +54,11 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        user = (TextView) findViewById(R.id.txtLoginUser);
-        password = (TextInputEditText) findViewById(R.id.txtLoginPassword);
-        login = (Button) findViewById(R.id.btnLogin);
-        register = (Button) findViewById(R.id.btnRegister);
-        openSession = (SwitchCompat) findViewById(R.id.openSession);
+        user = findViewById(R.id.txtLoginUser);
+        password = findViewById(R.id.txtLoginPassword);
+        login = findViewById(R.id.btnLogin);
+        register = findViewById(R.id.btnRegister);
+        openSession = findViewById(R.id.openSession);
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -104,8 +114,15 @@ public class LoginScreen extends AppCompatActivity {
 
     }
 
-    private boolean checkTokenOnline() {
+    private boolean checkTokenOnline(){
+
+        Comunicaciones com = new Comunicaciones();
+        Log.d("ERROR","Enviando datos");
+        com.execute("chimo servidor");
+
+
         return false; // TODO
+
     }
 
 

@@ -37,10 +37,10 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="20dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/logo_v2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

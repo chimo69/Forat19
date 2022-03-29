@@ -1,6 +1,9 @@
 package proyecto.golfus.forat19;
 
-public class User {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class User implements Serializable {
     String name = null;
     String id = null;
     String password = null;
