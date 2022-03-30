@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import classes.Token;
 import proyecto.golfus.forat19.utils.Comunicaciones;
 
 public class LoginScreen extends AppCompatActivity {

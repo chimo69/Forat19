@@ -3,17 +3,15 @@ package proyecto.golfus.forat19.utils;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-import proyecto.golfus.forat19.Token;
+import classes.Token;
 
 public class Comunicaciones extends AsyncTask<Token,Void,Void> {
-Socket s;
-PrintWriter salida;
-
 
 
     @Override
@@ -27,7 +25,10 @@ PrintWriter salida;
             Socket sk = new Socket("192.168.1.33", 7000);
 
             ObjectOutputStream ous = new ObjectOutputStream(sk.getOutputStream());
+            //BufferedReader entrada = new BufferedReader(new InputStreamReader(sk.getInputStream()));
+
             ous.writeObject(token);
+            //Log.d("RECIBIENDO: ",entrada.readLine());
             ous.close();
             sk.close();
 
