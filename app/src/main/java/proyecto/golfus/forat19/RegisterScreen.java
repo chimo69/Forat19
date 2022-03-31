@@ -177,7 +177,7 @@ public class RegisterScreen extends AppCompatActivity {
     }
 
     private void createUser() {
-        User newUser = new User();
+        /*User newUser = new User();
 
         newUser.setName(txtName.getText().toString());
         newUser.setId(txtUser.getText().toString());
@@ -185,6 +185,6 @@ public class RegisterScreen extends AppCompatActivity {
         newUser.setMail(txtMail.getText().toString());
         newUser.setPhone(txtPhone.getText().toString());
         newUser.setAddress(txtAddress.getText().toString());
-        newUser.setInfo(checkInfo.isChecked());
+        newUser.setInfo(checkInfo.isChecked());*/
     }
 }

@@ -73,7 +73,7 @@ public class Menu extends Fragment {
         }
 
         preferences= this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        activeUser=preferences.getString("user","");
+        activeUser=preferences.getString("activeUser","");
         editor = preferences.edit();
 
         Log.d("ERROR", activeUser);
@@ -94,7 +94,7 @@ public class Menu extends Fragment {
             public void onClick(View v) {
 
 
-           editor.putString("user","");
+           editor.putString("activeUser","");
            editor.putBoolean("openSession",false);
            editor.apply();
             Intent intent=new Intent(vista.getContext(),LoginScreen.class);

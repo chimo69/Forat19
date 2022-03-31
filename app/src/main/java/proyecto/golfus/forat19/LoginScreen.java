@@ -13,13 +13,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import classes.Token;
 import proyecto.golfus.forat19.utils.Comunicaciones;
+import Forat19.*;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -28,8 +29,12 @@ public class LoginScreen extends AppCompatActivity {
 
     private Button login, register;
     private SwitchCompat openSession;
+
+    public static ProgressBar loading;
+
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
+
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -37,12 +42,13 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // comprobamos formato del dispositivo
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
@@ -52,29 +58,40 @@ public class LoginScreen extends AppCompatActivity {
         register = findViewById(R.id.btnRegister);
         openSession = findViewById(R.id.openSession);
 
+        loading=(ProgressBar) findViewById(R.id.progressBar);
+
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+
+        // Comprobamos token en el dispositivo
         if (checkToken()) {
             Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
             startActivity(intent);
         } else {
-
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (checkToken()) {
-                        editor.putString("user", user.getText().toString());
-                        editor.putBoolean("openSession", openSession.isChecked());
-                        editor.apply();
+                    loading.setVisibility(View.VISIBLE);
 
-                        Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(LoginScreen.this, "Error: Usuario desconocido", Toast.LENGTH_SHORT).show();
+                    if (user.length()>0 && password.length()>0){
+                        // Comprobamos token en servidor
+                        if (checkTokenOnline()) {
+                            loading.setVisibility(View.GONE);
+                            editor.putString("activeUser", user.getText().toString());
+                            editor.putBoolean("openSession", openSession.isChecked());
+                            editor.apply();
+
+                            Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
+                            startActivity(intent);
+                        } else {
+
+                            Toast.makeText(LoginScreen.this, "Error: Usuario desconocido", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
-
+                    //loading.setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -100,25 +117,23 @@ public class LoginScreen extends AppCompatActivity {
 
         if (!preferences.getString("user", "").equals("") && preferences.getBoolean("openSession", false)) {
             return true;
-        } else {
-
-            return checkTokenOnline();
         }
-
+        return false;
     }
 
     private boolean checkTokenOnline(){
 
         Comunicaciones com = new Comunicaciones();
-        Log.d("ERROR","Enviando datos");
+        Log.d("ERROR", "Enviando datos");
 
-        Token token = new Token("Chimo69","1234");
+        //Forat19.Users user = new Users(1,"chimo69","Antonio Rodriguez","",1,"S",null,null,null);
 
-        com.execute(token);
+        String sendMessage=user.getText().toString()+"¬"+password.getText().toString();
+        Forat19.Message message = new Message(null,"Loggin",sendMessage,null);
 
+        Log.d("INFO:","ENVIO: "+sendMessage);
 
-        return false; // TODO
-
+        return com.checkToken(message);
     }
 
 
