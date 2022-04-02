@@ -118,8 +118,6 @@ public class LoginScreen extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     private boolean checkToken() {
