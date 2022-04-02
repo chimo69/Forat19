@@ -27,6 +27,7 @@
     <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
     <string name="error_address">Error. La direccion no puede exceder de 70 caracteres</string>
     <string name="register_title">Iniciar Sesión</string>
+    <string name="forat19_project">Forat19 es un proyecto de GolfUs</string>
 
 
 </resources>

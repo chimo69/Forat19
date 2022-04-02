@@ -9,28 +9,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.concurrent.ExecutionException;
+
 import proyecto.golfus.forat19.utils.Comunicaciones;
 import Forat19.*;
 
 public class LoginScreen extends AppCompatActivity {
 
+
+    private ImageView logo;
     private TextView user;
     private TextInputEditText password;
 
     private Button login, register;
     private SwitchCompat openSession;
 
-    public static ProgressBar loading;
+    public  static ProgressBar loading;
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
@@ -38,9 +45,10 @@ public class LoginScreen extends AppCompatActivity {
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        getSupportActionBar().hide();
 
         // comprobamos formato del dispositivo
         if (esTablet(this)) {
@@ -52,16 +60,18 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
+        logo= findViewById(R.id.loginLogo);
         user = findViewById(R.id.txtLoginUser);
         password = findViewById(R.id.txtLoginPassword);
         login = findViewById(R.id.btnLogin);
         register = findViewById(R.id.btnRegister);
         openSession = findViewById(R.id.openSession);
 
-        loading=(ProgressBar) findViewById(R.id.progressBar);
+        loading = findViewById(R.id.progressBar);
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
+
 
 
         // Comprobamos token en el dispositivo
@@ -73,12 +83,11 @@ public class LoginScreen extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    loading.setVisibility(View.VISIBLE);
+                    if (user.length() > 0 && password.length() > 0) {
 
-                    if (user.length()>0 && password.length()>0){
                         // Comprobamos token en servidor
                         if (checkTokenOnline()) {
-                            loading.setVisibility(View.GONE);
+
                             editor.putString("activeUser", user.getText().toString());
                             editor.putBoolean("openSession", openSession.isChecked());
                             editor.apply();
@@ -91,7 +100,7 @@ public class LoginScreen extends AppCompatActivity {
 
                         }
                     }
-                    //loading.setVisibility(View.INVISIBLE);
+
                 }
             });
 
@@ -121,19 +130,40 @@ public class LoginScreen extends AppCompatActivity {
         return false;
     }
 
-    private boolean checkTokenOnline(){
+    private boolean checkTokenOnline() {
 
-        Comunicaciones com = new Comunicaciones();
+        loading.setVisibility(View.VISIBLE);
+        String respuesta = "";
+        Message m = null;
+
         Log.d("ERROR", "Enviando datos");
 
         //Forat19.Users user = new Users(1,"chimo69","Antonio Rodriguez","",1,"S",null,null,null);
 
-        String sendMessage=user.getText().toString()+"¬"+password.getText().toString();
-        Forat19.Message message = new Message(null,"Loggin",sendMessage,null);
+        String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
+        Forat19.Message message = new Message(null, "Loggin", sendMessage, null);
 
-        Log.d("INFO:","ENVIO: "+sendMessage);
+        Log.d("INFO:", "ENVIO: " + sendMessage);
 
-        return com.checkToken(message);
+        Comunicaciones com = new Comunicaciones();
+
+
+            try {
+                respuesta = com.execute(message).get().getToken();
+
+                Log.d("INFO: ", respuesta);
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        Log.d("INFO: ","Fuera del assync");
+        loading.setVisibility(View.GONE);
+        if (respuesta.equals("ValidToken")) {
+            return true;
+        }
+        return false;
     }
 
 
