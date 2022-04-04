@@ -122,6 +122,7 @@ public class LoginScreen extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
         }
     }
 
@@ -135,16 +136,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private boolean checkTokenOnline() {
 
-        Message m = null;
-        Thread thread;
-        Handler handler = new Handler();
         String respuesta = "";
-        boolean resp = false;
-
-
-        Log.d("ERROR", "Enviando datos");
-
-        //Forat19.Users user = new Users(1,"chimo69","Antonio Rodriguez","",1,"S",null,null,null);
 
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
         Forat19.Message message = new Message(null, "Loggin", sendMessage, null);

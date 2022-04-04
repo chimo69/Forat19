@@ -18,8 +18,6 @@ public class Comunicaciones extends AsyncTask<Message, Integer, Message> {
     private Object input;
     private int PORT = 5050;
     private String IP = "192.168.1.33"; //PC
-    //private final String IP = "192.168.1.83"; //portatil
-
 
     @Override
     protected void onProgressUpdate(Integer... values) {
@@ -29,7 +27,6 @@ public class Comunicaciones extends AsyncTask<Message, Integer, Message> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
         Log.d("INFO: ", "Empieza assync");
     }
 
@@ -42,7 +39,6 @@ public class Comunicaciones extends AsyncTask<Message, Integer, Message> {
                 Message message = messages[0];
                 Log.d("INFO: ", "ENVIANDO COMANDO: " + message.getCommand());
 
-
                 ObjectOutputStream os = new ObjectOutputStream(sk.getOutputStream());
                 os.writeObject(message);
 
@@ -50,7 +46,6 @@ public class Comunicaciones extends AsyncTask<Message, Integer, Message> {
 
                 try {
                     input = is.readObject();
-                    Log.d("INFO: ", "RECIBIENDO: " + ((Message) input).getToken());
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -65,18 +60,14 @@ public class Comunicaciones extends AsyncTask<Message, Integer, Message> {
                 e.printStackTrace();
             }
 
-            notifyAll();
             return (Message) input;
         }
 
     }
 
-
-
     @Override
     protected void onPostExecute(Message message) {
         super.onPostExecute(message);
-        //LoginScreen.loading.setVisibility(View.GONE);
         Log.d("INFO: ", "Acaba assync");
     }
 
