@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import Forat19.*;
-import proyecto.golfus.forat19.LoginScreen;
 
 
 public class Comunicaciones extends AsyncTask<Message, Integer, Message> {

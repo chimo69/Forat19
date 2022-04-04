@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19;
+package proyecto.golfus.forat19.ui;
 
 import static proyecto.golfus.forat19.utils.Services.*;
 
@@ -9,10 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,14 +20,10 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import Forat19.*;
+import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.utils.Comunicaciones;
 
 public class LoginScreen extends AppCompatActivity {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Forat19</string>
+    <string name="user">Usuario</string>
+    <string name="password">Password</string>
+    <string name="login_user">Login</string>
+    <string name="login_register">Registro</string>
+    <string name="login_openSession">Permanecer sesión abierta</string>
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="register_intro_data">Introduce datos para el registro</string>
+    <string name="register_id">Id de usuario</string>
+    <string name="register_name">Nombre completo</string>
+    <string name="register_password">Password</string>
+    <string name="register_rePassword">Repite el Password</string>
+    <string name="register_mail">Email</string>
+    <string name="register_phone">Teléfono</string>
+    <string name="register_address">Dirección</string>
+    <string name="register_info">¿Quieres recibir información?</string>
+    <string name="register_check">Sí</string>
+    <string name="register_save">Guardar</string>
+    <string name="error_rePassword">Error. Los password no coinciden</string>
+    <string name="error_password">El password debe ser mayor de 6 caracteres y contener mayúsculas y caracteres especiales</string>
+    <string name="error_user">Error. El usuario debe tener entre 6 y 10 caracteres y comenzar con vocal</string>
+    <string name="error_name">Error. Debe introducir nombre y un apellido</string>
+    <string name="error_mail">Error. Formato de correo incorrecto</string>
+    <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
+    <string name="error_address">Error. La dirección no puede exceder de 70 caracteres</string>
+    <string name="register_title">Iniciar Sesión</string>
+    <string name="forat19_project">Forat19 es un proyecto de GolfUs</string>
+    <string name="navigation_drawer_open">Abrir</string>
+    <string name="navigation_drawer_close">Cerrar</string>
+    <string name="attention">Atención</string>
+    <string name="do_you_want_close_session">¿Seguro que quieres cerrar la sesión?</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="are_all_the_data_correct">¿Son todos los datos correctos?</string>
+</resources>

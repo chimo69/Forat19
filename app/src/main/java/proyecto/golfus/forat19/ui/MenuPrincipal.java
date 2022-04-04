@@ -1,8 +1,6 @@
-package proyecto.golfus.forat19;
+package proyecto.golfus.forat19.ui;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,8 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +19,8 @@ import android.widget.TextView;
 
 
 import com.google.android.material.navigation.NavigationView;
+
+import proyecto.golfus.forat19.R;
 
 public class MenuPrincipal extends AppCompatActivity  {
 
@@ -39,11 +37,13 @@ public class MenuPrincipal extends AppCompatActivity  {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // comprobamos el tipo de usuario para diferenciar opciones de menu
+        // 0 - Admin
+        // 1 - User
+
         switch (userType) {
             case 0:
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, true);
                 break;
-
             case 1:
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
                 break;
@@ -81,6 +81,7 @@ public class MenuPrincipal extends AppCompatActivity  {
         userMenu = view.findViewById(R.id.userMenu);
         userMenu.setText(activeUser);
 
+        // Capturamos las pulsaciones del menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -92,8 +93,6 @@ public class MenuPrincipal extends AppCompatActivity  {
                 return false;
             }
         });
-
-
     }
 
     private void setToolBar() {
@@ -108,8 +107,8 @@ public class MenuPrincipal extends AppCompatActivity  {
     private void closeSession() {
 
         AlertDialog.Builder confirmation = new AlertDialog.Builder(this);
-        confirmation.setTitle("Atención");
-        confirmation.setMessage("¿Seguro que quieres cerrar la sesión?");
+        confirmation.setTitle(R.string.attention);
+        confirmation.setMessage(R.string.do_you_want_close_session);
         confirmation.setCancelable(true);
         confirmation.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
@@ -120,21 +119,14 @@ public class MenuPrincipal extends AppCompatActivity  {
 
                 Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                 startActivity(intent);
-
-
             }
         });
-        confirmation.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
+        confirmation.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
+            public void onClick(DialogInterface dialog, int which) {}
         });
 
         confirmation.show();
-
-
 
     }
 
@@ -146,6 +138,5 @@ public class MenuPrincipal extends AppCompatActivity  {
             super.onBackPressed();
         }
     }
-
 
 }

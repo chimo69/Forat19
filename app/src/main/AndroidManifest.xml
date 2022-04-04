@@ -14,19 +14,16 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:screenOrientation="unspecified">
         <activity
-            android:name=".MenuPrincipal"
+            android:name=".ui.MenuPrincipal"
             android:exported="false" />
         <activity
-            android:name=".PrincipalScreen"
+            android:name=".ui.RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".RegisterScreen"
+            android:name=".ui.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

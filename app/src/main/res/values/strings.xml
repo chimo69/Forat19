@@ -1,35 +1,39 @@
 <resources>
-    <string name="app_name">Forat19</string>
-    <string name="user">Usuario</string>
+    <string name="app_name" translatable="false">Forat19</string>
+    <string name="user">User</string>
     <string name="password">Password</string>
     <string name="login_user">Login</string>
-    <string name="login_register">Registro</string>
-    <string name="login_openSession">Permanecer sesion abierta</string>
-    <string name="login_title">Iniciar Sesión</string>
+    <string name="login_register">Register</string>
+    <string name="login_openSession">Stay open session</string>
+    <string name="login_title">Log in</string>
 
-    <string name="register_intro_data">Introduce datos para el registro</string>
-    <string name="register_id">Id de usuario</string>
-    <string name="register_name">Nombre completo</string>
+    <string name="register_intro_data">Enter data for registration</string>
+    <string name="register_id">User ID</string>
+    <string name="register_name">Full name</string>
     <string name="register_password">Password</string>
-    <string name="register_rePassword">Repite el Password</string>
-    <string name="register_mail">Mail</string>
-    <string name="register_phone">Teléfono</string>
-    <string name="register_address">Dirección</string>
-    <string name="register_info">Quieres recibir información?</string>
-    <string name="register_check">Sí</string>
-    <string name="register_save">Guardar</string>
+    <string name="register_rePassword">Repeat the password</string>
+    <string name="register_mail">Email</string>
+    <string name="register_phone">Phone</string>
+    <string name="register_address">Address</string>
+    <string name="register_info">Do you want to receive information?</string>
+    <string name="register_check">Yes</string>
+    <string name="register_save">Save</string>
 
-    <string name="error_name">Error. Debe introducir nombre y un apellido</string>
-    <string name="error_user">Error. El usuario debe tener entre 6 y 10 caracteres y empezar con vocal</string>
-    <string name="error_password">El password debe ser mayor de 6 carácteres y contener mayúsculas, minúsculas y caracteres especiales</string>
-    <string name="error_rePassword">Error. Los password no coinciden</string>
-    <string name="error_mail">Error. Formato de email incorrecto.</string>
-    <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
-    <string name="error_address">Error. La direccion no puede exceder de 70 caracteres</string>
-    <string name="register_title">Iniciar Sesión</string>
-    <string name="forat19_project">Forat19 es un proyecto de GolfUs</string>
-    <string name="navigation_drawer_open">Abrir</string>
-    <string name="navigation_drawer_close">Cerrar</string>
+    <string name="error_name">Error. You must enter a first and last name</string>
+    <string name="error_user">Error. The user must have between 6 and 10 characters and start with a vowel</string>
+    <string name="error_password">The password must be greater than 6 characters and contain uppercase, lowercase and special characters</string>
+    <string name="error_rePassword">Error. The passwords do not match</string>
+    <string name="error_mail">Error. Wrong email format.</string>
+    <string name="error_phone">Error. The phone must have 6 digits</string>
+    <string name="error_address">Error. The address cannot exceed 70 characters</string>
+    <string name="register_title">Log in</string>
+    <string name="forat19_project">Forat19 is a GolfUs project</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="attention">Attention</string>
+    <string name="do_you_want_close_session">Are you sure you want to log out?</string>
+    <string name="Cancel">Cancel</string>
+    <string name="are_all_the_data_correct">Is all the data correct?</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19;
+package proyecto.golfus.forat19.ui;
 
 import static proyecto.golfus.forat19.utils.Services.esTablet;
 
@@ -18,6 +18,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import proyecto.golfus.forat19.R;
 
 public class RegisterScreen extends AppCompatActivity {
 
@@ -73,8 +75,8 @@ public class RegisterScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if (checkDataUser()) {
                     AlertDialog.Builder confirmation = new AlertDialog.Builder(RegisterScreen.this);
-                    confirmation.setTitle("Atención");
-                    confirmation.setMessage("¿Son todos los datos correctos?");
+                    confirmation.setTitle(R.string.attention);
+                    confirmation.setMessage(R.string.are_all_the_data_correct);
                     confirmation.setCancelable(true);
                     confirmation.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                         @Override
@@ -89,7 +91,7 @@ public class RegisterScreen extends AppCompatActivity {
                         }
                     });
 
-                    confirmation.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    confirmation.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();

@@ -1,11 +1,11 @@
-package proyecto.golfus.forat19;
+package proyecto.golfus.forat19.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import proyecto.golfus.forat19.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Intent intent = new Intent(this,LoginScreen.class);
+        Intent intent = new Intent(this, LoginScreen.class);
         startActivity(intent);
     }
 }

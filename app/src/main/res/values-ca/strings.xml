@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Forat19</string>
+    <string name="user">Usuari</string>
+    <string name="password">Password</string>
+    <string name="login_user">Login</string>
+    <string name="login_register">Registre</string>
+    <string name="are_all_the_data_correct">Són totes les dades correctes?</string>
+    <string name="Cancel">Cancel·lar</string>
+    <string name="do_you_want_close_session">Segur que vols tancar la sessió?</string>
+    <string name="attention">Atenció</string>
+    <string name="navigation_drawer_close">Tancar</string>
+    <string name="navigation_drawer_open">Obrir</string>
+    <string name="forat19_project">Forat19 és un projecte de GolfUs</string>
+    <string name="register_title">Iniciar Sessió</string>
+    <string name="error_address">Error. La adreça no pot excedir els 70 caràcters</string>
+    <string name="error_phone">Error. El telèfon ha de tenir 6 xifres</string>
+    <string name="error_mail">Error. Format de correu incorrecte</string>
+    <string name="error_rePassword">Error. Els passwords no coincideixen</string>
+    <string name="error_password">El password ha de ser més gran de 6 caràcters i contenir majúscules i caràcters especials</string>
+    <string name="error_user">Error. L\'usuari ha de tenir entre 6 i 10 caràcters i començar amb vocal</string>
+    <string name="error_name">Error. Heu d\'introduir nom i un cognom</string>
+    <string name="register_save">Desar</string>
+    <string name="register_check">Si</string>
+    <string name="register_info">Vols rebre informació?</string>
+    <string name="register_address">Adreça</string>
+    <string name="register_phone">Telèfon</string>
+    <string name="register_mail">Email</string>
+    <string name="register_rePassword">Repeteix el Password</string>
+    <string name="register_password">Password</string>
+    <string name="register_name">Nom complet</string>
+    <string name="register_id">Id d\'usuari</string>
+    <string name="register_intro_data">Introdueix dades per al registre</string>
+    <string name="login_title">Iniciar Sessió</string>
+    <string name="login_openSession">Romandre sessió oberta</string>
+</resources>
