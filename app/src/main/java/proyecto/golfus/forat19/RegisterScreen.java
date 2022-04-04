@@ -84,7 +84,7 @@ public class RegisterScreen extends AppCompatActivity {
                             editor.putBoolean("openSession", true);
                             editor.apply();
 
-                            Intent intent = new Intent(RegisterScreen.this, PrincipalScreen.class);
+                            Intent intent = new Intent(RegisterScreen.this, MenuPrincipal.class);
                             startActivity(intent);
                         }
                     });

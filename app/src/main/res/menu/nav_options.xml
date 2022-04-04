@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+android:icon="@drawable/ic_create_game"
+            android:title="Crear partido" />
+        <item
+            android:icon="@drawable/ic_start_game"
+            android:title="Iniciar partido" />
+        <item
+            android:icon="@drawable/ic_search"
+            android:title="Buscar campo" />
+
+    </group>
+
+    <group android:id="@+id/adminOption">
+
+    <item android:title="Opciones administrador">
+        <menu>
+            <item
+                android:icon="@drawable/ic_manage_users"
+                android:title="Gestión usuario" />
+            <item
+                android:icon="@drawable/ic_manage_greens"
+                android:title="Gestión campos" />
+        </menu>
+    </item>
+    </group>
+
+    <item android:title="Otras opciones">
+        <menu>
+            <item
+                android:icon="@drawable/ic_info"
+                android:title="Acerca de..." />
+            <item
+                android:icon="@drawable/ic_close_session"
+                android:title="Cerrar sesión" />
+        </menu>
+    </item>
+
+
+</menu>

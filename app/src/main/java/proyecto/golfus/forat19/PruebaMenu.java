@@ -11,16 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Menu#newInstance} factory method to
+ * Use the {@link PruebaMenu#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Menu extends Fragment {
+public class PruebaMenu extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,7 +39,7 @@ public class Menu extends Fragment {
     private String mParam1;
 
 
-    public Menu() {
+    public PruebaMenu() {
         // Required empty public constructor
     }
 
@@ -49,11 +48,11 @@ public class Menu extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.     *
-     * @return A new instance of fragment Menu.
+     * @return A new instance of fragment PruebaMenu.
      */
     // TODO: Rename and change types and number of parameters
-    public static Menu newInstance(String param1) {
-        Menu fragment = new Menu();
+    public static PruebaMenu newInstance(String param1) {
+        PruebaMenu fragment = new PruebaMenu();
         Bundle args = new Bundle();
         args.putString(ACTIVE_USER, param1);
 

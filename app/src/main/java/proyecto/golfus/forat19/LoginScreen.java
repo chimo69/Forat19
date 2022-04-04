@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,10 +23,15 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
-import proyecto.golfus.forat19.utils.Comunicaciones;
 import Forat19.*;
+import proyecto.golfus.forat19.utils.Comunicaciones;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -37,7 +43,7 @@ public class LoginScreen extends AppCompatActivity {
     private Button login, register;
     private SwitchCompat openSession;
 
-    public  static ProgressBar loading;
+    public static ProgressBar loading;
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
@@ -48,9 +54,8 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        getSupportActionBar().hide();
-
         // comprobamos formato del dispositivo
+
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
@@ -60,7 +65,7 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        logo= findViewById(R.id.loginLogo);
+        logo = findViewById(R.id.loginLogo);
         user = findViewById(R.id.txtLoginUser);
         password = findViewById(R.id.txtLoginPassword);
         login = findViewById(R.id.btnLogin);
@@ -73,10 +78,9 @@ public class LoginScreen extends AppCompatActivity {
         editor = preferences.edit();
 
 
-
         // Comprobamos token en el dispositivo
         if (checkToken()) {
-            Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
+            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
             startActivity(intent);
         } else {
             login.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +94,10 @@ public class LoginScreen extends AppCompatActivity {
 
                             editor.putString("activeUser", user.getText().toString());
                             editor.putBoolean("openSession", openSession.isChecked());
+                            editor.putInt("userType",0);
                             editor.apply();
 
-                            Intent intent = new Intent(LoginScreen.this, PrincipalScreen.class);
+                            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
                             startActivity(intent);
                         } else {
 
@@ -130,9 +135,12 @@ public class LoginScreen extends AppCompatActivity {
 
     private boolean checkTokenOnline() {
 
-        loading.setVisibility(View.VISIBLE);
-        String respuesta = "";
         Message m = null;
+        Thread thread;
+        Handler handler = new Handler();
+        String respuesta = "";
+        boolean resp = false;
+
 
         Log.d("ERROR", "Enviando datos");
 
@@ -145,22 +153,18 @@ public class LoginScreen extends AppCompatActivity {
 
         Comunicaciones com = new Comunicaciones();
 
+        try {
+            respuesta = com.execute(message).get().getToken();
+            Log.d("INFO: ", respuesta);
 
-            try {
-                respuesta = com.execute(message).get().getToken();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
-                Log.d("INFO: ", respuesta);
-
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-        Log.d("INFO: ","Fuera del assync");
-        loading.setVisibility(View.GONE);
         if (respuesta.equals("ValidToken")) {
             return true;
         }
+
         return false;
     }
 

@@ -12,6 +12,6 @@ public class Services {
     public static boolean esTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+                != Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }
