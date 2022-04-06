@@ -2,6 +2,13 @@ package proyecto.golfus.forat19.utils;
 
 import android.util.Log;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,14 +18,18 @@ import Forat19.Message;
 
 public class RequestServer {
 
+    private final int PORT = 5050;
+    private final String IP = "192.168.1.33";
+
     private Socket socket;
     private Object input;
-    private int PORT = 5050;
-    private String IP = "192.168.1.33"; //PC
     private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
     private Message message;
 
+    public Message getMessage() {
+        return message;
+    }
     public void request(Message message) {
         Thread thread = new Thread(() -> {
             initializeConnection(IP, PORT);
@@ -66,9 +77,6 @@ public class RequestServer {
         }
     }
 
-    public Message getMessage() {
-        return message;
-    }
 
     public Message retrieveData() {
         try {

@@ -34,4 +34,14 @@
     <string name="Cancel">Cancelar</string>
     <string name="are_all_the_data_correct">¿Son todos los datos correctos?</string>
     <string name="no">No</string>
+    <string name="create_game">Crear juego</string>
+    <string name="start_game">Comenzar juego</string>
+    <string name="search_green">Buscar green</string>
+    <string name="admin_options">Opciones de administrador</string>
+    <string name="user_management">Gestión de usuarios</string>
+    <string name="green_managementes">Gestión de greens</string>
+    <string name="other_options">Otras opciones</string>
+    <string name="about">Acerca de nosotros</string>
+    <string name="close_session">Cerrar sesión</string>
+    <string name="unknown_user">Error. Usuario desconocido</string>
 </resources>

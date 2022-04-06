@@ -34,4 +34,14 @@
     <string name="login_title">Iniciar Sessió</string>
     <string name="login_openSession">Romandre sessió oberta</string>
     <string name="no">No</string>
+    <string name="create_game">Crear joc</string>
+    <string name="start_game">Començar joc</string>
+    <string name="search_green">Buscar green</string>
+    <string name="admin_options">Opcions d\'administrador</string>
+    <string name="user_management">Gestió d\'usuaris</string>
+    <string name="green_managementes">Gestió de greens</string>
+    <string name="other_options">Altres opcions</string>
+    <string name="about">Sobre nosaltres</string>
+    <string name="close_session">Tancar sessió</string>
+    <string name="unknown_user">Error. Usuari desconegut</string>
 </resources>

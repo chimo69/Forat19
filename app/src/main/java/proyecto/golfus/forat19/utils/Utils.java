@@ -20,6 +20,10 @@ public class Utils {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
+    /**
+     * Oculta el teclado de la actividad recibida
+     * @param activity
+     */
     public static void hideKeyboard(@NonNull Activity activity) {
 
         View view = activity.getCurrentFocus();

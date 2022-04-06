@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import Forat19.*;
+import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -34,30 +37,22 @@ import proyecto.golfus.forat19.utils.Utils;
 public class LoginScreen extends AppCompatActivity {
 
 
-    public static final String EXTRA_USER = "user";
-    public static final String EXTRA_PASSWORD = "password";
-
     private ImageView logo;
     private TextView user;
     private TextInputEditText password;
-
     private Button login, register;
     private SwitchCompat openSession;
-
     public static ProgressBar loading;
-
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private RequestServer request;
-
-    public static Message mMessage, respuesta;
+    public static Message mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // comprobamos formato del dispositivo
-
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
@@ -79,6 +74,7 @@ public class LoginScreen extends AppCompatActivity {
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
         loading.setVisibility(View.GONE);
+        loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
         // Comprobamos token en el dispositivo
         if (checkToken()) {
@@ -105,17 +101,20 @@ public class LoginScreen extends AppCompatActivity {
                     Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
 
                     Bundle extras = new Bundle();
-                    extras.putString(EXTRA_USER, user.getText().toString());
-                    extras.putString(EXTRA_PASSWORD, password.getText().toString());
+                    extras.putString(Global.EXTRA_USER, user.getText().toString());
+                    extras.putString(Global.EXTRA_PASSWORD, password.getText().toString());
 
                     intent.putExtras(extras);
                     startActivity(intent);
                 }
             });
-
         }
     }
 
+    /**
+     * Comprueba si esta guardado el token en el movil
+     * @return
+     */
     private boolean checkToken() {
 
         if (!preferences.getString("activeUser", "").equals("") && preferences.getBoolean("openSession", false)) {
@@ -151,7 +150,7 @@ public class LoginScreen extends AppCompatActivity {
                 Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(LoginScreen.this, "Error: Usuario desconocido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginScreen.this, R.string.unknown_user, Toast.LENGTH_SHORT).show();
             }
         });
         thread.start();

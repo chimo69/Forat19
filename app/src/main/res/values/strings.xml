@@ -36,5 +36,15 @@
 
     <string name="yes">Yes</string>
     <string name="no" >No</string>
+    <string name="create_game">Create game</string>
+    <string name="start_game">Start game</string>
+    <string name="search_green">Search green</string>
+    <string name="admin_options">Admin options</string>
+    <string name="user_management">User management</string>
+    <string name="green_managementes">Green managements</string>
+    <string name="other_options">Other options</string>
+    <string name="about">About us</string>
+    <string name="close_session">Close session</string>
+    <string name="unknown_user">Error. Unknown user</string>
 
 </resources>

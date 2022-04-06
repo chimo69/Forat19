@@ -6,15 +6,15 @@
         <item
             android:checkable="true"
             android:icon="@drawable/ic_create_game"
-            android:title="Crear partido" />
+            android:title="@string/create_game" />
         <item
             android:checkable="true"
             android:icon="@drawable/ic_start_game"
-            android:title="Iniciar partido" />
+            android:title="@string/start_game" />
         <item
             android:checkable="true"
             android:icon="@drawable/ic_search"
-            android:title="Buscar campo" />
+            android:title="@string/search_green" />
 
     </group>
 
@@ -22,33 +22,33 @@
     <group
         android:id="@+id/adminOption"
         android:checkableBehavior="single">
-        <item android:title="Opciones administrador">
+        <item android:title="@string/admin_options">
             <menu>
                 <item
                     android:checkable="true"
                     android:icon="@drawable/ic_manage_users"
-                    android:title="Gestión usuario" />
+                    android:title="@string/user_management" />
                 <item
                     android:checkable="true"
                     android:icon="@drawable/ic_manage_greens"
-                    android:title="Gestión campos" />
+                    android:title="@string/green_managementes" />
             </menu>
         </item>
     </group>
 
     <group android:checkableBehavior="single">
-        <item android:title="Otras opciones">
+        <item android:title="@string/other_options">
             <menu>
                 <item
                     android:id="@+id/about"
                     android:checkable="true"
                     android:icon="@drawable/ic_info"
-                    android:title="Acerca de..." />
+                    android:title="@string/about" />
                 <item
                     android:id="@+id/closeSession"
                     android:checkable="true"
                     android:icon="@drawable/ic_close_session"
-                    android:title="Cerrar sesión" />
+                    android:title="@string/close_session" />
             </menu>
         </item>
     </group>

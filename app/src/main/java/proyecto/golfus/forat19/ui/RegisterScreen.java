@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 
 public class RegisterScreen extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class RegisterScreen extends AppCompatActivity {
 
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+
 
 
     @Override
@@ -60,8 +63,8 @@ public class RegisterScreen extends AppCompatActivity {
         checkInfo = (CheckBox) findViewById(R.id.checkInfo);
         btnSave = (Button) findViewById(R.id.btnRegisterOk);
 
-        user = extras.getString(LoginScreen.EXTRA_USER);
-        password = extras.getString(LoginScreen.EXTRA_PASSWORD);
+        user = extras.getString(Global.EXTRA_USER);
+        password = extras.getString(Global.EXTRA_PASSWORD);
 
         txtUser.setText(user);
         txtPassword.setText(password);
