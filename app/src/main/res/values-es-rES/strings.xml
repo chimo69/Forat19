@@ -16,7 +16,7 @@
     <string name="register_phone">Teléfono</string>
     <string name="register_address">Dirección</string>
     <string name="register_info">¿Quieres recibir información?</string>
-    <string name="register_check">Sí</string>
+    <string name="yes">Sí</string>
     <string name="register_save">Guardar</string>
     <string name="error_rePassword">Error. Los password no coinciden</string>
     <string name="error_password">El password debe ser mayor de 6 caracteres y contener mayúsculas y caracteres especiales</string>
@@ -33,4 +33,5 @@
     <string name="do_you_want_close_session">¿Seguro que quieres cerrar la sesión?</string>
     <string name="Cancel">Cancelar</string>
     <string name="are_all_the_data_correct">¿Son todos los datos correctos?</string>
+    <string name="no">No</string>
 </resources>

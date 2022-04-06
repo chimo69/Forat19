@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import proyecto.golfus.forat19.R;
 
@@ -89,6 +91,16 @@ public class MenuPrincipal extends AppCompatActivity  {
                     case R.id.closeSession:
                         closeSession();
                         break;
+                    case R.id.about:
+                        Snackbar.make(view, "Esto es otra prueba", Snackbar.LENGTH_LONG)
+                                .setAction("Acción", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Log.i("Snackbar", "Pulsada acción snackbar!");
+                                    }
+                                })
+                                .show();
+                        break;
                 }
                 return false;
             }
@@ -110,7 +122,7 @@ public class MenuPrincipal extends AppCompatActivity  {
         confirmation.setTitle(R.string.attention);
         confirmation.setMessage(R.string.do_you_want_close_session);
         confirmation.setCancelable(true);
-        confirmation.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        confirmation.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 editor.putString("activeUser", "");
@@ -135,7 +147,9 @@ public class MenuPrincipal extends AppCompatActivity  {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            moveTaskToBack(true);
+
         }
     }
 

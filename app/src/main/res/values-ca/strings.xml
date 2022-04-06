@@ -21,7 +21,7 @@
     <string name="error_user">Error. L\'usuari ha de tenir entre 6 i 10 caràcters i començar amb vocal</string>
     <string name="error_name">Error. Heu d\'introduir nom i un cognom</string>
     <string name="register_save">Desar</string>
-    <string name="register_check">Si</string>
+    <string name="yes">Si</string>
     <string name="register_info">Vols rebre informació?</string>
     <string name="register_address">Adreça</string>
     <string name="register_phone">Telèfon</string>
@@ -33,4 +33,5 @@
     <string name="register_intro_data">Introdueix dades per al registre</string>
     <string name="login_title">Iniciar Sessió</string>
     <string name="login_openSession">Romandre sessió oberta</string>
+    <string name="no">No</string>
 </resources>

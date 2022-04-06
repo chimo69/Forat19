@@ -16,7 +16,6 @@
     <string name="register_phone">Phone</string>
     <string name="register_address">Address</string>
     <string name="register_info">Do you want to receive information?</string>
-    <string name="register_check">Yes</string>
     <string name="register_save">Save</string>
 
     <string name="error_name">Error. You must enter a first and last name</string>
@@ -35,5 +34,7 @@
     <string name="Cancel">Cancel</string>
     <string name="are_all_the_data_correct">Is all the data correct?</string>
 
+    <string name="yes">Yes</string>
+    <string name="no" >No</string>
 
 </resources>

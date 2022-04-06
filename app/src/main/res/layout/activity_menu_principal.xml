@@ -7,6 +7,7 @@
     tools:context=".ui.MenuPrincipal"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

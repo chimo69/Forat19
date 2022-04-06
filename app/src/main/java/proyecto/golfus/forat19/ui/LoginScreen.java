@@ -1,6 +1,6 @@
 package proyecto.golfus.forat19.ui;
 
-import static proyecto.golfus.forat19.utils.Services.*;
+import static proyecto.golfus.forat19.utils.Utils.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,14 +21,21 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import Forat19.*;
 import proyecto.golfus.forat19.R;
-import proyecto.golfus.forat19.utils.Comunicaciones;
+import proyecto.golfus.forat19.utils.RequestServer;
+import proyecto.golfus.forat19.utils.Utils;
 
 public class LoginScreen extends AppCompatActivity {
 
+
+    public static final String EXTRA_USER = "user";
+    public static final String EXTRA_PASSWORD = "password";
 
     private ImageView logo;
     private TextView user;
@@ -38,11 +46,12 @@ public class LoginScreen extends AppCompatActivity {
 
     public static ProgressBar loading;
 
-    public static final String EXTRA_USER = "user";
-    public static final String EXTRA_PASSWORD = "password";
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private RequestServer request;
+
+    public static Message mMessage, respuesta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +78,7 @@ public class LoginScreen extends AppCompatActivity {
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
-
+        loading.setVisibility(View.GONE);
 
         // Comprobamos token en el dispositivo
         if (checkToken()) {
@@ -83,22 +92,10 @@ public class LoginScreen extends AppCompatActivity {
                     if (user.length() > 0 && password.length() > 0) {
 
                         // Comprobamos token en servidor
-                        if (checkTokenOnline()) {
+                        checkTokenOnline();
+                        Utils.hideKeyboard(LoginScreen.this );
 
-                            editor.putString("activeUser", user.getText().toString());
-                            editor.putBoolean("openSession", openSession.isChecked());
-                            editor.putInt("userType",0);
-                            editor.apply();
-
-                            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
-                            startActivity(intent);
-                        } else {
-
-                            Toast.makeText(LoginScreen.this, "Error: Usuario desconocido", Toast.LENGTH_SHORT).show();
-
-                        }
                     }
-
                 }
             });
 
@@ -121,37 +118,43 @@ public class LoginScreen extends AppCompatActivity {
 
     private boolean checkToken() {
 
-        if (!preferences.getString("user", "").equals("") && preferences.getBoolean("openSession", false)) {
+        if (!preferences.getString("activeUser", "").equals("") && preferences.getBoolean("openSession", false)) {
             return true;
         }
         return false;
     }
 
-    private boolean checkTokenOnline() {
-
-        String respuesta = "";
-
+    /**
+     * Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es valida
+     */
+    private void checkTokenOnline(){
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
-        Forat19.Message message = new Message(null, "Loggin", sendMessage, null);
+        mMessage = new Message(null, "Loggin", sendMessage, null);
 
-        Log.d("INFO:", "ENVIO: " + sendMessage);
+        request = new RequestServer();
+        request.request(mMessage);
 
-        Comunicaciones com = new Comunicaciones();
+        LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.VISIBLE));
 
-        try {
-            respuesta = com.execute(message).get().getToken();
-            Log.d("INFO: ", respuesta);
+        Thread thread = new Thread(() -> {
 
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+            while(request.getMessage()==null){
 
-        if (respuesta.equals("ValidToken")) {
-            return true;
-        }
+            }
+            Log.d("INFO","Token: "+request.getMessage().getToken());
+            if (request.getMessage().getToken().equals("ValidToken")) {
+                editor.putString("activeUser", user.getText().toString());
+                editor.putBoolean("openSession", openSession.isChecked());
+                editor.putInt("userType", 0);
+                editor.apply();
 
-        return false;
+                Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(LoginScreen.this, "Error: Usuario desconocido", Toast.LENGTH_SHORT).show();
+            }
+        });
+        thread.start();
     }
-
 
 }

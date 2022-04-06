@@ -260,7 +260,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:buttonTint="@color/green"
-        android:text="@string/register_check"
+        android:text="@string/yes"
         app:layout_constraintBottom_toBottomOf="@+id/txtInfo"
         app:layout_constraintStart_toEndOf="@+id/txtInfo"
         app:layout_constraintTop_toTopOf="@+id/txtInfo" />
