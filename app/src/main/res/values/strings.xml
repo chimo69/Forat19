@@ -46,5 +46,6 @@
     <string name="about">About us</string>
     <string name="close_session">Close session</string>
     <string name="unknown_user">Error. Unknown user</string>
+    <string name="Error_user_password">Invalid user or password</string>
 
 </resources>

@@ -20,16 +20,17 @@ public class RequestServer {
 
     private final int PORT = 5050;
     private final String IP = "192.168.1.33";
-
+    //private final String IP ="54.155.165.31";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
-    private Message message;
+    private Message message=null;
 
     public Message getMessage() {
         return message;
     }
+
     public void request(Message message) {
         Thread thread = new Thread(() -> {
             initializeConnection(IP, PORT);
@@ -50,7 +51,7 @@ public class RequestServer {
             Log.d("INFO", "Connect to :" + socket.getInetAddress().getHostName());
         } catch (Exception e) {
             Log.d("INFO:", "Exception on connection innitialization: " + e.getMessage());
-            System.exit(0);
+            //System.exit(0);
         }
     }
 

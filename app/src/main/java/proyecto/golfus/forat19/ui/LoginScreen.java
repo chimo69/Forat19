@@ -76,59 +76,42 @@ public class LoginScreen extends AppCompatActivity {
         loading.setVisibility(View.GONE);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
-        // Comprobamos token en el dispositivo
-        if (checkToken()) {
-            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
-            startActivity(intent);
-        } else {
-            login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    if (user.length() > 0 && password.length() > 0) {
+                if (user.length() > 0 && password.length() > 0) {
 
-                        // Comprobamos token en servidor
-                        checkTokenOnline();
-                        Utils.hideKeyboard(LoginScreen.this );
+                    // Comprobamos token en servidor
+                    checkTokenOnline();
+                    Utils.hideKeyboard(LoginScreen.this);
 
-                    }
                 }
-            });
+            }
+        });
 
-            register.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
 
-                    Bundle extras = new Bundle();
-                    extras.putString(Global.EXTRA_USER, user.getText().toString());
-                    extras.putString(Global.EXTRA_PASSWORD, password.getText().toString());
+                Bundle extras = new Bundle();
+                extras.putString(Global.EXTRA_USER, user.getText().toString());
+                extras.putString(Global.EXTRA_PASSWORD, password.getText().toString());
 
-                    intent.putExtras(extras);
-                    startActivity(intent);
-                }
-            });
-        }
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
     }
 
-    /**
-     * Comprueba si esta guardado el token en el movil
-     * @return
-     */
-    private boolean checkToken() {
-
-        if (!preferences.getString("activeUser", "").equals("") && preferences.getBoolean("openSession", false)) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es valida
      */
-    private void checkTokenOnline(){
+    private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
-        mMessage = new Message(null, "Loggin", sendMessage, null);
+        mMessage = new Message(null, "Login", sendMessage, null);
 
         request = new RequestServer();
         request.request(mMessage);
@@ -137,20 +120,42 @@ public class LoginScreen extends AppCompatActivity {
 
         Thread thread = new Thread(() -> {
 
-            while(request.getMessage()==null){
-
+            while (request.getMessage() == null) {
             }
-            Log.d("INFO","Token: "+request.getMessage().getToken());
-            if (request.getMessage().getToken().equals("ValidToken")) {
-                editor.putString("activeUser", user.getText().toString());
+
+            Log.d("INFO", "Token: " + request.getMessage().getToken());
+            Log.d("INFO", "Parametros: " + request.getMessage().getParameters());
+            Log.d("INFO", "Comando: " + request.getMessage().getCommand());
+
+            if (request.getMessage().getCommand().equals("Token")) {
+                String activeUser = ((Users) request.getMessage().getObject()).getUsername();
+                int typeUser = ((Users)request.getMessage().getObject()).getId_usertype();
+
+                Log.d("INFO", "Usuario: " + activeUser);
+                Log.d("INFO", "Tipo usuario: "+typeUser);
+
+                editor.putString("activeUser", activeUser);
                 editor.putBoolean("openSession", openSession.isChecked());
-                editor.putInt("userType", 0);
+                editor.putInt("userType", typeUser);
                 editor.apply();
 
                 Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
                 startActivity(intent);
-            } else {
-                Toast.makeText(LoginScreen.this, R.string.unknown_user, Toast.LENGTH_SHORT).show();
+
+            } else if (request.getMessage().getCommand().equals("Error")) {
+                LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
+                Log.d("INFO", "Motivo error: " + request.getMessage().getParameters());
+
+                LoginScreen.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        user.setText("");
+                        password.setText("");
+                        Toast.makeText(getApplicationContext(), R.string.Error_user_password, Toast.LENGTH_SHORT).show();
+                        user.requestFocus();
+                    }
+                });
+
             }
         });
         thread.start();
