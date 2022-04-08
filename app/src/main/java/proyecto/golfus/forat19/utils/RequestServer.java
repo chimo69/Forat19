@@ -19,6 +19,7 @@ import Forat19.Message;
 public class RequestServer {
 
     private final int PORT = 5050;
+
     private final String IP = "192.168.1.33";
     //private final String IP ="54.155.165.31";
     private Socket socket;

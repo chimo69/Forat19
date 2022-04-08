@@ -20,8 +20,14 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Forat19.Message;
+import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.utils.RequestServer;
 
 public class RegisterScreen extends AppCompatActivity {
 
@@ -33,8 +39,6 @@ public class RegisterScreen extends AppCompatActivity {
 
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +55,18 @@ public class RegisterScreen extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        txtUser = (TextView) findViewById(R.id.registerId);
-        txtPassword = (TextInputEditText) findViewById(R.id.registerPassword);
-        txtRePassword = (TextInputEditText) findViewById(R.id.registerRePassword);
-        txtName = (TextView) findViewById(R.id.registerName);
-        txtMail = (TextView) findViewById(R.id.registerMail);
-        txtPhone = (TextView) findViewById(R.id.registerPhone);
-        txtAddress = (TextView) findViewById(R.id.registerAddress);
-        txtInfoError = (TextView) findViewById(R.id.txtInfoError);
+        txtUser = findViewById(R.id.registerId);
+        txtPassword = findViewById(R.id.registerPassword);
+        txtRePassword = findViewById(R.id.registerRePassword);
+        txtName = findViewById(R.id.registerName);
+        txtMail = findViewById(R.id.registerMail);
+        txtPhone = findViewById(R.id.registerPhone);
+        txtAddress = findViewById(R.id.registerAddress);
+        txtInfoError = findViewById(R.id.txtInfoError);
 
-        checkInfo = (CheckBox) findViewById(R.id.checkInfo);
-        btnSave = (Button) findViewById(R.id.btnRegisterOk);
+
+        checkInfo = findViewById(R.id.checkInfo);
+        btnSave = findViewById(R.id.btnRegisterOk);
 
         user = extras.getString(Global.EXTRA_USER);
         password = extras.getString(Global.EXTRA_PASSWORD);
@@ -76,35 +81,14 @@ public class RegisterScreen extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkDataUser()) {
-                    AlertDialog.Builder confirmation = new AlertDialog.Builder(RegisterScreen.this);
-                    confirmation.setTitle(R.string.attention);
-                    confirmation.setMessage(R.string.are_all_the_data_correct);
-                    confirmation.setCancelable(true);
-                    confirmation.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            createUser();
-                            editor.putString("user", txtUser.getText().toString());
-                            editor.putBoolean("openSession", true);
-                            editor.apply();
 
-                            Intent intent = new Intent(RegisterScreen.this, MenuPrincipal.class);
-                            startActivity(intent);
-                        }
-                    });
-
-                    confirmation.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-
-                    confirmation.show();
-
+                if (!(txtPassword.getText().toString().equals(txtRePassword.getText().toString()))) {
+                    txtRePassword.setTextColor(Color.RED);
+                    txtRePassword.requestFocus();
+                    txtInfoError.setText(R.string.error_rePassword);
+                } else {
+                    checkDataUser();
                 }
-                ;
             }
         });
 
@@ -115,81 +99,128 @@ public class RegisterScreen extends AppCompatActivity {
      *
      * @return true / false
      */
-    private boolean checkDataUser() {
+    private void checkDataUser() {
 
-        String[] words = txtName.getText().toString().split("\\s+");
-        String patternPassword = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
-        String patternMail = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-        String patternUser = "((?i)^[a-zA-z].*).{6,10}";
+        String token = preferences.getString("Token", "");
+        int id_user = 0;
+        int id_usertype = 1;
+        String username = txtUser.getText().toString();
+        String name = txtName.getText().toString();
+        String password = txtPassword.getText().toString();
+        String active = "S";
+        String email = txtMail.getText().toString();
+        String phone = txtPhone.getText().toString();
+        String address = txtAddress.getText().toString();
 
-        //txtUser.setTextColor(Color.WHITE);
-        //txtName.setTextColor(Color.WHITE);
+
+        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        Users toCheckUser = new Users(id_user, username, name, password, id_usertype, active, email, phone, address);
+        Message message = new Message(token, "AddUser", null, toCheckUser);
+
+        RequestServer request = new RequestServer();
+        request.request(message);
+
+        Thread thread = new Thread(() -> {
+
+            while (request.getMessage() == null) {
+            }
+            Users newUser;
+
+            Log.d("INFO", "Token: " + request.getMessage().getToken());
+            Log.d("INFO", "Parametros: " + request.getMessage().getParameters());
+            Log.d("INFO", "Comando: " + request.getMessage().getCommand());
 
 
-        // campo usuario
-        if (!txtUser.getText().toString().matches(patternUser)) {
-            txtUser.setTextColor(Color.RED);
-            txtUser.requestFocus();
-            txtInfoError.setText(R.string.error_user);
-            return false;
+            if (request.getMessage().getParameters().equals("Incorrect Data")) {
 
-            // campo nombre
-        } else if (txtName.length() < 10 || txtName.length() > 40 || words.length != 2) {
-            txtName.setTextColor(Color.RED);
-            txtName.requestFocus();
-            txtInfoError.setText(R.string.error_name);
-            return false;
+                Log.d("INFO", "Nombre: " + ((Users) request.getMessage().getObject()).getName());
+                Log.d("INFO", "Correo: " + ((Users) request.getMessage().getObject()).getEmail());
 
-            // campo password
-        } else if (!txtPassword.getText().toString().matches(patternPassword)) {
-            txtPassword.setTextColor(Color.RED);
-            txtPassword.requestFocus();
-            txtInfoError.setText(R.string.error_password);
-            return false;
 
-            // campo rePassword
-        } else if (!(txtPassword.getText().toString().equals(txtRePassword.getText().toString()))) {
-            txtRePassword.setTextColor(Color.RED);
-            txtRePassword.requestFocus();
-            txtInfoError.setText(R.string.error_rePassword);
-            return false;
+                newUser = (Users) request.getMessage().getObject();
 
-            // campo email
-        } else if (!(txtMail.getText().toString().matches(patternMail))) {
-            txtMail.setTextColor(Color.RED);
-            txtMail.requestFocus();
-            txtInfoError.setText(R.string.error_mail);
-            return false;
+                RegisterScreen.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // campo usuario
 
-            // campo telefono
-        } else if (txtPhone.length() != 9) {
-            txtPhone.setTextColor(Color.RED);
-            txtPhone.requestFocus();
-            txtInfoError.setText(R.string.error_phone);
-            return false;
 
-            // campo direccion
-        } else if (txtAddress.length() > 70) {
-            txtAddress.setTextColor(Color.RED);
-            txtAddress.requestFocus();
-            txtInfoError.setText(R.string.error_address);
-            return false;
-        }
+                        List<TextView> textViewError = new ArrayList<TextView>();
+                        List<Integer> errorMessage = new ArrayList<Integer>();
 
-        txtInfoError.setText("");
-        return true;
+                        if (newUser.getUsername().equals("*")) {
+                            textViewError.add(txtUser);
+
+                            errorMessage.add(R.string.error_user);
+
+                            // campo nombre
+                        }
+                        if (newUser.getName().equals("*")) {
+                            textViewError.add(txtName);
+                            errorMessage.add(R.string.error_name);
+
+                            // campo password
+                        }
+                        if (newUser.getPassword().equals("*")) {
+                            textViewError.add(txtPassword);
+                            errorMessage.add(R.string.error_password);
+
+                            // campo email
+                        }
+                        if (newUser.getEmail().equals("*")) {
+                            textViewError.add(txtMail);
+                            errorMessage.add(R.string.error_mail);
+
+                            // campo telefono
+                        }
+                        if (newUser.getPhone().equals("*")) {
+                            textViewError.add(txtPhone);
+                            errorMessage.add(R.string.error_phone);
+
+                            // campo direccion
+                        }
+                        if (newUser.getAddress().equals("*")) {
+                            textViewError.add(txtAddress);
+                            errorMessage.add(R.string.error_address);
+
+                        }
+
+                        if (errorMessage.size() != 0) {
+                            for (int i = 0; i < textViewError.size(); i++) {
+                                textViewError.get(i).setTextColor(Color.RED);
+                                textViewError.get(i).setError(getResources().getString(errorMessage.get(i)));
+                            }
+
+                            textViewError.get(0).requestFocus();
+
+                        }
+
+                    }
+                });
+
+
+            } else {
+
+
+                String user = ((Users) request.getMessage().getObject()).getUsername();
+                int typeUser = ((Users) request.getMessage().getObject()).getId_usertype();
+                String activeToken = request.getMessage().getToken();
+
+                editor.putString(Global.PREF_ACTIVE_USER, user);
+                editor.putInt(Global.PREF_TYPE_USER, typeUser);
+                editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
+                editor.apply();
+
+                Intent intent = new Intent(RegisterScreen.this, MenuPrincipal.class);
+                startActivity(intent);
+
+            }
+        });
+        thread.start();
+
 
     }
 
-    private void createUser() {
-        /*User newUser = new User();
-
-        newUser.setName(txtName.getText().toString());
-        newUser.setId(txtUser.getText().toString());
-        newUser.setPassword(txtPassword.getText().toString());
-        newUser.setMail(txtMail.getText().toString());
-        newUser.setPhone(txtPhone.getText().toString());
-        newUser.setAddress(txtAddress.getText().toString());
-        newUser.setInfo(checkInfo.isChecked());*/
-    }
 }
