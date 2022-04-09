@@ -46,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
 
         loading.setVisibility(View.VISIBLE);
-        String token = preferences.getString("Token", "");
-        Message message = new Message(token, "ValidateToken", null, null);
+        String token = preferences.getString("activeToken", "");
+
+        Message message = new Message("1234", Global.VALIDATE_TOKEN, null, null);
 
         RequestServer request = new RequestServer();
         request.request(message);
@@ -59,33 +60,30 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void update(Observable o, Object arg) {
 
         Message request = (Message) arg;
-        String token = preferences.getString("Token", "");
 
         Log.d("INFO", "Token: " + request.getToken());
         Log.d("INFO", "Parametros: " + request.getParameters());
         Log.d("INFO", "Comando: " + request.getCommand());
 
-
-        if (request.getParameters().equals("TokenValidated")) {
+        if (request.getParameters().equals(Global.TOKEN_VALIDATED)) {
 
             Log.d("INFO", "Usuario: " + ((Users) request.getObject()).getUsername());
             Log.d("INFO", "Tipo: " + ((Users) request.getObject()).getId_usertype());
 
-            String user = ((Users) request.getObject()).getUsername();
-            int typeUser = ((Users) request.getObject()).getId_usertype();
-            String activeToken = request.getToken();
-
-            editor.putString(Global.PREF_ACTIVE_USER, user);
-            editor.putInt(Global.PREF_TYPE_USER, typeUser);
-            editor.putString(Global.PREF_ACTIVE_TOKEN, token);
+            editor.putString(Global.PREF_ACTIVE_USER, ((Users) request.getObject()).getUsername());
+            editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_usertype());
+            editor.putString(Global.PREF_ACTIVE_TOKEN, request.getToken());
             editor.apply();
 
             Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
             startActivity(intent);
 
-        } else if (request.getParameters().equals("Error")) {
+        } else if (request.getCommand().equals(Global.ERROR)) {
 
-            Log.d("INFO", "Motivo error: " + request.getParameters());
+            editor.putString(Global.PREF_ACTIVE_USER, "");
+            editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
+            editor.putString(Global.PREF_ACTIVE_TOKEN, null);
+            editor.apply();
             Intent intent = new Intent(MainActivity.this, LoginScreen.class);
             startActivity(intent);
 

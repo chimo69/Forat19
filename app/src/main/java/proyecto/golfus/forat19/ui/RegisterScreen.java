@@ -84,7 +84,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         txtAddress = findViewById(R.id.registerAddress);
         tilAddress =findViewById(R.id.LayoutRegisterAddress);
 
-        checkInfo = findViewById(R.id.checkInfo);
         btnSave = findViewById(R.id.btnRegisterOk);
 
         user = extras.getString(Global.EXTRA_USER);

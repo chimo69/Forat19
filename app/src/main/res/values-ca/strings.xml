@@ -45,4 +45,5 @@
     <string name="close_session">Tancar sessió</string>
     <string name="unknown_user">Error. Usuari desconegut</string>
     <string name="Error_user_password">Usuari o contrasenya invalids</string>
+    <string name="my_account">La meva conta</string>
 </resources>

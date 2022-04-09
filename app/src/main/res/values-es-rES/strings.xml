@@ -45,4 +45,5 @@
     <string name="close_session">Cerrar sesión</string>
     <string name="unknown_user">Error. Usuario desconocido</string>
     <string name="Error_user_password">" Usuario o password invalidos"</string>
+    <string name="my_account">Mi cuenta</string>
 </resources>

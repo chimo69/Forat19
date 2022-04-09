@@ -84,7 +84,6 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                 if (user.length() > 0 && password.length() > 0) {
 
                     // Comprobamos token en servidor
-
                     checkTokenOnline();
                     Utils.hideKeyboard(LoginScreen.this);
 
@@ -113,15 +112,13 @@ public class LoginScreen extends AppCompatActivity implements Observer {
      */
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
-        mMessage = new Message(null, "Login", sendMessage, null);
+        mMessage = new Message(null, Global.LOGIN, sendMessage, null);
 
         RequestServer request = new RequestServer();
         request.request(mMessage);
         request.addObserver(this);
 
         LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.VISIBLE));
-
-
 
     }
 
@@ -134,7 +131,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         Log.d("INFO", "Parametros: " + request.getParameters());
         Log.d("INFO", "Comando: " + request.getCommand());
 
-        if (request.getCommand().equals("Token")) {
+        if (request.getCommand().equals(Global.TOKEN)) {
             String activeUser = ((Users) request.getObject()).getUsername();
             int typeUser = ((Users)request.getObject()).getId_usertype();
 
