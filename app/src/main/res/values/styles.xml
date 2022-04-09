@@ -10,9 +10,12 @@
     </style>
 
     <!--Input field style-->
-    <style name="MyEditText" parent="Theme.AppCompat.Light">
+
+    <style name="MyEditText">
         <item name="colorControlNormal">@color/green</item>
         <item name="colorControlActivated">@color/green</item>
+        <item name="colorError">@color/white</item>
+        <item name="errorTextAppearance"></item>
     </style>
 
     <style name="GenericProgressBackground" parent="android:Theme">
@@ -27,6 +30,18 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:indeterminate">true</item>
     </style>
+
+    <style name="prefixStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+
+    </style>
+
+
+
+
+
+
 
 
 </resources>

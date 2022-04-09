@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
 
 import Forat19.*;
 import proyecto.golfus.forat19.Global;
@@ -34,7 +36,7 @@ import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements Observer {
 
 
     private ImageView logo;
@@ -46,7 +48,6 @@ public class LoginScreen extends AppCompatActivity {
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private RequestServer request;
     public static Message mMessage;
 
     @Override
@@ -83,6 +84,7 @@ public class LoginScreen extends AppCompatActivity {
                 if (user.length() > 0 && password.length() > 0) {
 
                     // Comprobamos token en servidor
+
                     checkTokenOnline();
                     Utils.hideKeyboard(LoginScreen.this);
 
@@ -113,52 +115,54 @@ public class LoginScreen extends AppCompatActivity {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
         mMessage = new Message(null, "Login", sendMessage, null);
 
-        request = new RequestServer();
+        RequestServer request = new RequestServer();
         request.request(mMessage);
+        request.addObserver(this);
 
         LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.VISIBLE));
 
-        Thread thread = new Thread(() -> {
 
-            while (request.getMessage() == null) {
-            }
 
-            Log.d("INFO", "Token: " + request.getMessage().getToken());
-            Log.d("INFO", "Parametros: " + request.getMessage().getParameters());
-            Log.d("INFO", "Comando: " + request.getMessage().getCommand());
-
-            if (request.getMessage().getCommand().equals("Token")) {
-                String activeUser = ((Users) request.getMessage().getObject()).getUsername();
-                int typeUser = ((Users)request.getMessage().getObject()).getId_usertype();
-
-                Log.d("INFO", "Usuario: " + activeUser);
-                Log.d("INFO", "Tipo usuario: "+typeUser);
-
-                editor.putString("activeUser", activeUser);
-                editor.putBoolean("openSession", openSession.isChecked());
-                editor.putInt("userType", typeUser);
-                editor.apply();
-
-                Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
-                startActivity(intent);
-
-            } else if (request.getMessage().getCommand().equals("Error")) {
-                LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
-                Log.d("INFO", "Motivo error: " + request.getMessage().getParameters());
-
-                LoginScreen.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        user.setText("");
-                        password.setText("");
-                        Toast.makeText(getApplicationContext(), R.string.Error_user_password, Toast.LENGTH_SHORT).show();
-                        user.requestFocus();
-                    }
-                });
-
-            }
-        });
-        thread.start();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+        Message request = (Message) arg;
+
+        Log.d("INFO", "Token: " + request.getToken());
+        Log.d("INFO", "Parametros: " + request.getParameters());
+        Log.d("INFO", "Comando: " + request.getCommand());
+
+        if (request.getCommand().equals("Token")) {
+            String activeUser = ((Users) request.getObject()).getUsername();
+            int typeUser = ((Users)request.getObject()).getId_usertype();
+
+            Log.d("INFO", "Usuario: " + activeUser);
+            Log.d("INFO", "Tipo usuario: "+typeUser);
+
+            editor.putString("activeUser", activeUser);
+            editor.putBoolean("openSession", openSession.isChecked());
+            editor.putInt("userType", typeUser);
+            editor.apply();
+
+            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
+            startActivity(intent);
+
+        } else if (request.getCommand().equals("Error")) {
+            LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
+            Log.d("INFO", "Motivo error: " + request.getParameters());
+
+            LoginScreen.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    user.setText("");
+                    password.setText("");
+                    Toast.makeText(getApplicationContext(), R.string.Error_user_password, Toast.LENGTH_SHORT).show();
+                    user.requestFocus();
+                }
+            });
+
+        }
+    }
 }

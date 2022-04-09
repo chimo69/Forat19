@@ -22,7 +22,7 @@ public class Utils {
 
     /**
      * Oculta el teclado de la actividad recibida
-     * @param activity
+     * @param activity Actividad donde hay que ocultar el teclado
      */
     public static void hideKeyboard(@NonNull Activity activity) {
 

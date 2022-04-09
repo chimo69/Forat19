@@ -13,10 +13,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Observable;
 
 import Forat19.Message;
 
-public class RequestServer {
+public class RequestServer extends Observable {
 
     private final int PORT = 5050;
 
@@ -38,11 +39,14 @@ public class RequestServer {
             initializeTransaction(message);
         });
         thread.start();
+
     }
 
     public void initializeTransaction(Message message) {
         send(message);
-        this.message = retrieveData();
+        //this.message = retrieveData();
+        retrieveData();
+
     }
 
 
@@ -88,6 +92,9 @@ public class RequestServer {
             if (input instanceof Message) {
                 Message returnMessage = (Message) input;
                 Log.d("INFO", "Received message: "+returnMessage.getToken());
+                this.setChanged();
+                this.notifyObservers(returnMessage);
+                this.clearChanged();
                 return returnMessage;
             } else {
                 closeConnection();
