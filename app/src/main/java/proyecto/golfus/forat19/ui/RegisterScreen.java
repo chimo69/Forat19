@@ -44,7 +44,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     private TextInputEditText txtPassword, txtRePassword;
     public static ProgressBar registerLoading;
     private Button btnSave;
-    private CheckBox checkInfo;
 
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -127,8 +126,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
      */
     private void checkDataUser() {
 
-        //RegisterScreen.registerLoading.post(() -> RegisterScreen.registerLoading.setVisibility(View.VISIBLE));
-
         String token = preferences.getString("Token", "");
         int id_user = 0;
         int id_usertype = 1;
@@ -145,12 +142,11 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         editor = preferences.edit();
 
         Users toCheckUser = new Users(id_user, username, name, password, id_usertype, active, email, phone, address);
-        Message message = new Message(token, "AddUser", null, toCheckUser);
+        Message message = new Message(null, "AddUser", null, toCheckUser);
 
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
-
 
     }
 
@@ -163,10 +159,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         Log.d("INFO", "Parametros: " + request.getParameters());
         Log.d("INFO", "Comando: " + request.getCommand());
 
-        if (request.getParameters().equals("Incorrect Data")) {
-
-            Log.d("INFO", "Nombre: " + ((Users) request.getObject()).getName());
-            Log.d("INFO", "Correo: " + ((Users) request.getObject()).getEmail());
+        if (request.getParameters().equals(Global.INCORRECT_DATA)) {
 
             Users newUser;
             newUser = (Users) request.getObject();
@@ -240,9 +233,9 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
             });
 
 
-        } else {
+        } else if (request.getParameters().equals(Global.USER_ADDED)){
 
-            String user = ((Users) request.getObject()).getUsername();
+            /*String user = ((Users) request.getObject()).getUsername();
             int typeUser = ((Users) request.getObject()).getId_usertype();
             String activeToken = request.getToken();
 
@@ -251,9 +244,22 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
             editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
             editor.apply();
 
+            Log.d("INFO",request.getParameters());*/
+
+            RegisterScreen.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(RegisterScreen.this,"Usuario registrado",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+            /**/
+
             Intent intent = new Intent(RegisterScreen.this, MenuPrincipal.class);
             startActivity(intent);
 
+        }else if (request.getCommand().equals(Global.ERROR)){
+            Log.d("INFO",request.getParameters());
         }
     }
 }

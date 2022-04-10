@@ -35,7 +35,7 @@
     <string name="are_all_the_data_correct">Is all the data correct?</string>
 
     <string name="yes">Yes</string>
-    <string name="no" >No</string>
+    <string name="no">No</string>
     <string name="create_game">Create game</string>
     <string name="start_game">Start game</string>
     <string name="search_green">Search green</string>
@@ -48,5 +48,7 @@
     <string name="unknown_user">Error. Unknown user</string>
     <string name="Error_user_password">Invalid user or password</string>
     <string name="my_account">My account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -2,41 +2,40 @@ package proyecto.golfus.forat19.ui;
 
 import static proyecto.golfus.forat19.utils.Utils.esTablet;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import Forat19.Message;
-import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.utils.RequestServer;
 
-public class MenuPrincipal extends AppCompatActivity {
+public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ProgressBar loadingMenu;
     private TextView userMenu;
     private View view;
     private int userType;
@@ -89,9 +88,10 @@ public class MenuPrincipal extends AppCompatActivity {
         setContentView(R.layout.activity_menu_principal);
         setToolBar();
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        activeUser = preferences.getString("activeUser", "");
-        userType = preferences.getInt("userType", Global.TYPE_NORMAL_USER);
-        openSession = preferences.getBoolean("openSession", false);
+        activeUser = preferences.getString(Global.PREF_ACTIVE_USER, "");
+        userType = preferences.getInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
+        openSession = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
+        loadingMenu = findViewById(R.id.loadingMenu);
 
         editor = preferences.edit();
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -101,18 +101,20 @@ public class MenuPrincipal extends AppCompatActivity {
         userMenu = view.findViewById(R.id.userMenu);
         userMenu.setText(activeUser);
 
+
         Log.d("INFO", "Usuario activo: " + activeUser);
 
         // Capturamos las pulsaciones del menu
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
+                case R.id.manageUSers:
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new MyAccount());
+                    break;
                 case R.id.closeSession:
                     closeSession();
                     break;
                 case R.id.about:
-                   /*Snackbar.make(view, "Esto es otra prueba", Snackbar.LENGTH_LONG)
-                            .setAction("Acción", view -> Log.i("Snackbar", "Pulsada acción snackbar!"))
-                            .show();*/
 
                     break;
             }
@@ -136,10 +138,7 @@ public class MenuPrincipal extends AppCompatActivity {
         confirmation.setMessage(R.string.do_you_want_close_session);
         confirmation.setCancelable(true);
         confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
-            editor.putString(Global.PREF_ACTIVE_USER, "");
-            editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
-            editor.apply();
-
+            loadingMenu.setVisibility(View.VISIBLE);
             logoutUser();
         });
         confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
@@ -165,39 +164,46 @@ public class MenuPrincipal extends AppCompatActivity {
 
     private void logoutUser() {
 
-        String token = preferences.getString("Token", "");
-        Message message = new Message(token, "Logout", null, null);
+        String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        Message message = new Message(token, Global.LOGOUT, null, null);
 
         RequestServer request = new RequestServer();
         request.request(message);
-
-        Thread thread = new Thread(() -> {
-
-            while (request.getMessage() == null) {
-
-            }
-
-            Log.d("INFO", "Token: " + request.getMessage().getToken());
-            Log.d("INFO", "Parametros: " + request.getMessage().getParameters());
-            Log.d("INFO", "Comando: " + request.getMessage().getCommand());
-
-
-            if (request.getMessage().getParameters().equals("User logged out")) {
-
-                editor.putString(Global.PREF_ACTIVE_USER, "");
-                editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
-                editor.apply();
-
-                Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
-                startActivity(intent);
-
-            } else if (request.getMessage().getParameters().equals("Error")) {
-
-            }
-        });
-        thread.start();
-
+        request.addObserver(this);
 
     }
 
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        Message request = (Message) arg;
+
+        Log.d("INFO", "Token: " + request.getToken());
+        Log.d("INFO", "Parametros: " + request.getParameters());
+        Log.d("INFO", "Comando: " + request.getCommand());
+
+        String command = request.getCommand();
+
+        switch (command) {
+            case Global.LOGOUT:
+                if (request.getParameters().equals(Global.USER_LOGED_OUT)) {
+
+                    editor.putString(Global.PREF_ACTIVE_USER, "");
+                    editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
+                    editor.putString(Global.PREF_ACTIVE_TOKEN,null);
+                    editor.apply();
+                    Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
+                    startActivity(intent);
+                }else{
+                    Log.d("INFO",request.getParameters());
+                }
+                break;
+
+        }
+
+    }
 }

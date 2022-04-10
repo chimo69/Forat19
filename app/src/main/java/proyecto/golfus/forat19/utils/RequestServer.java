@@ -21,8 +21,8 @@ public class RequestServer extends Observable {
 
     private final int PORT = 5050;
 
-    private final String IP = "192.168.1.33";
-    //private final String IP ="54.155.165.31";
+    //private final String IP = "192.168.1.33";
+    private final String IP ="54.75.134.119";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;

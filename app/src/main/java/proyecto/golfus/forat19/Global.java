@@ -28,6 +28,6 @@ public class Global {
     public static final String TOKEN_VALIDATED="Token validated";
     public static final String USER_UPDATED="User updated";
     public static final String TOKEN = "Token";
-
-
+    public static final String LOGOUT_ERROR = "Login out failed, please try to login again";
+    public static final String USER_LOGED_OUT = "User logged out";
 }

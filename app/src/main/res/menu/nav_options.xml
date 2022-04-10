@@ -41,6 +41,7 @@
         <item android:title="@string/other_options">
             <menu>
                 <item
+                    android:id="@+id/manageUSers"
                     android:checkable="true"
                     android:icon="@drawable/ic_manage_users"
                     android:title="@string/my_account" />

@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
 
         loading.setVisibility(View.VISIBLE);
-        String token = preferences.getString("activeToken", "");
+        String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message message = new Message("1234", Global.VALIDATE_TOKEN, null, null);
+        Message message = new Message(token, Global.VALIDATE_TOKEN, null, null);
 
         RequestServer request = new RequestServer();
         request.request(message);

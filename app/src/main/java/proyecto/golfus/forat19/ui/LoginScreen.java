@@ -134,19 +134,21 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         if (request.getCommand().equals(Global.TOKEN)) {
             String activeUser = ((Users) request.getObject()).getUsername();
             int typeUser = ((Users)request.getObject()).getId_usertype();
+            String activeToken = request.getToken();
 
             Log.d("INFO", "Usuario: " + activeUser);
             Log.d("INFO", "Tipo usuario: "+typeUser);
 
-            editor.putString("activeUser", activeUser);
-            editor.putBoolean("openSession", openSession.isChecked());
-            editor.putInt("userType", typeUser);
+            editor.putString(Global.PREF_ACTIVE_USER, activeUser);
+            editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
+            editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
+            editor.putInt(Global.PREF_TYPE_USER, typeUser);
             editor.apply();
 
             Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
             startActivity(intent);
 
-        } else if (request.getCommand().equals("Error")) {
+        } else if (request.getCommand().equals(Global.ERROR)) {
             LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
             Log.d("INFO", "Motivo error: " + request.getParameters());
 
