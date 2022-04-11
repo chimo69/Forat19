@@ -22,16 +22,11 @@ public class RequestServer extends Observable {
     private final int PORT = 5050;
 
     //private final String IP = "192.168.1.33";
-    private final String IP ="54.75.134.119";
+    private final String IP ="63.33.201.101";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
-    private Message message=null;
-
-    public Message getMessage() {
-        return message;
-    }
 
     public void request(Message message) {
         Thread thread = new Thread(() -> {

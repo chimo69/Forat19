@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,19 +21,19 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.*;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * Pantalla de Login
+ */
 public class LoginScreen extends AppCompatActivity implements Observer {
 
 
@@ -69,7 +67,6 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         login = findViewById(R.id.btnLogin);
         register = findViewById(R.id.btnRegister);
         openSession = findViewById(R.id.openSession);
-
         loading = findViewById(R.id.progressBar);
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
@@ -77,6 +74,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         loading.setVisibility(View.GONE);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
+        // Boton ok Login
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,9 +86,11 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                     Utils.hideKeyboard(LoginScreen.this);
 
                 }
+
             }
         });
 
+        // Boton registrar
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +112,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
      */
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
+
         mMessage = new Message(null, Global.LOGIN, sendMessage, null);
 
         RequestServer request = new RequestServer();
@@ -122,8 +123,15 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
     }
 
+    /**
+     * Permanece a la espera de que las variables cambien
+     * @param o la clase observada
+     * @param arg objeto obserbado
+     */
     @Override
     public void update(Observable o, Object arg) {
+
+        if (arg instanceof Reply){ Log.d("INFO", "Answer: "+ ((Reply) arg).getCommand());}
 
         Message request = (Message) arg;
 
@@ -135,6 +143,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
             String activeUser = ((Users) request.getObject()).getUsername();
             int typeUser = ((Users)request.getObject()).getId_usertype();
             String activeToken = request.getToken();
+            int activeID = ((Users) request.getObject()).getId_user();
 
             Log.d("INFO", "Usuario: " + activeUser);
             Log.d("INFO", "Tipo usuario: "+typeUser);
@@ -143,6 +152,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
             editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
             editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
             editor.putInt(Global.PREF_TYPE_USER, typeUser);
+            editor.putInt(Global.PREF_ACTIVE_ID,activeID);
             editor.apply();
 
             Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);

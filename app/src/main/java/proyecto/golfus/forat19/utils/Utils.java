@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class Utils {
     /**
@@ -32,6 +35,17 @@ public class Utils {
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
+    public static void showToast(Activity activity, String text,int i){
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(activity,text,i).show();
+            }
+        });
+    }
+
+
 }
 
 

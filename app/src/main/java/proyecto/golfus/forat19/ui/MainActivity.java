@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             editor.putString(Global.PREF_ACTIVE_USER, ((Users) request.getObject()).getUsername());
             editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_usertype());
             editor.putString(Global.PREF_ACTIVE_TOKEN, request.getToken());
+            editor.putInt(Global.PREF_ACTIVE_ID,((Users) request.getObject()).getId_user());
             editor.apply();
 
             Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             editor.putString(Global.PREF_ACTIVE_USER, "");
             editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
             editor.putString(Global.PREF_ACTIVE_TOKEN, null);
+            editor.putInt(Global.PREF_ACTIVE_ID,0);
             editor.apply();
             Intent intent = new Intent(MainActivity.this, LoginScreen.class);
             startActivity(intent);

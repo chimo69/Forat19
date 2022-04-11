@@ -161,12 +161,16 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         }
     }
 
-
+    /**
+     * Hace el logout del usuario activo
+     * Mensaje = (token, Logout, null, null)
+     */
     private void logoutUser() {
 
-        String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        Message message = new Message(token, Global.LOGOUT, null, null);
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
+        Message message = new Message(activeToken, Global.LOGOUT, null, null);
+        Log.d("INFO","Enviando token: "+activeToken);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -177,6 +181,12 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
 
+    /**
+     * Permanece a la espera de que las variables cambien
+     *
+     * @param o   la clase observada
+     * @param arg objeto obserbado
+     */
     @Override
     public void update(Observable o, Object arg) {
 
@@ -192,10 +202,11 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
             case Global.LOGOUT:
                 if (request.getParameters().equals(Global.USER_LOGED_OUT)) {
 
-                    editor.putString(Global.PREF_ACTIVE_USER, "");
+                    editor.putString(Global.PREF_ACTIVE_USER, null);
                     editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
                     editor.putString(Global.PREF_ACTIVE_TOKEN,null);
                     editor.apply();
+
                     Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                     startActivity(intent);
                 }else{

@@ -155,6 +155,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
         Message request = (Message) arg;
 
+
         Log.d("INFO", "Token: " + request.getToken());
         Log.d("INFO", "Parametros: " + request.getParameters());
         Log.d("INFO", "Comando: " + request.getCommand());
@@ -172,6 +173,10 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                     List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
                     List<TextView> textViewList = new ArrayList<TextView>();
                     List<Integer> errorMessage = new ArrayList<Integer>();
+
+                    textInputLayoutsError.clear();
+                    textViewList.clear();
+                    errorMessage.clear();
 
                     if (newUser.getUsername().equals("*")) {
                         textInputLayoutsError.add(tilUser);
@@ -235,27 +240,29 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
         } else if (request.getParameters().equals(Global.USER_ADDED)){
 
-            /*String user = ((Users) request.getObject()).getUsername();
+            String user = ((Users) request.getObject()).getUsername();
             int typeUser = ((Users) request.getObject()).getId_usertype();
             String activeToken = request.getToken();
+            int activeID = ((Users) request.getObject()).getId_user();
 
             editor.putString(Global.PREF_ACTIVE_USER, user);
+            editor.putInt(Global.PREF_ACTIVE_ID,activeID);
             editor.putInt(Global.PREF_TYPE_USER, typeUser);
             editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
             editor.apply();
 
-            Log.d("INFO",request.getParameters());*/
+            Log.d("INFO",request.getParameters());
 
-            RegisterScreen.this.runOnUiThread(new Runnable() {
+            /*RegisterScreen.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast toast = Toast.makeText(RegisterScreen.this,"Usuario registrado",Toast.LENGTH_LONG);
                     toast.show();
                 }
-            });
-            /**/
+            });*/
+            Utils.showToast(this,"Usuario registrado",Toast.LENGTH_SHORT);
 
-            Intent intent = new Intent(RegisterScreen.this, MenuPrincipal.class);
+            Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
             startActivity(intent);
 
         }else if (request.getCommand().equals(Global.ERROR)){

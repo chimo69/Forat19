@@ -11,6 +11,7 @@ public class Global {
     public static final String PREF_OPEN_KEEP_SESSION_OPEN="keepSessionOpen";
     public static final String PREF_TYPE_USER="typeUser";
     public static final String PREF_ACTIVE_TOKEN="activeToken";
+    public static final String PREF_ACTIVE_ID = "activeID";
 
     // Codigos para enviar
     public static final String LOGIN="Login";
@@ -19,6 +20,7 @@ public class Global {
     public static final String ADD_USER="AddUser";
     public static final String UPDATE_USER="UpdateUser";
     public static final String DELETE_USER="DeleteUser";
+    public static final String GET_USER = "GetUser";
 
     // Codigo recibidos
     public static final String ERROR="Error";
@@ -30,4 +32,6 @@ public class Global {
     public static final String TOKEN = "Token";
     public static final String LOGOUT_ERROR = "Login out failed, please try to login again";
     public static final String USER_LOGED_OUT = "User logged out";
+    public static final String USER_GETTED = "User getted";
+
 }
