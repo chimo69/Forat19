@@ -1,22 +1,28 @@
 package proyecto.golfus.forat19.utils;
 
-import java.util.Observable;
 
 public class Reply {
-    String command;
-    String parameters;
+    Boolean timeOut;
+    int typeError;
 
-    public String getCommand() {
-        return command;
+    public int getTypeError() {
+        return typeError;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public void setTypeError(int typeError) {
+        this.typeError = typeError;
     }
 
-    public Reply(String command, String parameters) {
-    this.command=command;
-    this.parameters=parameters;
+    public Boolean getTimeOut() {
+        return timeOut;
+    }
 
+    public void setTimeOut(Boolean timeOut) {
+        this.timeOut = timeOut;
+    }
+
+    public Reply(Boolean timeOut, int typeError) {
+        this.timeOut = timeOut;
+        this.typeError = typeError;
     }
 }

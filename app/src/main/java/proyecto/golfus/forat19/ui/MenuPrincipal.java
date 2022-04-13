@@ -29,13 +29,15 @@ import java.util.Observer;
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
+import proyecto.golfus.forat19.utils.Utils;
 
 public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ProgressBar loadingMenu;
+    private static ProgressBar loadingMenu;
     private TextView userMenu;
     private View view;
     private int userType;
@@ -101,13 +103,21 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         userMenu = view.findViewById(R.id.userMenu);
         userMenu.setText(activeUser);
 
-
-        Log.d("INFO", "Usuario activo: " + activeUser);
-
         // Capturamos las pulsaciones del menu
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
+
+                case R.id.createGame:
+                    break;
+                case R.id.startGame:
+                    break;
+                case R.id.searchGreen:
+                    break;
                 case R.id.manageUSers:
+                    break;
+                case R.id.manageGreens:
+                    break;
+                case R.id.myAccount:
                     drawerLayout.closeDrawer(GravityCompat.START);
                     loadFragment(new MyAccount());
                     break;
@@ -131,6 +141,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     }
 
+    /**
+     * muestra mensaje emergente de consulta
+     */
     private void closeSession() {
 
         AlertDialog.Builder confirmation = new AlertDialog.Builder(this);
@@ -153,24 +166,25 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            if (openSession) {
+            moveTaskToBack(true);
+            /*if (openSession) {
                 moveTaskToBack(true);
             } else {
                 closeSession();
-            }
+            }*/
         }
     }
 
     /**
      * Hace el logout del usuario activo
-     * Mensaje = (token, Logout, null, null)
+     * Mensaje = (token+device, Logout, null, null)
      */
     private void logoutUser() {
 
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message message = new Message(activeToken, Global.LOGOUT, null, null);
-        Log.d("INFO","Enviando token: "+activeToken);
+        Message message = new Message(activeToken+"¬"+Utils.getDevice(this), Global.LOGOUT, null, null);
+        Log.d("INFO", "Enviando token: " + activeToken);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -185,34 +199,40 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      * Permanece a la espera de que las variables cambien
      *
      * @param o   la clase observada
-     * @param arg objeto obserbado
+     * @param arg objeto observado
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        Message request = (Message) arg;
+        if (arg instanceof Reply){
+            MenuPrincipal.loadingMenu.post(() -> MenuPrincipal.loadingMenu.setVisibility(View.INVISIBLE));
 
-        Log.d("INFO", "Token: " + request.getToken());
-        Log.d("INFO", "Parametros: " + request.getParameters());
-        Log.d("INFO", "Comando: " + request.getCommand());
+        } else if (arg instanceof Message){
+            Message request = (Message) arg;
 
-        String command = request.getCommand();
+            Log.d("INFO", "Token: " + request.getToken());
+            Log.d("INFO", "Parametros: " + request.getParameters());
+            Log.d("INFO", "Comando: " + request.getCommand());
 
-        switch (command) {
-            case Global.LOGOUT:
-                if (request.getParameters().equals(Global.USER_LOGED_OUT)) {
+            String command = request.getCommand();
 
-                    editor.putString(Global.PREF_ACTIVE_USER, null);
-                    editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
-                    editor.putString(Global.PREF_ACTIVE_TOKEN,null);
-                    editor.apply();
+            switch (command) {
+                case Global.LOGOUT:
+                    if (request.getParameters().equals(Global.OK)) {
 
-                    Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
-                    startActivity(intent);
-                }else{
-                    Log.d("INFO",request.getParameters());
-                }
-                break;
+                        editor.putString(Global.PREF_ACTIVE_USER, null);
+                        editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
+                        editor.putString(Global.PREF_ACTIVE_TOKEN, null);
+                        editor.apply();
+
+                        Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
+                        startActivity(intent);
+                    } else {
+                        Log.d("INFO", request.getParameters());
+                    }
+                    break;
+
+            }
 
         }
 

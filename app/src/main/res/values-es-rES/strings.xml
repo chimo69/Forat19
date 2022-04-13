@@ -46,4 +46,12 @@
     <string name="unknown_user">Error. Usuario desconocido</string>
     <string name="Error_user_password">" Usuario o password invalidos"</string>
     <string name="my_account">Mi cuenta</string>
+    <string name="user_successfully_registered">Usuario registrado con éxito</string>
+    <string name="it_was_impossible_to_make_connection">Ha sido imposible realizar la conexión</string>
+    <string name="Update">Actualizar</string>
+    <string name="delete_account">Eliminar cuenta</string>
+    <string name="Full_name">Nombre completo</string>
+    <string name="Email">Correo electrónico</string>
+    <string name="Phone_number">Teléfono</string>
+    <string name="Address">Dirección</string>
 </resources>

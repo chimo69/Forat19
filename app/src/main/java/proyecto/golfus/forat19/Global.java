@@ -1,12 +1,16 @@
 package proyecto.golfus.forat19;
 
 public class Global {
+    public static final int TIME_OUT_LIMIT=3000;
+
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
 
+    // Tipos de usuarios
     public static final int TYPE_ADMIN_USER = 0;
     public static final int TYPE_NORMAL_USER = 1;
 
+    // Preferences
     public static final String PREF_ACTIVE_USER="activeUser";
     public static final String PREF_OPEN_KEEP_SESSION_OPEN="keepSessionOpen";
     public static final String PREF_TYPE_USER="typeUser";
@@ -23,6 +27,7 @@ public class Global {
     public static final String GET_USER = "GetUser";
 
     // Codigo recibidos
+    public static final String OK = "Ok";
     public static final String ERROR="Error";
     public static final String USER_ADDED="User Added";
     public static final String INCORRECT_DATA="Incorrect Data";
@@ -33,5 +38,7 @@ public class Global {
     public static final String LOGOUT_ERROR = "Login out failed, please try to login again";
     public static final String USER_LOGED_OUT = "User logged out";
     public static final String USER_GETTED = "User getted";
+    public static final String USER_DELETED = "User deleted";
+
 
 }

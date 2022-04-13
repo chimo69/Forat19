@@ -46,4 +46,12 @@
     <string name="unknown_user">Error. Usuari desconegut</string>
     <string name="Error_user_password">Usuari o contrasenya invalids</string>
     <string name="my_account">La meva conta</string>
+    <string name="user_successfully_registered">Usuari registrat amb èxit</string>
+    <string name="it_was_impossible_to_make_connection">Ha estat impossible fer la connexió</string>
+    <string name="Update">Actualitzar</string>
+    <string name="delete_account">Eliminar compte</string>
+    <string name="Full_name">Nom complet</string>
+    <string name="Email">Correu electrónic</string>
+    <string name="Phone_number">Telèfon</string>
+    <string name="Address">Direcció</string>
 </resources>

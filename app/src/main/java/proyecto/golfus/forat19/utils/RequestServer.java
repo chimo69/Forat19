@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 
@@ -16,42 +17,70 @@ import java.net.Socket;
 import java.util.Observable;
 
 import Forat19.Message;
+import proyecto.golfus.forat19.Global;
+import proyecto.golfus.forat19.R;
 
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
 
     //private final String IP = "192.168.1.33";
-    private final String IP ="63.33.201.101";
+    private final String IP = "52.214.32.91";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
+    private Boolean connectionOK = true;
 
+
+    /**
+     * Recibe un objeto Message, inicia la conexión y la transacción
+     *
+     * @param message
+     */
     public void request(Message message) {
         Thread thread = new Thread(() -> {
             initializeConnection(IP, PORT);
             initializeTransaction(message);
         });
         thread.start();
-
     }
 
+    /**
+     * Envia el objeto Message al servidor y recibe una respuesta
+     *
+     * @param message
+     */
     public void initializeTransaction(Message message) {
-        send(message);
-        //this.message = retrieveData();
-        retrieveData();
+        if (connectionOK) {
+            send(message);
+        }
+        if (connectionOK) {
+            retrieveData();
+        }
 
     }
 
-
+    /**
+     * Inicia la conexión
+     *
+     * @param ip
+     * @param port
+     */
     public void initializeConnection(String ip, int port) {
         try {
-            socket = new Socket(ip, port);
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(ip, port), Global.TIME_OUT_LIMIT);
             Log.d("INFO", "Connect to :" + socket.getInetAddress().getHostName());
+            connectionOK = true;
         } catch (Exception e) {
             Log.d("INFO:", "Exception on connection innitialization: " + e.getMessage());
-            //System.exit(0);
+            Reply reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+            connectionOK = false;
+            this.setChanged();
+            this.notifyObservers(reply);
+            this.clearChanged();
+
         }
     }
 
@@ -74,11 +103,14 @@ public class RequestServer extends Observable {
         } catch (IOException e) {
             Log.d("INFO", "IOException on closeConnection()");
         } finally {
-            System.exit(0);
+
         }
     }
 
 
+    /**
+     * Recoge del servidor un obeto Message y lo registra en el observador
+     */
     public Message retrieveData() {
         try {
             Log.d("INFO", "Receiving message");
@@ -86,7 +118,7 @@ public class RequestServer extends Observable {
             input = in.readObject();
             if (input instanceof Message) {
                 Message returnMessage = (Message) input;
-                Log.d("INFO", "Received message: "+returnMessage.getToken());
+                Log.d("INFO", "Received message: " + returnMessage.getToken());
                 this.setChanged();
                 this.notifyObservers(returnMessage);
                 this.clearChanged();

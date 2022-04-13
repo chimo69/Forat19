@@ -3,6 +3,7 @@ package proyecto.golfus.forat19.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ public class MyAccount extends Fragment implements Observer {
     private View view;
     private Button btnDelete;
     private SharedPreferences preferences;
+    private static ProgressBar loading;
     Message request;
     Users user;
 
@@ -79,6 +83,8 @@ public class MyAccount extends Fragment implements Observer {
         }
 
 
+
+
     }
 
     @Override
@@ -86,7 +92,8 @@ public class MyAccount extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //super.onCreateView(inflater,container, savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_my_account, container, false);
+        //view = inflater.inflate(R.layout.fragment_my_account, container, false);
+        view = inflater.inflate(R.layout.micuenta, container, false);
         txtUserInfo = view.findViewById(R.id.txtUserInfo);
         txtMailInfo = view.findViewById(R.id.txtMailInfo);
         txtPhoneInfo = view.findViewById(R.id.txtPhoneInfo);
@@ -94,6 +101,7 @@ public class MyAccount extends Fragment implements Observer {
         txtNameInfo = view.findViewById(R.id.txtNameInfo);
         preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         btnDelete = view.findViewById(R.id.btn_delete);
+        loading = view.findViewById(R.id.loading_myAccount);
 
         // Boton de borrado de cuenta
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -104,16 +112,13 @@ public class MyAccount extends Fragment implements Observer {
                 confirmation.setMessage("¿Seguro que quieres eliminar la cuenta?");
                 confirmation.setCancelable(true);
                 confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
-                    //loadingMenu.setVisibility(View.VISIBLE);
-                    //    logoutUser();
-                deleteUser();
+
+                    deleteUser();
                 });
                 confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
                 });
 
                 confirmation.show();
-
-
             }
         });
 
@@ -129,8 +134,7 @@ public class MyAccount extends Fragment implements Observer {
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message mMessage = new Message(activeToken, Global.GET_USER, Integer.toString(activeID), null);
-        Log.d("INFO", "Enviando token: " + activeToken);
+        Message mMessage = new Message(activeToken+"¬"+Utils.getDevice(requireContext()), Global.GET_USER, Integer.toString(activeID), null);
 
         RequestServer request = new RequestServer();
         request.request(mMessage);
@@ -160,44 +164,52 @@ public class MyAccount extends Fragment implements Observer {
     public void update(Observable o, Object arg) {
 
         request = (Message) arg;
-        String parameter = request.getParameters();
-        user= (Users) request.getObject();
+        String command = request.getCommand();
+        user = (Users) request.getObject();
 
-        Log.d("INFO", "Parametro recibido:" + parameter);
+        Log.d("INFO", "Token recibido: " + request.getToken());
+        Log.d("INFO", "Parametros recibido: " + request.getParameters());
+        Log.d("INFO", "Comando recibido: " + request.getCommand());
 
-        switch (parameter) {
-            case Global.USER_GETTED:
-                if (request.getParameters().equals(Global.USER_GETTED)) {
+        if (arg instanceof Message){
+            switch (command) {
+                case Global.GET_USER:
+                    if (request.getParameters().equals(Global.OK)) {
 
-                    Log.d("INFO", "USER:" + ((Users) request.getObject()).getUsername());
-                    Log.d("INFO", "MAIL: " + ((Users) request.getObject()).getEmail());
 
-                    changeText();
-                }
-                break;
-            case Global.USER_UPDATED:
-                if (request.getParameters().equals(Global.USER_UPDATED)) {
-                    // TODO mostrar resultado
-                    Log.d("INFO", request.getParameters());
-                } else if (request.getCommand().equals(Global.ERROR)) {
-                    Log.d("INFO", request.getParameters());
-                }
+                        Log.d("INFO", "USER:" + ((Users) request.getObject()).getUsername());
+                        Log.d("INFO", "MAIL: " + ((Users) request.getObject()).getEmail());
 
-                break;
+                        changeText();
+                    }
+                    break;
+                case Global.UPDATE_USER:
+                    if (request.getParameters().equals(Global.USER_UPDATED)) {
+                        // TODO mostrar resultado
+                        Log.d("INFO", request.getParameters());
+                    } else if (request.getCommand().equals(Global.ERROR)) {
+                        Log.d("INFO", request.getParameters());
+                    }
+                    break;
 
-            case Global.DELETE_USER:
-                if (request.getParameters().equals(Global.USER_UPDATED)){
-                    Utils.showToast(getActivity(),"Cuenta eliminada con éxito",Toast.LENGTH_LONG);
-                    Intent intent = new Intent(getActivity(),LoginScreen.class);
-                    startActivity(intent);
-                }else{
-                    Utils.showToast(getActivity(),"Ha sido imposible eliminar la cuenta",Toast.LENGTH_SHORT);
-                    Log.d("INFO","Imposible eliminar");
-                }
+                case Global.DELETE_USER:
+                    if (request.getParameters().equals(Global.USER_DELETED)) {
+                        Utils.showToast(getActivity(), "Cuenta eliminada con éxito", Toast.LENGTH_LONG);
+                        Intent intent = new Intent(getActivity(), LoginScreen.class);
+                        startActivity(intent);
+                    } else {
+                        Utils.showToast(getActivity(), "Ha sido imposible eliminar la cuenta", Toast.LENGTH_SHORT);
+                        Log.d("INFO", "Imposible eliminar");
+                    }
+            }
+
         }
 
     }
 
+    /**
+     * Cambia el texto del usuario con los datos obtenidos
+     */
     public void changeText() {
 
         getActivity().runOnUiThread(new Runnable() {
@@ -209,15 +221,17 @@ public class MyAccount extends Fragment implements Observer {
                 String email = ((Users) request.getObject()).getEmail();
                 String name = ((Users) request.getObject()).getName();
                 String address = (((Users) request.getObject()).getAddress());
-                if (email==null) {
+                if (email == null) {
                     email = "-";
                 }
-                if (address==null) {
+                if (address == null) {
                     address = "-";
                 }
-                if (phone==null){
-                    phone="-";
+                if (phone == null) {
+                    phone = "-";
                 }
+
+                MyAccount.loading.post(() -> MyAccount.loading.setVisibility(View.INVISIBLE));
                 txtUserInfo.setText(userName);
                 txtPhoneInfo.setText(phone);
                 txtMailInfo.setText(email);
@@ -226,6 +240,5 @@ public class MyAccount extends Fragment implements Observer {
             }
         });
     }
-
 
 }

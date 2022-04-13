@@ -49,6 +49,13 @@
     <string name="Error_user_password">Invalid user or password</string>
     <string name="my_account">My account</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_successfully_registered">User successfully registered</string>
+    <string name="it_was_impossible_to_make_connection">It was impossible to make the connection</string>
+    <string name="Update">Update</string>
+    <string name="delete_account">Delete account</string>
+    <string name="Full_name">Full name</string>
+    <string name="Email">Email</string>
+    <string name="Phone_number">Phone number</string>
+    <string name="Address">Address</string>
 
 </resources>

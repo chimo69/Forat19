@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Observable;
@@ -43,6 +44,8 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private Button login, register;
     private SwitchCompat openSession;
     public static ProgressBar loading;
+    private String device;
+    private View view;
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -68,6 +71,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         register = findViewById(R.id.btnRegister);
         openSession = findViewById(R.id.openSession);
         loading = findViewById(R.id.progressBar);
+        view = findViewById(R.id.layoutLogin);
 
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -113,7 +117,11 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
 
-        mMessage = new Message(null, Global.LOGIN, sendMessage, null);
+        mMessage = new Message(null+"¬"+Utils.getDevice(this), Global.LOGIN, sendMessage, null);
+
+        Log.d("INFO", "Token enviado: " + mMessage.getToken());
+        Log.d("INFO", "Parametros enviado: " + mMessage.getParameters());
+        Log.d("INFO", "Comando enviado: " + mMessage.getCommand());
 
         RequestServer request = new RequestServer();
         request.request(mMessage);
@@ -126,52 +134,55 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     /**
      * Permanece a la espera de que las variables cambien
      * @param o la clase observada
-     * @param arg objeto obserbado
+     * @param arg objeto observado
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        if (arg instanceof Reply){ Log.d("INFO", "Answer: "+ ((Reply) arg).getCommand());}
-
-        Message request = (Message) arg;
-
-        Log.d("INFO", "Token: " + request.getToken());
-        Log.d("INFO", "Parametros: " + request.getParameters());
-        Log.d("INFO", "Comando: " + request.getCommand());
-
-        if (request.getCommand().equals(Global.TOKEN)) {
-            String activeUser = ((Users) request.getObject()).getUsername();
-            int typeUser = ((Users)request.getObject()).getId_usertype();
-            String activeToken = request.getToken();
-            int activeID = ((Users) request.getObject()).getId_user();
-
-            Log.d("INFO", "Usuario: " + activeUser);
-            Log.d("INFO", "Tipo usuario: "+typeUser);
-
-            editor.putString(Global.PREF_ACTIVE_USER, activeUser);
-            editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
-            editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
-            editor.putInt(Global.PREF_TYPE_USER, typeUser);
-            editor.putInt(Global.PREF_ACTIVE_ID,activeID);
-            editor.apply();
-
-            Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
-            startActivity(intent);
-
-        } else if (request.getCommand().equals(Global.ERROR)) {
+        // Comprobamos si hemos recibido un objeto Reply que sera un error de conexión
+        if (arg instanceof Reply){
+            Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
-            Log.d("INFO", "Motivo error: " + request.getParameters());
 
-            LoginScreen.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    user.setText("");
-                    password.setText("");
-                    Toast.makeText(getApplicationContext(), R.string.Error_user_password, Toast.LENGTH_SHORT).show();
-                    user.requestFocus();
-                }
-            });
+        }else if (arg instanceof Message){
+            Message request = (Message) arg;
 
+            Log.d("INFO", "Token: " + request.getToken());
+            Log.d("INFO", "Parametros: " + request.getParameters());
+            Log.d("INFO", "Comando: " + request.getCommand());
+            Log.d("INFO", "Respuesta: " + request.getMessageText());
+
+            if (request.getParameters().equals(Global.OK)) {
+                String activeUser = ((Users) request.getObject()).getUsername();
+                int typeUser = ((Users)request.getObject()).getId_usertype();
+                String activeToken = request.getToken();
+                int activeID = ((Users) request.getObject()).getId_user();
+
+                editor.putString(Global.PREF_ACTIVE_USER, activeUser);
+                editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
+                editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
+                editor.putInt(Global.PREF_TYPE_USER, typeUser);
+                editor.putInt(Global.PREF_ACTIVE_ID,activeID);
+                editor.apply();
+
+                Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
+                startActivity(intent);
+
+            } else {
+                LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
+
+                LoginScreen.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        user.setText("");
+                        password.setText("");
+                        Utils.showToast(LoginScreen.this, R.string.Error_user_password, Toast.LENGTH_SHORT);
+                        user.requestFocus();
+                    }
+                });
+
+            }
         }
+
     }
 }

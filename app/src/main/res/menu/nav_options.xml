@@ -5,18 +5,20 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/createGame"
             android:checkable="true"
             android:icon="@drawable/ic_create_game"
             android:title="@string/create_game" />
         <item
+            android:id="@+id/startGame"
             android:checkable="true"
             android:icon="@drawable/ic_start_game"
             android:title="@string/start_game" />
         <item
             android:checkable="true"
+            android:id="@+id/searchGreen"
             android:icon="@drawable/ic_search"
             android:title="@string/search_green" />
-
     </group>
 
 
@@ -27,10 +29,12 @@
             <menu>
                 <item
                     android:checkable="true"
+                    android:id="@+id/manageUSers"
                     android:icon="@drawable/ic_manage_users"
                     android:title="@string/user_management" />
                 <item
                     android:checkable="true"
+                    android:id="@+id/manageGreens"
                     android:icon="@drawable/ic_manage_greens"
                     android:title="@string/green_managementes" />
             </menu>
@@ -41,7 +45,7 @@
         <item android:title="@string/other_options">
             <menu>
                 <item
-                    android:id="@+id/manageUSers"
+                    android:id="@+id/myAccount"
                     android:checkable="true"
                     android:icon="@drawable/ic_manage_users"
                     android:title="@string/my_account" />

@@ -150,11 +150,16 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
     }
 
+    /**
+     * Permanece a la espera de que las variables cambien
+     *
+     * @param o   la clase observada
+     * @param arg objeto observado
+     */
     @Override
     public void update(Observable o, Object arg) {
 
         Message request = (Message) arg;
-
 
         Log.d("INFO", "Token: " + request.getToken());
         Log.d("INFO", "Parametros: " + request.getParameters());
@@ -168,7 +173,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
             RegisterScreen.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // campo usuario
 
                     List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
                     List<TextView> textViewList = new ArrayList<TextView>();
@@ -178,6 +182,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                     textViewList.clear();
                     errorMessage.clear();
 
+                         // campo usuario
                     if (newUser.getUsername().equals("*")) {
                         textInputLayoutsError.add(tilUser);
                         textViewList.add(txtUser);
@@ -253,14 +258,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
             Log.d("INFO",request.getParameters());
 
-            /*RegisterScreen.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast toast = Toast.makeText(RegisterScreen.this,"Usuario registrado",Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });*/
-            Utils.showToast(this,"Usuario registrado",Toast.LENGTH_SHORT);
+            Utils.showToast(this,getString(R.string.user_successfully_registered),Toast.LENGTH_SHORT);
 
             Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
             startActivity(intent);
