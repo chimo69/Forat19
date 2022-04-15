@@ -8,24 +8,23 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 
-import android.util.Log;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Observable;
 
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 
+/**
+ * Clase encargada de realizar la conexión, enviar y recibir mensajes
+ * @author Antonio Rodríguez Sirgado
+ */
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
 
-    //private final String IP = "192.168.1.33";
-    private final String IP = "52.214.32.91";
+    private final String IP = "192.168.1.33";
+    //private final String IP = "54.216.204.8";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
@@ -35,7 +34,7 @@ public class RequestServer extends Observable {
 
     /**
      * Recibe un objeto Message, inicia la conexión y la transacción
-     *
+     * @author Antonio Rodríguez Sirgado
      * @param message
      */
     public void request(Message message) {
@@ -48,7 +47,7 @@ public class RequestServer extends Observable {
 
     /**
      * Envia el objeto Message al servidor y recibe una respuesta
-     *
+     * @author Antonio Rodríguez Sirgado
      * @param message
      */
     public void initializeTransaction(Message message) {
@@ -63,7 +62,7 @@ public class RequestServer extends Observable {
 
     /**
      * Inicia la conexión
-     *
+     * @author Antonio Rodríguez Sirgado
      * @param ip
      * @param port
      */
@@ -84,6 +83,11 @@ public class RequestServer extends Observable {
         }
     }
 
+    /**
+     * Envía el objeto al servidor
+     * @author Antonio Rodríguez Sirgado
+     * @param o Objeto Message
+     */
     public void send(Object o) {
         try {
             Log.d("INFO", "Sending message");
@@ -94,6 +98,10 @@ public class RequestServer extends Observable {
         }
     }
 
+    /**
+     * Cierra la conexión
+     * @author Antonio Rodríguez Sirgado
+     */
     public void closeConnection() {
         try {
             out.close();
@@ -110,6 +118,7 @@ public class RequestServer extends Observable {
 
     /**
      * Recoge del servidor un obeto Message y lo registra en el observador
+     * @author Antonio Rodriguez Sirgado
      */
     public Message retrieveData() {
         try {
@@ -127,7 +136,7 @@ public class RequestServer extends Observable {
                 closeConnection();
             }
         } catch (IOException e) {
-            Log.d("INFO", "IOExceptin on retrieveData: " + e.toString());
+            Log.d("INFO", "IOException on retrieveData: " + e.toString());
         } catch (ClassNotFoundException e) {
             Log.d("INFO", "ClassNotFoundException: " + e.toString());
         }

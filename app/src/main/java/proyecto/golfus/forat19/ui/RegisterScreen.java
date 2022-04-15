@@ -2,25 +2,22 @@ package proyecto.golfus.forat19.ui;
 
 import static proyecto.golfus.forat19.utils.Utils.esTablet;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -32,10 +29,15 @@ import java.util.Observer;
 import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * @author Antonio Rodriguez Sirgado
+ * Pantalla de registro de usuario
+ */
 public class RegisterScreen extends AppCompatActivity implements Observer {
 
     private String user, password;
@@ -44,6 +46,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     private TextInputEditText txtPassword, txtRePassword;
     public static ProgressBar registerLoading;
     private Button btnSave;
+    private View view;
 
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -94,10 +97,13 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         registerLoading = findViewById(R.id.register_loading);
         registerLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
+        view = findViewById(R.id.layout_register);
+
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
 
+        // Boton de guardar
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,28 +127,23 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     }
 
     /**
-     * Comprovamos que los datos introducidos sean correctos
-     *
+     * @author Antonio Rodriguez Sirgado
+     * Comprobamos que los datos introducidos sean correctos
      */
     private void checkDataUser() {
 
-        String token = preferences.getString("Token", "");
-        int id_user = 0;
-        int id_usertype = 1;
         String username = txtUser.getText().toString();
         String name = txtName.getText().toString();
         String password = txtPassword.getText().toString();
-        String active = "S";
         String email = txtMail.getText().toString();
         String phone = txtPhone.getText().toString();
         String address = txtAddress.getText().toString();
 
-
         preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
-        Users toCheckUser = new Users(id_user, username, name, password, id_usertype, active, email, phone, address);
-        Message message = new Message(null, "AddUser", null, toCheckUser);
+        Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
+        Message message = new Message(null+"¬"+Utils.getDevice(this), "AddUser", null, toCheckUser);
 
         RequestServer request = new RequestServer();
         request.request(message);
@@ -151,120 +152,131 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     }
 
     /**
+     * @author Antonio Rodriguez Sirgado
      * Permanece a la espera de que las variables cambien
-     *
-     * @param o   la clase observada
+     * @param o la clase observada
      * @param arg objeto observado
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        Message request = (Message) arg;
-
-        Log.d("INFO", "Token: " + request.getToken());
-        Log.d("INFO", "Parametros: " + request.getParameters());
-        Log.d("INFO", "Comando: " + request.getCommand());
-
-        if (request.getParameters().equals(Global.INCORRECT_DATA)) {
-
-            Users newUser;
-            newUser = (Users) request.getObject();
-
-            RegisterScreen.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
-                    List<TextView> textViewList = new ArrayList<TextView>();
-                    List<Integer> errorMessage = new ArrayList<Integer>();
-
-                    textInputLayoutsError.clear();
-                    textViewList.clear();
-                    errorMessage.clear();
-
-                         // campo usuario
-                    if (newUser.getUsername().equals("*")) {
-                        textInputLayoutsError.add(tilUser);
-                        textViewList.add(txtUser);
-                        errorMessage.add(R.string.error_user);
-
-                        // campo nombre
-                    }
-                    if (newUser.getName().equals("*")) {
-                        textInputLayoutsError.add(tilName);
-                        textViewList.add(txtName);
-                        errorMessage.add(R.string.error_name);
-
-                        // campo password
-                    }
-                    if (newUser.getPassword().equals("*")) {
-                        textInputLayoutsError.add(tilPassword);
-                        textViewList.add(txtPassword);
-                        errorMessage.add(R.string.error_password);
-
-                        // campo email
-                    }
-                    if (newUser.getEmail().equals("*")) {
-                        textInputLayoutsError.add(tilMail);
-                        textViewList.add(txtMail);
-                        errorMessage.add(R.string.error_mail);
-
-                        // campo telefono
-                    }
-                    if (newUser.getPhone().equals("*")) {
-                        textInputLayoutsError.add(tilPhone);
-                        textViewList.add(txtPhone);
-                        errorMessage.add(R.string.error_phone);
-
-                        // campo direccion
-                    }
-                    if (newUser.getAddress().equals("*")) {
-                        textInputLayoutsError.add(tilAddress);
-                        textViewList.add(txtAddress);
-                        errorMessage.add(R.string.error_address);
-
-                    }
-
-                    if (errorMessage.size() != 0) {
-                        for (int i = 0; i < textInputLayoutsError.size(); i++) {
-                            textInputLayoutsError.get(i).setError(getResources().getString(errorMessage.get(i)));
-                        }
-                        textViewList.get(0).requestFocus();
-                    }
-                }
-            });
-
+        // comprueba si ha recibido un objeto Reply que será un error de conexión
+        if (arg instanceof Reply){
+            Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             RegisterScreen.registerLoading.post(() -> RegisterScreen.registerLoading.setVisibility(View.GONE));
-            RegisterScreen.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    btnSave.setEnabled(true);
-                }
-            });
+        }else {
+            Message request = (Message) arg;
+
+            Log.d("INFO", "Token: " + request.getToken());
+            Log.d("INFO", "Parametros: " + request.getParameters());
+            Log.d("INFO", "Comando: " + request.getCommand());
+
+            if (request.getParameters().equals("Error:1")) {
+
+                Users newUser;
+                newUser = (Users) request.getObject();
+
+                RegisterScreen.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        tilUser.setError(null);
+                        tilName.setError(null);
+                        tilPassword.setError(null);
+                        tilRePassword.setError(null);
+                        tilMail.setError(null);
+                        tilPhone.setError(null);
+                        tilAddress.setError(null);
+
+                        List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
+                        List<TextView> textViewList = new ArrayList<TextView>();
+                        List<Integer> errorMessage = new ArrayList<Integer>();
+
+                        // campo usuario
+                        if (newUser.getUsername().equals("*")) {
+                            textInputLayoutsError.add(tilUser);
+                            textViewList.add(txtUser);
+                            errorMessage.add(R.string.error_user);
+
+                            // campo nombre
+                        }
+                        if (newUser.getName().equals("*")) {
+                            textInputLayoutsError.add(tilName);
+                            textViewList.add(txtName);
+                            errorMessage.add(R.string.error_name);
+
+                            // campo password
+                        }
+                        if (newUser.getPassword().equals("*")) {
+                            textInputLayoutsError.add(tilPassword);
+                            textViewList.add(txtPassword);
+                            errorMessage.add(R.string.error_password);
+
+                            // campo email
+                        }
+                        if (newUser.getEmail().equals("*")) {
+                            textInputLayoutsError.add(tilMail);
+                            textViewList.add(txtMail);
+                            errorMessage.add(R.string.error_mail);
+
+                            // campo telefono
+                        }
+                        if (newUser.getPhone().equals("*")) {
+                            textInputLayoutsError.add(tilPhone);
+                            textViewList.add(txtPhone);
+                            errorMessage.add(R.string.error_phone);
+
+                            // campo direccion
+                        }
+                        if (newUser.getAddress().equals("*")) {
+                            textInputLayoutsError.add(tilAddress);
+                            textViewList.add(txtAddress);
+                            errorMessage.add(R.string.error_address);
+
+                        }
+
+                        if (errorMessage.size() != 0) {
+                            for (int i = 0; i < textInputLayoutsError.size(); i++) {
+                                textInputLayoutsError.get(i).setError(getResources().getString(errorMessage.get(i)));
+                            }
+                            textViewList.get(0).requestFocus();
+                        }
+                    }
+                });
+
+                RegisterScreen.registerLoading.post(() -> RegisterScreen.registerLoading.setVisibility(View.INVISIBLE));
+                RegisterScreen.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnSave.setEnabled(true);
+                    }
+                });
 
 
-        } else if (request.getParameters().equals(Global.USER_ADDED)){
+            } else if (request.getParameters().equals(Global.OK)) {
 
-            String user = ((Users) request.getObject()).getUsername();
-            int typeUser = ((Users) request.getObject()).getId_usertype();
-            String activeToken = request.getToken();
-            int activeID = ((Users) request.getObject()).getId_user();
+                String user = ((Users) request.getObject()).getUsername();
+                int typeUser = ((Users) request.getObject()).getId_usertype();
+                String activeToken = request.getToken();
+                int activeID = ((Users) request.getObject()).getId_user();
 
-            editor.putString(Global.PREF_ACTIVE_USER, user);
-            editor.putInt(Global.PREF_ACTIVE_ID,activeID);
-            editor.putInt(Global.PREF_TYPE_USER, typeUser);
-            editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
-            editor.apply();
+                editor.putString(Global.PREF_ACTIVE_USER, user);
+                editor.putInt(Global.PREF_ACTIVE_ID, activeID);
+                editor.putInt(Global.PREF_TYPE_USER, typeUser);
+                editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
+                editor.apply();
 
-            Log.d("INFO",request.getParameters());
+                Log.d("INFO", request.getParameters());
 
-            Utils.showToast(this,getString(R.string.user_successfully_registered),Toast.LENGTH_SHORT);
+                Utils.showToast(this, getString(R.string.user_successfully_registered), Toast.LENGTH_SHORT);
 
-            Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
-            startActivity(intent);
+                Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                startActivity(intent);
 
-        }else if (request.getCommand().equals(Global.ERROR)){
-            Log.d("INFO",request.getParameters());
+
+            }
         }
+
     }
+
 }

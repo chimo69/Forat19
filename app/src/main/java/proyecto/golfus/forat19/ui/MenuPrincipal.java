@@ -28,11 +28,16 @@ import java.util.Observer;
 
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * Pantalla de menú principal
+ *
+ * @author Antonio Rodriguez Sirgado
+ */
 public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     private DrawerLayout drawerLayout;
@@ -74,7 +79,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -108,14 +112,19 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
             switch (item.getItemId()) {
 
                 case R.id.createGame:
+                    // TODO crear un juego
                     break;
                 case R.id.startGame:
+                    // TODO empezar un juego
                     break;
                 case R.id.searchGreen:
+                    // TODO buscar un campo
                     break;
                 case R.id.manageUSers:
+                    // TODO gestión de usuarios
                     break;
                 case R.id.manageGreens:
+                    // TODO gestión de campos
                     break;
                 case R.id.myAccount:
                     drawerLayout.closeDrawer(GravityCompat.START);
@@ -125,7 +134,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     closeSession();
                     break;
                 case R.id.about:
-
+                    // TODO sobre nosotros
                     break;
             }
             return false;
@@ -142,6 +151,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     }
 
     /**
+     * @author Antonio Rodriguez Sirgado
      * muestra mensaje emergente de consulta
      */
     private void closeSession() {
@@ -166,16 +176,12 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            moveTaskToBack(true);
-            /*if (openSession) {
-                moveTaskToBack(true);
-            } else {
-                closeSession();
-            }*/
+            loadFragment(new PrincipalFragment());
         }
     }
 
     /**
+     * @author Antonio Rodriguez Sirgado
      * Hace el logout del usuario activo
      * Mensaje = (token+device, Logout, null, null)
      */
@@ -183,7 +189,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message message = new Message(activeToken+"¬"+Utils.getDevice(this), Global.LOGOUT, null, null);
+        Message message = new Message(activeToken + "¬" + Utils.getDevice(this), Global.LOGOUT, null, null);
         Log.d("INFO", "Enviando token: " + activeToken);
         RequestServer request = new RequestServer();
         request.request(message);
@@ -191,6 +197,12 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     }
 
+    /**
+     * Carga el fragmento recibido por parametro
+     *
+     * @param fragment fragmento recibido
+     * @author Antonio Rodríguez Sirgado
+     */
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
@@ -200,14 +212,15 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      *
      * @param o   la clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        if (arg instanceof Reply){
+        if (arg instanceof Reply) {
             MenuPrincipal.loadingMenu.post(() -> MenuPrincipal.loadingMenu.setVisibility(View.INVISIBLE));
 
-        } else if (arg instanceof Message){
+        } else if (arg instanceof Message) {
             Message request = (Message) arg;
 
             Log.d("INFO", "Token: " + request.getToken());

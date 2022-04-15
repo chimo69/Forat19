@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_update_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.UpdateUser">
@@ -33,7 +34,7 @@
             <com.google.android.material.textfield.TextInputLayout
 
 
-                android:id="@+id/LayoutRegisterId"
+                android:id="@+id/LayoutUpdateId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -53,7 +54,7 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerId"
+                    android:id="@+id/updateId"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -65,7 +66,7 @@
 
             <!-- Nombre y apellidos -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/LayoutRegisterName"
+                android:id="@+id/LayoutUpdateName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -82,10 +83,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterId">
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdateId">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerName"
+                    android:id="@+id/updateName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -97,7 +98,7 @@
             <!-- Password -->
             <com.google.android.material.textfield.TextInputLayout
 
-                android:id="@+id/LayoutRegisterPassword"
+                android:id="@+id/LayoutUpdatePassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -108,12 +109,12 @@
                 app:hintTextAppearance="@style/MyHintStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterName"
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdateName"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
 
-                    android:id="@+id/registerPassword"
+                    android:id="@+id/updatePassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -126,7 +127,7 @@
 
             <!-- Repeticion Password -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/LayoutRegisterRePassword"
+                android:id="@+id/LayoutUpdateRePassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -139,11 +140,11 @@
                 app:hintTextAppearance="@style/MyHintStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterPassword"
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdatePassword"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerRePassword"
+                    android:id="@+id/updateRePassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -155,7 +156,7 @@
 
             <!-- Mail -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/LayoutRegisterMail"
+                android:id="@+id/LayoutUpdateMail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -170,10 +171,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterRePassword">
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdateRePassword">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerMail"
+                    android:id="@+id/updateMail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -184,7 +185,7 @@
 
             <!-- Telefono -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/LayoutRegisterPhone"
+                android:id="@+id/LayoutUpdatePhone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -200,12 +201,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterMail"
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdateMail"
                 app:prefixText="+34"
                 app:prefixTextAppearance="@style/prefixStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerPhone"
+                    android:id="@+id/upadtePhone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="#94BF62"
@@ -216,7 +217,7 @@
 
             <!-- Direccion -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/LayoutRegisterAddress"
+                android:id="@+id/LayoutUpdateAddress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -234,10 +235,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterPhone">
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdatePhone">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/registerAddress"
+                    android:id="@+id/updateAddress"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/green"
@@ -248,18 +249,18 @@
 
             <!-- Barra de progreso -->
             <ProgressBar
-                android:id="@+id/register_loading"
+                android:id="@+id/update_loading"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="35dp"
                 android:indeterminate="true"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LayoutRegisterAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/LayoutUpdateAddress" />
 
             <!-- Boton actualizar -->
             <Button
@@ -267,6 +268,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="24dp"
                 android:indeterminate="true"
@@ -274,23 +276,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/register_loading" />
+                app:layout_constraintTop_toBottomOf="@+id/update_loading" />
 
             <!-- Boton eliminar -->
-            <Button
-                android:id="@+id/btnDeleteOk"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="24dp"
-                android:text="Eliminar cuenta"
-                android:background="#E35252"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnUpdateOkOk" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

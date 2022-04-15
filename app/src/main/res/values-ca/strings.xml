@@ -54,4 +54,7 @@
     <string name="Email">Correu electrónic</string>
     <string name="Phone_number">Telèfon</string>
     <string name="Address">Direcció</string>
+    <string name="Account_deleted">Compte eliminat amb éxit</string>
+    <string name="Not_possible_to_delete_account">No ha estat possible eliminar el compte</string>
+    <string name="Data_properly_updated">Dades actualitzades correctament</string>
 </resources>

@@ -27,13 +27,14 @@ import java.util.Observer;
 
 import Forat19.*;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * Pantalla de Login
+ * @author Antonio Rodriguez Sirgado
+ * Página de Login, primera página que se muestra al abrir la aplicación
  */
 public class LoginScreen extends AppCompatActivity implements Observer {
 
@@ -112,6 +113,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
 
     /**
+     * @author Antonio Rodríguez Sirgado
      * Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es valida
      */
     private void checkTokenOnline() {
@@ -133,13 +135,14 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
     /**
      * Permanece a la espera de que las variables cambien
+     * @author Antonio Rodriguez Sirgado
      * @param o la clase observada
      * @param arg objeto observado
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        // Comprobamos si hemos recibido un objeto Reply que sera un error de conexión
+        // Comprobamos si hemos recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply){
             Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));

@@ -10,10 +10,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import proyecto.golfus.forat19.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-public class Utils {
+import com.google.android.material.snackbar.Snackbar;
+
+import proyecto.golfus.forat19.*;
+
+public class Utils extends AppCompatActivity {
     /**
      * Comprueba si el dispositivo es una tablet
      *
@@ -117,10 +123,18 @@ public class Utils {
 
     }
 
+    /**
+     * Devuelve el dispositivo donde esta la aplicaciçon
+     * @author Antonio Rodríguez Sirgado
+     * @param context
+     * @return dispositivo
+     */
     public static String getDevice(Context context){
         String device  = Settings.Global.getString(context.getContentResolver(), Settings.Global.DEVICE_NAME);
         return device;
     }
+
+
 }
 
 

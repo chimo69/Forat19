@@ -1,7 +1,5 @@
 package proyecto.golfus.forat19.ui;
 
-import static java.net.InetAddress.getLocalHost;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -10,29 +8,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * @author Antonio Rodriguez Sirgado
+ * Clase que coge el token almacenado y lo comprueba en el servidor
+ */
 public class MainActivity extends AppCompatActivity implements Observer {
 
     private SharedPreferences preferences;
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     /**
+     * @author: Antonio Rodríguez Sirgado
      * Comprueba que el token almacenado siga vigente en el servidor y que el usuario haya
      * marcado que quiere dejar la sesion abierta
      */
@@ -84,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * Permanece a la espera de que las variables cambien
-     *
+     * @author: Antonio Rodríguez Sirgado
+     * Permanece a la espera de que las variables cambien     *
      * @param o   la clase observada
      * @param arg objeto observado
      */
@@ -121,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
                 editor.putString(Global.PREF_ACTIVE_USER, ((Users) request.getObject()).getUsername());
                 editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_usertype());
-                //editor.putString(Global.PREF_ACTIVE_TOKEN, request.getToken());
                 editor.putInt(Global.PREF_ACTIVE_ID, ((Users) request.getObject()).getId_user());
                 editor.apply();
 
@@ -135,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 editor.putString(Global.PREF_ACTIVE_TOKEN, null);
                 editor.putInt(Global.PREF_ACTIVE_ID, 0);
                 editor.apply();
+
                 Intent intent = new Intent(MainActivity.this, LoginScreen.class);
                 startActivity(intent);
             }

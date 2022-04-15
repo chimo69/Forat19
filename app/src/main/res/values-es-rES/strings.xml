@@ -54,4 +54,7 @@
     <string name="Email">Correo electrónico</string>
     <string name="Phone_number">Teléfono</string>
     <string name="Address">Dirección</string>
+    <string name="Account_deleted">Cuenta eliminada con éxito</string>
+    <string name="Not_possible_to_delete_account">No ha sido posible eliminar la cuenta</string>
+    <string name="Data_properly_updated">Datos actualizados correctamente</string>
 </resources>

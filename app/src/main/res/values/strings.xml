@@ -57,5 +57,8 @@
     <string name="Email">Email</string>
     <string name="Phone_number">Phone number</string>
     <string name="Address">Address</string>
+    <string name="Account_deleted">Account deleted</string>
+    <string name="Not_possible_to_delete_account">It has not been possible to delete the account</string>
+    <string name="Data_properly_updated">Data properly updated</string>
 
 </resources>

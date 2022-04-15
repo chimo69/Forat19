@@ -1,78 +1,64 @@
 package proyecto.golfus.forat19.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
+import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
+import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link UpdateUser#newInstance} factory method to
- * create an instance of this fragment.
+ * @author Antonio Rodriguez Sirgado
+ * Fragment para la actulización de datos de usuario
  */
 public class UpdateUser extends Fragment implements Observer {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private TextView txtUser, txtName, txtMail, txtPhone, txtAddress;
-    private TextInputLayout tilUser,tilName,tilMail,tilPassword, tilRePassword, tilPhone,tilAddress;
+    private TextInputLayout tilUser, tilName, tilMail, tilPassword, tilRePassword, tilPhone, tilAddress;
     private TextInputEditText txtPassword, txtRePassword;
-    public static ProgressBar registerLoading;
-    private Button btnSave;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static ProgressBar updateLoading;
+    private Button btnUpdate;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    Message request;
+    Users user;
 
     public UpdateUser() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UpdateUser.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UpdateUser newInstance(String param1, String param2) {
+    public static UpdateUser newInstance() {
         UpdateUser fragment = new UpdateUser();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
     }
 
@@ -80,21 +66,276 @@ public class UpdateUser extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_update_user,container,false);
-        txtUser = view.findViewById(R.id.registerId);
-        return inflater.inflate(R.layout.fragment_update_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_user, container, false);
+
+        updateLoading = view.findViewById(R.id.update_loading);
+        updateLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
+
+        txtUser = view.findViewById(R.id.updateId);
+        tilUser = view.findViewById(R.id.LayoutUpdateId);
+
+        txtPassword = view.findViewById(R.id.updatePassword);
+        tilPassword = view.findViewById(R.id.LayoutUpdatePassword);
+
+        txtRePassword = view.findViewById(R.id.updateRePassword);
+        tilRePassword = view.findViewById(R.id.LayoutUpdateRePassword);
+
+        txtName = view.findViewById(R.id.updateName);
+        tilName = view.findViewById(R.id.LayoutUpdateName);
+
+        txtMail = view.findViewById(R.id.updateMail);
+        tilMail = view.findViewById(R.id.LayoutUpdateMail);
+
+        txtPhone = view.findViewById(R.id.upadtePhone);
+        tilPhone = view.findViewById(R.id.LayoutUpdatePhone);
+
+        txtAddress = view.findViewById(R.id.updateAddress);
+        tilAddress = view.findViewById(R.id.LayoutUpdateAddress);
+
+        btnUpdate = view.findViewById(R.id.btnUpdateOkOk);
+
+        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        // Botón update
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLoading.setVisibility(View.VISIBLE);
+                checkPassword();
+            }
+        });
+
+        //cargamos datos de usuario
+        getUser();
+
+        return view;
+
     }
 
-    public void loadInformation(){
+    /**
+     * @param o   clase observada
+     * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
+     * Permanece a la espera de que el objeto observado varie
+     */
+    @Override
+    public void update(Observable o, Object arg) {
 
-        Message mMessage = new Message(null, Global.VALIDATE_TOKEN, "", null);
+        btnUpdate.setEnabled(true);
+        request = (Message) arg;
+        String command = request.getCommand();
+        user = (Users) request.getObject();
+
+        Log.d("INFO", "Token recibido: " + request.getToken());
+        Log.d("INFO", "Parametros recibido: " + request.getParameters());
+        Log.d("INFO", "Comando recibido: " + request.getCommand());
+
+        // comprueba si ha recibido un objeto Reply que será un error de conexión
+        if (arg instanceof Reply) {
+            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+        } else {
+            switch (command) {
+                case Global.GET_USER:
+                    changeText();
+                    break;
+
+                case Global.UPDATE_USER:
+
+                    if (request.getParameters().equals("Error:1")) {
+
+                        Users newUser = (Users) request.getObject();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                tilUser.setError(null);
+                                tilName.setError(null);
+                                tilPassword.setError(null);
+                                tilRePassword.setError(null);
+                                tilMail.setError(null);
+                                tilPhone.setError(null);
+                                tilAddress.setError(null);
+
+                                List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
+                                List<TextView> textViewList = new ArrayList<TextView>();
+                                List<Integer> errorMessage = new ArrayList<Integer>();
+
+                                textInputLayoutsError.clear();
+                                textViewList.clear();
+                                errorMessage.clear();
+
+                                // campo usuario
+                                if (newUser.getUsername().equals("*")) {
+                                    textInputLayoutsError.add(tilUser);
+                                    textViewList.add(txtUser);
+                                    errorMessage.add(R.string.error_user);
+
+                                    // campo nombre
+                                }
+                                if (newUser.getName().equals("*")) {
+                                    textInputLayoutsError.add(tilName);
+                                    textViewList.add(txtName);
+                                    errorMessage.add(R.string.error_name);
+
+                                    // campo password
+                                }
+                                if (newUser.getPassword().equals("*")) {
+                                    textInputLayoutsError.add(tilPassword);
+                                    textViewList.add(txtPassword);
+                                    errorMessage.add(R.string.error_password);
+
+                                    // campo email
+                                }
+                                if (newUser.getEmail().equals("*")) {
+                                    textInputLayoutsError.add(tilMail);
+                                    textViewList.add(txtMail);
+                                    errorMessage.add(R.string.error_mail);
+
+                                    // campo telefono
+                                }
+                                if (newUser.getPhone().equals("*")) {
+                                    textInputLayoutsError.add(tilPhone);
+                                    textViewList.add(txtPhone);
+                                    errorMessage.add(R.string.error_phone);
+
+                                    // campo direccion
+                                }
+                                if (newUser.getAddress().equals("*")) {
+                                    textInputLayoutsError.add(tilAddress);
+                                    textViewList.add(txtAddress);
+                                    errorMessage.add(R.string.error_address);
+                                }
+
+                                if (errorMessage.size() != 0) {
+                                    for (int i = 0; i < textInputLayoutsError.size(); i++) {
+                                        textInputLayoutsError.get(i).setError(getResources().getString(errorMessage.get(i)));
+                                    }
+                                    textViewList.get(0).requestFocus();
+                                }
+                            }
+
+                        });
+
+                        updateLoading.setVisibility(View.INVISIBLE);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btnUpdate.setEnabled(true);
+                            }
+                        });
+                    } else if (request.getParameters().equals(Global.OK)) {
+                        int activeID = ((Users) request.getObject()).getId_user();
+                        String user = ((Users) request.getObject()).getUsername();
+                        int typeUser = ((Users) request.getObject()).getId_usertype();
+
+                        editor.putInt(Global.PREF_ACTIVE_ID, activeID);
+                        editor.putString(Global.PREF_ACTIVE_USER, user);
+                        editor.putInt(Global.PREF_TYPE_USER, typeUser);
+                        editor.apply();
+
+                        updateLoading.setVisibility(View.INVISIBLE);
+                        Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
+
+                        // Volvemos a fragment inicial
+                        Fragment fragment = new PrincipalFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+                        Log.d("INFO", request.getMessageText());
+                    } else {
+                        Log.d("INFO", request.getMessageText());
+                    }
+            }
+        }
+    }
+
+    /**
+     * @author Antonio Rodriguez Sirgado
+     * Comprueba en el servidor que los datos modificados sean correctos
+     * Mensaje = token¬dispositivo, updateUser
+     */
+    private void checkDataUser() {
+
+        String username = txtUser.getText().toString();
+        String name = txtName.getText().toString();
+        String password = txtPassword.getText().toString();
+        String email = txtMail.getText().toString();
+        String phone = txtPhone.getText().toString();
+        String address = txtAddress.getText().toString();
+
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        String active = user.getActive();
+        int typeUser = user.getId_usertype();
+        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+
+        Users toCheckUser = new Users(activeID, username, name, password, typeUser, active, email, phone, address);
+        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Integer.toString(activeID), toCheckUser);
+
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+
+    }
+
+    /**
+     * @author Antonio Rodriguez Sirgado
+     * Comprueba que los 2 password coincidan
+     */
+    private void checkPassword() {
+        if (!(txtPassword.getText().toString().equals(txtRePassword.getText().toString()))) {
+
+            txtRePassword.requestFocus();
+            tilPassword.setError(getResources().getString(R.string.error_rePassword));
+            tilRePassword.setError("*");
+
+        } else {
+            //updateLoading.setVisibility(View.VISIBLE);
+            checkDataUser();
+            Utils.hideKeyboard(getActivity());
+
+        }
+    }
+
+    /**
+     * @author Antonio Rodriguez Sirgado
+     * Obtiene los datos del usuario solicitado
+     * Mensaje= token¬dispositivo, getUser, id, null
+     */
+    private void getUser() {
+        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+
+        Message mMessage = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, Integer.toString(activeID), null);
+
         RequestServer request = new RequestServer();
         request.request(mMessage);
         request.addObserver(this);
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    /**
+     * @author Antonio Rodriguez Sirgado
+     * Modifica los campos de texto con los datos del usuario recibido
+     */
+    public void changeText() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
+                String userName = ((Users) request.getObject()).getUsername();
+                String password = ((Users) request.getObject()).getPassword();
+                String phone = ((Users) request.getObject()).getPhone();
+                String email = ((Users) request.getObject()).getEmail();
+                String name = ((Users) request.getObject()).getName();
+                String address = (((Users) request.getObject()).getAddress());
+
+                txtUser.setText(userName);
+                txtPassword.setText(password);
+                txtRePassword.setText(password);
+                txtPhone.setText(phone);
+                txtMail.setText(email);
+                txtName.setText(name);
+                txtAddress.setText(address);
+            }
+        });
     }
 }
