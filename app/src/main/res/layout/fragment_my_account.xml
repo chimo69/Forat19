@@ -29,17 +29,20 @@
 
                 <ImageView
                     android:id="@+id/imageView7"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:src="@drawable/ic_baseline_person_24" />
 
                 <TextView
                     android:id="@+id/txtUserInfo"
+                    style="@style/Widget.AppCompat.TextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
+                    android:autoSizeMaxTextSize="40sp"
+                    android:autoSizeMinTextSize="15sp"
+                    android:autoSizeTextType="uniform"
                     android:gravity="center_horizontal|center_vertical"
-                    android:textSize="30sp"
                     android:textStyle="bold"
                     tools:text="Usuario" />
             </LinearLayout>
@@ -119,7 +122,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:paddingTop="20dp"
-                android:paddingBottom="20dp" />
+                android:paddingBottom="150dp"
+                android:scaleType="fitCenter" />
         </LinearLayout>
     </ScrollView>
 

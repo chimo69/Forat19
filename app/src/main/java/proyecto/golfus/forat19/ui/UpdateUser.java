@@ -217,7 +217,7 @@ public class UpdateUser extends Fragment implements Observer {
 
                         });
 
-                        updateLoading.setVisibility(View.INVISIBLE);
+
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -234,11 +234,10 @@ public class UpdateUser extends Fragment implements Observer {
                         editor.putInt(Global.PREF_TYPE_USER, typeUser);
                         editor.apply();
 
-                        updateLoading.setVisibility(View.INVISIBLE);
                         Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
 
                         // Volvemos a fragment inicial
-                        Fragment fragment = new PrincipalFragment();
+                        Fragment fragment = new MyAccount();
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
                         Log.d("INFO", request.getMessageText());
@@ -335,6 +334,8 @@ public class UpdateUser extends Fragment implements Observer {
                 txtMail.setText(email);
                 txtName.setText(name);
                 txtAddress.setText(address);
+
+                UpdateUser.updateLoading.post(() -> UpdateUser.updateLoading.setVisibility(View.INVISIBLE));
             }
         });
     }

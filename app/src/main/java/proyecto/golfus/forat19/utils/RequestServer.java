@@ -22,9 +22,8 @@ import proyecto.golfus.forat19.*;
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
-
-    private final String IP = "192.168.1.33";
     //private final String IP = "54.216.204.8";
+    private final String IP = "192.168.1.33";
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
@@ -52,6 +51,7 @@ public class RequestServer extends Observable {
      */
     public void initializeTransaction(Message message) {
         if (connectionOK) {
+            Log.d("INFO","Send:"+message.getCommand());
             send(message);
         }
         if (connectionOK) {
@@ -122,7 +122,6 @@ public class RequestServer extends Observable {
      */
     public Message retrieveData() {
         try {
-            Log.d("INFO", "Receiving message");
             in = new ObjectInputStream(socket.getInputStream());
             input = in.readObject();
             if (input instanceof Message) {

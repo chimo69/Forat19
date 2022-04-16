@@ -89,6 +89,7 @@ public class MyAccount extends Fragment implements Observer {
         loading = view.findViewById(R.id.loading_myAccount);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
+
         // Boton de borrado de cuenta
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override

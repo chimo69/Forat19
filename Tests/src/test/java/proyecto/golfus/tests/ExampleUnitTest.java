@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19;
+package proyecto.golfus.tests;
 
 import org.junit.Test;
 
