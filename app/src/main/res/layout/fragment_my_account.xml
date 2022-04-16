@@ -113,17 +113,29 @@
                 android:id="@+id/txtAddressInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="24dp"
                 android:textSize="20sp"
                 tools:text="Dirección" />
 
-            <ImageView
-                android:id="@+id/qrCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:paddingTop="20dp"
-                android:paddingBottom="150dp"
-                android:scaleType="fitCenter" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/cesped_xs">
+
+                <ImageView
+                    android:id="@+id/qrCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="150dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -138,8 +150,8 @@
             android:id="@+id/btn_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:text="@string/Update"
             app:layout_constraintBottom_toTopOf="@+id/btn_delete"
             app:layout_constraintEnd_toEndOf="parent"
@@ -164,8 +176,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="32dp"
             android:backgroundTint="#D34141"
             android:text="@string/delete_account"

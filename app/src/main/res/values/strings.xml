@@ -8,7 +8,7 @@
     <string name="login_title">Log in</string>
 
     <string name="register_intro_data">Enter data for registration</string>
-    <string name="register_id">User ID</string>
+    <string name="register_username">Username</string>
     <string name="register_name">Full name</string>
     <string name="register_password">Password</string>
     <string name="register_rePassword">Repeat the password</string>
@@ -18,8 +18,8 @@
     <string name="register_info">Do you want to receive information?</string>
     <string name="register_save">Save</string>
 
-    <string name="error_name">Error. You must enter a first and last name</string>
-    <string name="error_user">Error. The user must have between 6 and 10 characters and start with a vowel</string>
+    <string name="error_name">Error. You must enter at least one first name and one surname</string>
+    <string name="error_user">Error. The user must have between 8 and 20 characters</string>
     <string name="error_password">The password must be greater than 6 characters and contain uppercase, lowercase and special characters</string>
     <string name="error_rePassword">Error. The passwords do not match</string>
     <string name="error_mail">Error. Wrong email format.</string>
@@ -60,5 +60,7 @@
     <string name="Account_deleted">Account deleted</string>
     <string name="Not_possible_to_delete_account">It has not been possible to delete the account</string>
     <string name="Data_properly_updated">Data properly updated</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

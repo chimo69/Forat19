@@ -46,9 +46,9 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class MyAccount extends Fragment implements Observer {
 
-     private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo;
+    private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo;
     private ImageView qrCode;
-     private View view;
+    private View view;
     private Button btnDelete, btnUpdate;
     private SharedPreferences preferences;
     private static ProgressBar loading;
@@ -161,18 +161,21 @@ public class MyAccount extends Fragment implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        request = (Message) arg;
-        String command = request.getCommand();
-        user = (Users) request.getObject();
-
-        Log.d("INFO", "Token recibido: " + request.getToken());
-        Log.d("INFO", "Parametros recibido: " + request.getParameters());
-        Log.d("INFO", "Comando recibido: " + request.getCommand());
 
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+            Fragment fragment = new PrincipalFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
         } else if (arg instanceof Message) {
+            request = (Message) arg;
+            String command = request.getCommand();
+            user = (Users) request.getObject();
+
+            Log.d("INFO", "Token recibido: " + request.getToken());
+            Log.d("INFO", "Parametros recibido: " + request.getParameters());
+            Log.d("INFO", "Comando recibido: " + request.getCommand());
             switch (command) {
                 case Global.GET_USER:
                     if (request.getParameters().equals(Global.OK)) {
@@ -239,7 +242,7 @@ public class MyAccount extends Fragment implements Observer {
 
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 try {
-                    Bitmap bitmap=barcodeEncoder.encodeBitmap(userName, BarcodeFormat.QR_CODE, 750,750);
+                    Bitmap bitmap = barcodeEncoder.encodeBitmap(userName, BarcodeFormat.QR_CODE, 750, 750);
                     qrCode.setImageBitmap(bitmap);
                 } catch (WriterException e) {
                     e.printStackTrace();

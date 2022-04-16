@@ -65,8 +65,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        txtUser = findViewById(R.id.registerId);
-        tilUser =findViewById(R.id.LayoutRegisterId);
+        txtUser = findViewById(R.id.registerUsername);
+        tilUser =findViewById(R.id.LayoutRegisterUsername);
 
         txtPassword = findViewById(R.id.registerPassword);
         tilPassword = findViewById(R.id.LayoutRegisterPassword);
@@ -192,11 +192,13 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                         List<TextView> textViewList = new ArrayList<TextView>();
                         List<Integer> errorMessage = new ArrayList<Integer>();
 
+
                         // campo usuario
                         if (newUser.getUsername().equals("*")) {
                             textInputLayoutsError.add(tilUser);
                             textViewList.add(txtUser);
                             errorMessage.add(R.string.error_user);
+                            Log.d("INFO","Error: "+request.getMessageText());
 
                             // campo nombre
                         }

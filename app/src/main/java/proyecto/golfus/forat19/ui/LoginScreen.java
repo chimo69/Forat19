@@ -144,7 +144,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
         // Comprobamos si hemos recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply){
-            Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+            Utils.showSnack(view, R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
             LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
 
         }else if (arg instanceof Message){
@@ -179,7 +179,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                     public void run() {
                         user.setText("");
                         password.setText("");
-                        Utils.showToast(LoginScreen.this, R.string.Error_user_password, Toast.LENGTH_SHORT);
+                        Utils.showSnack(view, R.string.Error_user_password, Snackbar.LENGTH_LONG);
                         user.requestFocus();
                     }
                 });

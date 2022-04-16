@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -98,6 +100,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         userType = preferences.getInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
         openSession = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
         loadingMenu = findViewById(R.id.loadingMenu);
+        loadingMenu.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
         editor = preferences.edit();
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -121,7 +124,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     // TODO buscar un campo
                     break;
                 case R.id.manageUSers:
-                    // TODO gestión de usuarios
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new UsersList());
                     break;
                 case R.id.manageGreens:
                     // TODO gestión de campos
@@ -218,6 +222,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     public void update(Observable o, Object arg) {
 
         if (arg instanceof Reply) {
+            Utils.showSnack(view, R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
             MenuPrincipal.loadingMenu.post(() -> MenuPrincipal.loadingMenu.setVisibility(View.INVISIBLE));
 
         } else if (arg instanceof Message) {

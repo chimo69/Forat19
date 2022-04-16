@@ -38,8 +38,8 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class UpdateUser extends Fragment implements Observer {
 
-    private TextView txtUser, txtName, txtMail, txtPhone, txtAddress;
-    private TextInputLayout tilUser, tilName, tilMail, tilPassword, tilRePassword, tilPhone, tilAddress;
+    private TextView txtName, txtMail, txtPhone, txtAddress;
+    private TextInputLayout tilName, tilMail, tilPassword, tilRePassword, tilPhone, tilAddress;
     private TextInputEditText txtPassword, txtRePassword;
     public static ProgressBar updateLoading;
     private Button btnUpdate;
@@ -70,9 +70,6 @@ public class UpdateUser extends Fragment implements Observer {
 
         updateLoading = view.findViewById(R.id.update_loading);
         updateLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-
-        txtUser = view.findViewById(R.id.updateId);
-        tilUser = view.findViewById(R.id.LayoutUpdateId);
 
         txtPassword = view.findViewById(R.id.updatePassword);
         tilPassword = view.findViewById(R.id.LayoutUpdatePassword);
@@ -122,19 +119,22 @@ public class UpdateUser extends Fragment implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        btnUpdate.setEnabled(true);
-        request = (Message) arg;
-        String command = request.getCommand();
-        user = (Users) request.getObject();
-
-        Log.d("INFO", "Token recibido: " + request.getToken());
-        Log.d("INFO", "Parametros recibido: " + request.getParameters());
-        Log.d("INFO", "Comando recibido: " + request.getCommand());
-
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+            // Volvemos a fragment inicial
+            Fragment fragment = new PrincipalFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
         } else {
+            btnUpdate.setEnabled(true);
+            request = (Message) arg;
+            String command = request.getCommand();
+            user = (Users) request.getObject();
+
+            Log.d("INFO", "Token recibido: " + request.getToken());
+            Log.d("INFO", "Parametros recibido: " + request.getParameters());
+            Log.d("INFO", "Comando recibido: " + request.getCommand());
+
             switch (command) {
                 case Global.GET_USER:
                     changeText();
@@ -144,12 +144,12 @@ public class UpdateUser extends Fragment implements Observer {
 
                     if (request.getParameters().equals("Error:1")) {
 
+                        UpdateUser.updateLoading.post(() -> UpdateUser.updateLoading.setVisibility(View.INVISIBLE));
                         Users newUser = (Users) request.getObject();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
-                                tilUser.setError(null);
                                 tilName.setError(null);
                                 tilPassword.setError(null);
                                 tilRePassword.setError(null);
@@ -165,14 +165,8 @@ public class UpdateUser extends Fragment implements Observer {
                                 textViewList.clear();
                                 errorMessage.clear();
 
-                                // campo usuario
-                                if (newUser.getUsername().equals("*")) {
-                                    textInputLayoutsError.add(tilUser);
-                                    textViewList.add(txtUser);
-                                    errorMessage.add(R.string.error_user);
-
                                     // campo nombre
-                                }
+
                                 if (newUser.getName().equals("*")) {
                                     textInputLayoutsError.add(tilName);
                                     textViewList.add(txtName);
@@ -255,7 +249,6 @@ public class UpdateUser extends Fragment implements Observer {
      */
     private void checkDataUser() {
 
-        String username = txtUser.getText().toString();
         String name = txtName.getText().toString();
         String password = txtPassword.getText().toString();
         String email = txtMail.getText().toString();
@@ -264,6 +257,7 @@ public class UpdateUser extends Fragment implements Observer {
 
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         String active = user.getActive();
+        String username = user.getUsername();
         int typeUser = user.getId_usertype();
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
@@ -320,14 +314,12 @@ public class UpdateUser extends Fragment implements Observer {
             @Override
             public void run() {
 
-                String userName = ((Users) request.getObject()).getUsername();
                 String password = ((Users) request.getObject()).getPassword();
                 String phone = ((Users) request.getObject()).getPhone();
                 String email = ((Users) request.getObject()).getEmail();
                 String name = ((Users) request.getObject()).getName();
                 String address = (((Users) request.getObject()).getAddress());
 
-                txtUser.setText(userName);
                 txtPassword.setText(password);
                 txtRePassword.setText(password);
                 txtPhone.setText(phone);

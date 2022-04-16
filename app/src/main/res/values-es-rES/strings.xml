@@ -5,10 +5,10 @@
     <string name="password">Password</string>
     <string name="login_user">Login</string>
     <string name="login_register">Registro</string>
-    <string name="login_openSession">Permanecer sesión abierta</string>
+    <string name="login_openSession">Mantener sesión abierta</string>
     <string name="login_title">Iniciar Sesión</string>
     <string name="register_intro_data">Introduce datos para el registro</string>
-    <string name="register_id">Id de usuario</string>
+    <string name="register_username">Nombre de usuario</string>
     <string name="register_name">Nombre completo</string>
     <string name="register_password">Password</string>
     <string name="register_rePassword">Repite el Password</string>
@@ -20,8 +20,8 @@
     <string name="register_save">Guardar</string>
     <string name="error_rePassword">Error. Los password no coinciden</string>
     <string name="error_password">El password debe ser mayor de 6 caracteres y contener mayúsculas y caracteres especiales</string>
-    <string name="error_user">Error. El usuario debe tener entre 6 y 10 caracteres y comenzar con vocal</string>
-    <string name="error_name">Error. Debe introducir nombre y un apellido</string>
+    <string name="error_user">Error. El usuario debe tener entre 8 y 20 caracteres</string>
+    <string name="error_name">Error. Debe introducir nombre y un apellido almenos</string>
     <string name="error_mail">Error. Formato de correo incorrecto</string>
     <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
     <string name="error_address">Error. La dirección no puede exceder de 70 caracteres</string>
