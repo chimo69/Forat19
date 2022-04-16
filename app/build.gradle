@@ -37,7 +37,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation files('libs/Forat19Clases.jar')
 

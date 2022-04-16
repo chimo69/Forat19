@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ public class UsersList extends Fragment implements Observer {
 
     private SharedPreferences preferences;
     private Message request;
+    private ArrayList<Users> listUsers;
+    private RecyclerView recyclerView;
 
     public UsersList() {
 
@@ -46,14 +50,19 @@ public class UsersList extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_users_list, container, false);
+        recyclerView = view.findViewById(R.id.recyclerListUsers);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         loadUsers();
-        return inflater.inflate(R.layout.fragment_users_list, container, false);
+
+        return view;
     }
 
     public void loadUsers(){
@@ -85,13 +94,21 @@ public class UsersList extends Fragment implements Observer {
             Log.d("INFO", "Parametros recibido: " + request.getParameters());
             Log.d("INFO", "Comando recibido: " + request.getCommand());
 
-            List<Users> listUsers= new ArrayList<Users>();
 
-            listUsers = (List<Users>) request.getObject();
+            listUsers = (ArrayList<Users>) request.getObject();
 
             for (int i=0; i< listUsers.size();i++){
                 Log.d("INFO","Usuario"+listUsers.get(i).getUsername());
             }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AdapterList adapterList = new AdapterList(listUsers);
+                    recyclerView.setAdapter(adapterList);
+                }
+            });
+
         }
     }
 }
