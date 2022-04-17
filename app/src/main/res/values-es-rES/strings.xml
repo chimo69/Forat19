@@ -57,4 +57,9 @@
     <string name="Account_deleted">Cuenta eliminada con éxito</string>
     <string name="Not_possible_to_delete_account">No ha sido posible eliminar la cuenta</string>
     <string name="Data_properly_updated">Datos actualizados correctamente</string>
+    <string name="users_list">Listado de usuarios</string>
+    <string name="all_users">Todos los usuarios</string>
+    <string name="active">Activos</string>
+    <string name="inactive">Inactivos</string>
+    <string name="search_user">Buscar usuario</string>
 </resources>

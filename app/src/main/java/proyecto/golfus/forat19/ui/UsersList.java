@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,7 @@ import proyecto.golfus.forat19.utils.Utils;
  * Pantalla que muestra el listado de usuarios
  * @author Antonio Rodríguez Sirgado
  */
-public class UsersList extends Fragment implements Observer {
+public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
     private SharedPreferences preferences;
     private Message request;
@@ -45,6 +46,8 @@ public class UsersList extends Fragment implements Observer {
     private RecyclerView recyclerView;
     private Button btn_allUsers, btn_activeUsers, btn_inactiveUsers;
     private static ProgressBar loading;
+    private SearchView searchUserList;
+    private AdapterList adapterList;
 
     public UsersList() {
 
@@ -73,12 +76,14 @@ public class UsersList extends Fragment implements Observer {
         btn_activeUsers = view.findViewById(R.id.btn_ActiveUsers);
         btn_inactiveUsers = view.findViewById(R.id.btn_InactiveUsers);
         loading = view.findViewById(R.id.userlist_loading);
+        searchUserList = view.findViewById(R.id.searchUserList);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-
+        btn_allUsers.setBackgroundColor(getResources().getColor(R.color.green));
         btn_allUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                changeButtonColor(btn_allUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_ALL_USERS);
             }
@@ -86,6 +91,7 @@ public class UsersList extends Fragment implements Observer {
         btn_activeUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                changeButtonColor(btn_activeUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_ACTIVE_USERS);
             }
@@ -93,10 +99,13 @@ public class UsersList extends Fragment implements Observer {
         btn_inactiveUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                changeButtonColor(btn_inactiveUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_INACTIVE_USERS);
             }
         });
+
+        searchUserList.setOnQueryTextListener(this);
 
         loading.setVisibility(View.VISIBLE);
         loadUsers(Global.LIST_ALL_USERS);
@@ -153,8 +162,14 @@ public class UsersList extends Fragment implements Observer {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AdapterList adapterList = new AdapterList(listUsers);
+                    adapterList = new AdapterList(listUsers);
                     recyclerView.setAdapter(adapterList);
+                    adapterList.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d("INFO","Seleccionado"+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+                        }
+                    });
                 }
             });
 
@@ -162,5 +177,24 @@ public class UsersList extends Fragment implements Observer {
 
 
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapterList.filter(newText);
+        return false;
+    }
+
+    public void changeButtonColor(Button button){
+        btn_allUsers.setBackgroundColor(getResources().getColor(R.color.grey));
+        btn_activeUsers.setBackgroundColor(getResources().getColor(R.color.grey));
+        btn_inactiveUsers.setBackgroundColor(getResources().getColor(R.color.grey));
+
+        button.setBackgroundColor(getResources().getColor(R.color.green));
     }
 }

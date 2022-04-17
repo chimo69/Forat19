@@ -57,4 +57,9 @@
     <string name="Account_deleted">Compte eliminat amb éxit</string>
     <string name="Not_possible_to_delete_account">No ha estat possible eliminar el compte</string>
     <string name="Data_properly_updated">Dades actualitzades correctament</string>
+    <string name="users_list">Llistat d\'usuaris</string>
+    <string name="all_users">Tots els usuaris</string>
+    <string name="active">Actius</string>
+    <string name="inactive">Inactius</string>
+    <string name="search_user">Buscar usuari</string>
 </resources>

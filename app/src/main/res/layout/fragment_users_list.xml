@@ -15,8 +15,9 @@
         android:background="@color/green"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Listado de usuarios"
+        android:text="@string/users_list"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -37,23 +38,38 @@
             android:id="@+id/btn_allUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="All users" />
+            android:background="@color/grey"
+            android:text="@string/all_users" />
 
         <Button
             android:id="@+id/btn_ActiveUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="Active" />
+            android:background="@color/grey"
+            android:text="@string/active" />
 
         <Button
             android:id="@+id/btn_InactiveUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Inactive" />
+            android:background="@color/grey"
+            android:text="@string/inactive" />
     </LinearLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchUserList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:queryHint="@string/search_user">
+
+    </androidx.appcompat.widget.SearchView>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerListUsers"
