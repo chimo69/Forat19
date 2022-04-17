@@ -22,8 +22,8 @@ import proyecto.golfus.forat19.*;
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
-    private final String IP = "54.216.204.8";
-    //private final String IP = "192.168.1.33";
+    //private final String IP = "54.216.204.8";
+    private final String IP = "192.168.1.33";
 
     private Socket socket;
     private Object input;
@@ -35,7 +35,7 @@ public class RequestServer extends Observable {
     /**
      * Recibe un objeto Message, inicia la conexión y la transacción
      * @author Antonio Rodríguez Sirgado
-     * @param message
+     * @param message Mensaje recibido
      */
     public void request(Message message) {
         Thread thread = new Thread(() -> {
@@ -48,7 +48,7 @@ public class RequestServer extends Observable {
     /**
      * Envia el objeto Message al servidor y recibe una respuesta
      * @author Antonio Rodríguez Sirgado
-     * @param message
+     * @param message mensaje recibido
      */
     public void initializeTransaction(Message message) {
         if (connectionOK) {
@@ -64,8 +64,8 @@ public class RequestServer extends Observable {
     /**
      * Inicia la conexión
      * @author Antonio Rodríguez Sirgado
-     * @param ip
-     * @param port
+     * @param ip dirección del servidor
+     * @param port puerto del servidor
      */
     public void initializeConnection(String ip, int port) {
         try {
@@ -120,6 +120,7 @@ public class RequestServer extends Observable {
     /**
      * Recoge del servidor un obeto Message y lo registra en el observador
      * @author Antonio Rodriguez Sirgado
+     * @return Mensaje recibido
      */
     public Message retrieveData() {
         try {

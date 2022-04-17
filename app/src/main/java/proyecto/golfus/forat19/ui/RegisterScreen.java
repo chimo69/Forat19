@@ -35,8 +35,8 @@ import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * @author Antonio Rodriguez Sirgado
  * Pantalla de registro de usuario
+ * @author Antonio Rodriguez Sirgado
  */
 public class RegisterScreen extends AppCompatActivity implements Observer {
 
@@ -127,8 +127,9 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     }
 
     /**
+     * <b>Comprueba que los datos introducidos sean correctos</b><br>
+     * Mensaje = (null¬device,Adduser,null, usuario)
      * @author Antonio Rodriguez Sirgado
-     * Comprobamos que los datos introducidos sean correctos
      */
     private void checkDataUser() {
 
@@ -152,8 +153,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     }
 
     /**
-     * @author Antonio Rodriguez Sirgado
      * Permanece a la espera de que las variables cambien
+     * @author Antonio Rodriguez Sirgado
      * @param o la clase observada
      * @param arg objeto observado
      */

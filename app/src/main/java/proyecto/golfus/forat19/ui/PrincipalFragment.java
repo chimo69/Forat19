@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import proyecto.golfus.forat19.*;
 
 /**
- * @author Antonio Rodriguez Sirgado
  * Fragment contenedor
+ * @author Antonio Rodriguez Sirgado
  */
 public class PrincipalFragment extends Fragment {
 

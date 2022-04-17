@@ -41,7 +41,6 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para mostrar la cuenta del usuario
- *
  * @author Antonio Rodriguez Sirgado
  */
 public class MyAccount extends Fragment implements Observer {
@@ -122,9 +121,9 @@ public class MyAccount extends Fragment implements Observer {
     }
 
     /**
+     * <b>Consigue los datos del usuario solicitado por ID</b><br>
+     * Mensaje = (token¬device, getUser, id, null)
      * @author Antonio Rodriguez Sirgado
-     * Consigue los datos del usuario solicitado por ID
-     * Mensaje = (token, getUser, id, null)
      */
     private void getUser() {
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
@@ -138,9 +137,9 @@ public class MyAccount extends Fragment implements Observer {
     }
 
     /**
+     * <b>Desactiva al usuario solicitado por ID</b><br>
+     * Mensaje= (token¬device, deleteUser, null, usuario)
      * @author Antonio Rodriguez Sirgado
-     * Desactiva al usuario solicitado por ID
-     * Mensaje= (token, deleteUser, null, usuario)
      */
     private void deleteUser() {
         String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
@@ -153,7 +152,6 @@ public class MyAccount extends Fragment implements Observer {
 
     /**
      * Permanece a la espera de que las variables cambien
-     *
      * @param o   la clase observada
      * @param arg objeto observado
      * @author Antonio Rodriguez Sirgado
@@ -209,8 +207,8 @@ public class MyAccount extends Fragment implements Observer {
     }
 
     /**
-     * @author Antonio Rodriguez Sirgado
      * Cambia el texto del usuario con los datos obtenidos
+     * @author Antonio Rodriguez Sirgado
      */
     public void changeText() {
 

@@ -37,7 +37,6 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Pantalla de menú principal
- *
  * @author Antonio Rodriguez Sirgado
  */
 public class MenuPrincipal extends AppCompatActivity implements Observer {
@@ -155,8 +154,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     }
 
     /**
-     * @author Antonio Rodriguez Sirgado
      * muestra mensaje emergente de consulta
+     * @author Antonio Rodriguez Sirgado
      */
     private void closeSession() {
 
@@ -185,9 +184,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     }
 
     /**
+     * <b>Hace el logout del usuario activo</b><br><br>
+     * Mensaje = (token¬device, Logout, null, null)
      * @author Antonio Rodriguez Sirgado
-     * Hace el logout del usuario activo
-     * Mensaje = (token+device, Logout, null, null)
      */
     private void logoutUser() {
 
@@ -203,9 +202,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     /**
      * Carga el fragmento recibido por parametro
-     *
-     * @param fragment fragmento recibido
      * @author Antonio Rodríguez Sirgado
+     * @param fragment fragmento recibido
      */
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
@@ -213,10 +211,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     /**
      * Permanece a la espera de que las variables cambien
-     *
+     * @author Antonio Rodriguez Sirgado
      * @param o   la clase observada
      * @param arg objeto observado
-     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {

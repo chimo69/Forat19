@@ -33,8 +33,8 @@ import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * @author Antonio Rodriguez Sirgado
  * Página de Login, primera página que se muestra al abrir la aplicación
+ * @author Antonio Rodriguez Sirgado
  */
 public class LoginScreen extends AppCompatActivity implements Observer {
 
@@ -113,8 +113,9 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
 
     /**
+     * <b>Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es válida</b><br>
+     * Mensaje = (null¬device,Login,null)
      * @author Antonio Rodríguez Sirgado
-     * Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es valida
      */
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();

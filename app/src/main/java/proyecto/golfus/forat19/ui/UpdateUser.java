@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -27,14 +26,14 @@ import java.util.Observer;
 import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
+ * Fragment para la actualización de datos de usuario
  * @author Antonio Rodriguez Sirgado
- * Fragment para la actulización de datos de usuario
  */
 public class UpdateUser extends Fragment implements Observer {
 
@@ -111,10 +110,10 @@ public class UpdateUser extends Fragment implements Observer {
     }
 
     /**
-     * @param o   clase observada
-     * @param arg objeto observado
-     * @author Antonio Rodriguez Sirgado
      * Permanece a la espera de que el objeto observado varie
+     * @author Antonio Rodriguez Sirgado
+     * @param o clase observada
+     * @param arg objeto observado
      */
     @Override
     public void update(Observable o, Object arg) {
@@ -161,9 +160,6 @@ public class UpdateUser extends Fragment implements Observer {
                                 List<TextView> textViewList = new ArrayList<TextView>();
                                 List<Integer> errorMessage = new ArrayList<Integer>();
 
-                                textInputLayoutsError.clear();
-                                textViewList.clear();
-                                errorMessage.clear();
 
                                     // campo nombre
 
@@ -243,9 +239,9 @@ public class UpdateUser extends Fragment implements Observer {
     }
 
     /**
+     * <b>Comprueba en el servidor que los datos modificados sean correctos</b><br>
+     * Mensaje = (token¬device, updateUser, id, usuario)
      * @author Antonio Rodriguez Sirgado
-     * Comprueba en el servidor que los datos modificados sean correctos
-     * Mensaje = token¬dispositivo, updateUser
      */
     private void checkDataUser() {
 
@@ -271,8 +267,8 @@ public class UpdateUser extends Fragment implements Observer {
     }
 
     /**
-     * @author Antonio Rodriguez Sirgado
      * Comprueba que los 2 password coincidan
+     * @author Antonio Rodriguez Sirgado
      */
     private void checkPassword() {
         if (!(txtPassword.getText().toString().equals(txtRePassword.getText().toString()))) {
@@ -290,9 +286,9 @@ public class UpdateUser extends Fragment implements Observer {
     }
 
     /**
+     * <b>Obtiene los datos del usuario solicitado</b><br>
+     * Mensaje= (token¬device, getUser, id, null)
      * @author Antonio Rodriguez Sirgado
-     * Obtiene los datos del usuario solicitado
-     * Mensaje= token¬dispositivo, getUser, id, null
      */
     private void getUser() {
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
@@ -306,8 +302,8 @@ public class UpdateUser extends Fragment implements Observer {
     }
 
     /**
-     * @author Antonio Rodriguez Sirgado
      * Modifica los campos de texto con los datos del usuario recibido
+     * @author Antonio Rodriguez Sirgado
      */
     public void changeText() {
         getActivity().runOnUiThread(new Runnable() {

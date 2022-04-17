@@ -19,12 +19,16 @@ import com.google.android.material.snackbar.Snackbar;
 
 import proyecto.golfus.forat19.*;
 
+/**
+ * Clase con utilidades varias para el proyecto
+ * @author Antonio Rodríguez Sirgado
+ */
 public class Utils extends AppCompatActivity {
     /**
      * Comprueba si el dispositivo es una tablet
-     *
-     * @param context
-     * @return true si es dispositivo es una tablet
+     * @author Antonio Rodríguez Sirgado
+     * @param context contexto
+     * @return true si el dispositivo es una tablet
      */
     public static boolean esTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
@@ -34,7 +38,7 @@ public class Utils extends AppCompatActivity {
 
     /**
      * Oculta el teclado de la actividad recibida
-     *
+     * @author Antonio Rodríguez Sirgado
      * @param activity Actividad donde hay que ocultar el teclado
      */
     public static void hideKeyboard(@NonNull Activity activity) {
@@ -48,6 +52,7 @@ public class Utils extends AppCompatActivity {
 
     /**
      * Muestras un Toast personalizado
+     * @author Antonio Rodríguez Sirgado
      * @param activity actividad donde ha de mostrarse
      * @param text texto a mostrar
      * @param time tiempo mostrandose
@@ -68,6 +73,8 @@ public class Utils extends AppCompatActivity {
     }
 
     /**
+     * Muestra un Toast con el recurso Int y tiempo que recibe
+     * @author Antonio Rodríguez Sirgado
      * @param activity activity donde hay que mostrar el mensaje
      * @param text     texto a mostrar en formato recurso
      * @param time     tiempo mostrandose
@@ -83,6 +90,8 @@ public class Utils extends AppCompatActivity {
 
 
     /**
+     * Muestra un Toast con el texto que recibe y tiempo
+     * @author Antonio Rodríguez Sirgado
      * @param activity activity donde hay que mostrar el mensaje
      * @param text     texto a mostrar en formato texto
      * @param i        tiempo mostrado
@@ -97,7 +106,8 @@ public class Utils extends AppCompatActivity {
     }
 
     /**
-     * Muestra un snackBar
+     * Muestra un snackBar con el texto y el tiempo recibido
+     * @author Antonio Rodríguez Sirgado
      * @param view vista donde se mostrará
      * @param text texto a mostrar en formato texto
      * @param time tiempo mostrandose
@@ -110,7 +120,8 @@ public class Utils extends AppCompatActivity {
 
     }
     /**
-     * Muestra un snackBar
+     * Muestra un snackBar con el recurso Int y el tiempo recibido
+     * @author Antonio Rodríguez Sirgado
      * @param view vista donde se mostrará
      * @param text texto a mostrar en formato recurso
      * @param time tiempo mostrandose
@@ -126,14 +137,13 @@ public class Utils extends AppCompatActivity {
     /**
      * Devuelve el dispositivo donde esta la aplicaciçon
      * @author Antonio Rodríguez Sirgado
-     * @param context
+     * @param context contexto
      * @return dispositivo
      */
     public static String getDevice(Context context){
         String device  = Settings.Global.getString(context.getContentResolver(), Settings.Global.DEVICE_NAME);
         return device;
     }
-
 
 }
 

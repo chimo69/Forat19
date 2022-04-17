@@ -28,8 +28,8 @@ import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * @author Antonio Rodriguez Sirgado
  * Clase que coge el token almacenado y lo comprueba en el servidor
+ * @author Antonio Rodriguez Sirgado
  */
 public class MainActivity extends AppCompatActivity implements Observer {
 
@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * @author: Antonio Rodríguez Sirgado
-     * Comprueba que el token almacenado siga vigente en el servidor y que el usuario haya
-     * marcado que quiere dejar la sesion abierta
+     * <b>Comprueba que el token almacenado siga vigente en el servidor y que el usuario haya marcado que quiere dejar la sesion abierta</b><br>
+     * Mensaje = (token¬device,ValidateToken,null,null)
+     * @author Antonio Rodriguez Sirgado
      */
     private void checkToken() {
 
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * @author: Antonio Rodríguez Sirgado
-     * Permanece a la espera de que las variables cambien     *
-     * @param o   la clase observada
+     * Permanece a la espera de que las variables cambien
+     * @author Antonio Rodriguez Sirgado
+     * @param o la clase observada
      * @param arg objeto observado
      */
     @Override

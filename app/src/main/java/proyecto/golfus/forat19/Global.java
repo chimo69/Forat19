@@ -1,6 +1,11 @@
 package proyecto.golfus.forat19;
 
+/**
+ * Conjunto de variables globales y preferencias
+ * @author Antonio Rodríguez Sirgado
+ */
 public class Global {
+
     public static final int TIME_OUT_LIMIT=3000;
 
     public static final String EXTRA_USER = "user";
@@ -25,6 +30,9 @@ public class Global {
     public static final String UPDATE_USER="UpdateUser";
     public static final String DELETE_USER="DeleteUser";
     public static final String GET_USER = "GetUser";
+    public static final String LIST_ALL_USERS = "ListUser*";
+    public static final String LIST_ACTIVE_USERS = "ListUserA";
+    public static final String LIST_INACTIVE_USERS = "ListUserI";
 
     // Codigo recibidos
     public static final String OK = "Ok";
