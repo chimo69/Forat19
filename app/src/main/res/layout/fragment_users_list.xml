@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_golf"
     android:orientation="vertical"
     tools:context=".ui.UsersList">
 
@@ -17,8 +18,8 @@
         android:paddingBottom="10dp"
         android:text="@string/users_list"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <ProgressBar
@@ -38,7 +39,8 @@
             android:id="@+id/btn_allUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@color/grey"
             android:text="@string/all_users" />
@@ -56,6 +58,7 @@
             android:id="@+id/btn_InactiveUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@color/grey"
             android:text="@string/inactive" />
@@ -65,10 +68,12 @@
         android:id="@+id/searchUserList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         app:queryHint="@string/search_user">
 
     </androidx.appcompat.widget.SearchView>
-
 
 
     <androidx.recyclerview.widget.RecyclerView

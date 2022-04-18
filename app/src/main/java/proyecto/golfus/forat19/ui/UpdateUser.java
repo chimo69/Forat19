@@ -73,7 +73,7 @@ public class UpdateUser extends Fragment implements Observer {
         txtPassword = view.findViewById(R.id.updatePassword);
         tilPassword = view.findViewById(R.id.LayoutUpdatePassword);
 
-        txtRePassword = view.findViewById(R.id.updateRePassword);
+        txtRePassword = view.findViewById(R.id.accountUpdateRePassword);
         tilRePassword = view.findViewById(R.id.LayoutUpdateRePassword);
 
         txtName = view.findViewById(R.id.updateName);
@@ -278,7 +278,7 @@ public class UpdateUser extends Fragment implements Observer {
             tilRePassword.setError("*");
 
         } else {
-            //updateLoading.setVisibility(View.VISIBLE);
+
             checkDataUser();
             Utils.hideKeyboard(getActivity());
 

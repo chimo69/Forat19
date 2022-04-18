@@ -21,7 +21,7 @@
     <string name="error_rePassword">Error. Los password no coinciden</string>
     <string name="error_password">El password debe ser mayor de 6 caracteres y contener mayúsculas y caracteres especiales</string>
     <string name="error_user">Error. El usuario debe tener entre 8 y 20 caracteres</string>
-    <string name="error_name">Error. Debe introducir nombre y un apellido almenos</string>
+    <string name="error_name">Error. Debe introducir nombre y un apellido almenos y sin acentos</string>
     <string name="error_mail">Error. Formato de correo incorrecto</string>
     <string name="error_phone">Error. El teléfono debe tener 6 cifras</string>
     <string name="error_address">Error. La dirección no puede exceder de 70 caracteres</string>
@@ -62,4 +62,8 @@
     <string name="active">Activos</string>
     <string name="inactive">Inactivos</string>
     <string name="search_user">Buscar usuario</string>
+    <string name="registered_data">Datos registrados</string>
+    <string name="change_user_password">Cambiar password de usuario</string>
+    <string name="active_user">Usuario activo</string>
+    <string name="admin_user">Usuario Administrador</string>
 </resources>

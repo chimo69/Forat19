@@ -4,12 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -80,6 +78,8 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         btn_allUsers.setBackgroundColor(getResources().getColor(R.color.green));
+
+        // boton Todos los usuarios
         btn_allUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +88,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                 loadUsers(Global.LIST_ALL_USERS);
             }
         });
+        // boton usuarios activos
         btn_activeUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +97,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                 loadUsers(Global.LIST_ACTIVE_USERS);
             }
         });
+        // boton usuarios inactivos
         btn_inactiveUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,6 +161,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
 
             listUsers = (ArrayList<Users>) request.getObject();
 
+
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -167,7 +170,14 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.d("INFO","Seleccionado"+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+                            Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+
+                            Fragment fragment = new AccountAdmin();
+                            Bundle args = new Bundle();
+                            args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
+
+                            fragment.setArguments(args);
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
                         }
                     });
                 }
@@ -190,6 +200,11 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         return false;
     }
 
+    /**
+     * Cambia el color de fondo del boton recibido y pone los demas a gris
+     * @author Antonio Rodríguez Sirgado
+     * @param button boton recibido
+     */
     public void changeButtonColor(Button button){
         btn_allUsers.setBackgroundColor(getResources().getColor(R.color.grey));
         btn_activeUsers.setBackgroundColor(getResources().getColor(R.color.grey));

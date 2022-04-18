@@ -22,14 +22,15 @@ import proyecto.golfus.forat19.*;
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
-    //private final String IP = "54.216.204.8";
-    private final String IP = "192.168.1.33";
+    private final String IP = "54.216.204.8";
+    //private final String IP = "192.168.1.33";
 
     private Socket socket;
     private Object input;
     private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
     private Boolean connectionOK = true;
+    private Reply reply;
 
 
     /**
@@ -39,6 +40,7 @@ public class RequestServer extends Observable {
      */
     public void request(Message message) {
         Thread thread = new Thread(() -> {
+
             initializeConnection(IP, PORT);
             initializeTransaction(message);
         });
@@ -75,11 +77,12 @@ public class RequestServer extends Observable {
             connectionOK = true;
         } catch (Exception e) {
             Log.d("INFO:", "Exception on connection innitialization: " + e.getMessage());
-            Reply reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
-            connectionOK = false;
+            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
             this.setChanged();
             this.notifyObservers(reply);
             this.clearChanged();
+            connectionOK = false;
+
 
         }
     }
@@ -96,6 +99,10 @@ public class RequestServer extends Observable {
             out.writeObject(o);
         } catch (IOException e) {
             Log.d("INFO", "IOException on send: " + e.getMessage());
+            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+            this.setChanged();
+            this.notifyObservers(reply);
+            this.clearChanged();
         }
     }
 
@@ -111,6 +118,10 @@ public class RequestServer extends Observable {
             Log.d("INFO", "Connection ended");
         } catch (IOException e) {
             Log.d("INFO", "IOException on closeConnection()");
+            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+            this.setChanged();
+            this.notifyObservers(reply);
+            this.clearChanged();
         } finally {
 
         }
@@ -138,8 +149,13 @@ public class RequestServer extends Observable {
             }
         } catch (IOException e) {
             Log.d("INFO", "IOException on retrieveData: " + e.toString());
+            Reply reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
         } catch (ClassNotFoundException e) {
             Log.d("INFO", "ClassNotFoundException: " + e.toString());
+            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+            this.setChanged();
+            this.notifyObservers(reply);
+            this.clearChanged();
         }
         return null;
     }

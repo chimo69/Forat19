@@ -18,7 +18,7 @@
     <string name="register_info">Do you want to receive information?</string>
     <string name="register_save">Save</string>
 
-    <string name="error_name">Error. You must enter at least one first name and one surname</string>
+    <string name="error_name">Error. You must enter at least one first name and one surname and without accents</string>
     <string name="error_user">Error. The user must have between 8 and 20 characters</string>
     <string name="error_password">The password must be greater than 6 characters and contain uppercase, lowercase and special characters</string>
     <string name="error_rePassword">Error. The passwords do not match</string>
@@ -67,5 +67,9 @@
     <string name="active">Active</string>
     <string name="inactive">Inactive</string>
     <string name="search_user">Search user</string>
+    <string name="registered_data">Registered data</string>
+    <string name="change_user_password">Change user Password</string>
+    <string name="active_user">Active user</string>
+    <string name="admin_user">Admin user</string>
 
 </resources>

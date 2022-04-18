@@ -123,7 +123,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         mMessage = new Message(null+"¬"+Utils.getDevice(this), Global.LOGIN, sendMessage, null);
 
         Log.d("INFO", "Token enviado: " + mMessage.getToken());
-        Log.d("INFO", "Parametros enviado: " + mMessage.getParameters());
+        Log.d("INFO", "Parametro enviado: " + mMessage.getParameters());
         Log.d("INFO", "Comando enviado: " + mMessage.getCommand());
 
         RequestServer request = new RequestServer();

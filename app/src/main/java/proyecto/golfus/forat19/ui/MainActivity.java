@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         Boolean session = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
 
-        if (session) {
+        if (session && token!=null ) {
             Message message = new Message(token + "¬" + Utils.getDevice(this), Global.VALIDATE_TOKEN, null, null);
             RequestServer request = new RequestServer();
             request.request(message);

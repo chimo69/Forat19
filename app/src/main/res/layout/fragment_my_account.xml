@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background">
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_golf">
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/aaa">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -39,10 +40,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:autoSizeMaxTextSize="40sp"
-                    android:autoSizeMinTextSize="15sp"
-                    android:autoSizeTextType="uniform"
+                    android:background="@color/grey_light"
+                    android:fontFamily="@font/goldman"
                     android:gravity="center_horizontal|center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     tools:text="Usuario" />
             </LinearLayout>
@@ -51,7 +53,10 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:paddingTop="5dp"
                 android:text="@string/Full_name"
                 android:textColor="@color/green"
                 android:textSize="20sp"
@@ -61,6 +66,9 @@
                 android:id="@+id/txtNameInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 tools:text="Nombre completo" />
 
@@ -68,6 +76,8 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
                 android:paddingTop="10dp"
                 android:text="@string/Email"
                 android:textColor="@color/green"
@@ -78,6 +88,9 @@
                 android:id="@+id/txtMailInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 tools:text="Mail" />
 
@@ -85,6 +98,8 @@
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
                 android:paddingTop="10dp"
                 android:text="@string/Phone_number"
                 android:textColor="@color/green"
@@ -96,6 +111,9 @@
                 android:id="@+id/txtPhoneInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 tools:text="Teléfono" />
 
@@ -103,6 +121,8 @@
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
                 android:paddingTop="10dp"
                 android:text="@string/Address"
                 android:textColor="@color/green"
@@ -113,23 +133,24 @@
                 android:id="@+id/txtAddressInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="16dp"
                 android:paddingBottom="24dp"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 tools:text="Dirección" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/cesped_xs">
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/qrCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="150dp"
-                    android:scaleType="fitCenter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,10 +161,10 @@
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/aaa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/cardview_dark_background">
+        android:layout_alignParentBottom="true">
 
 
         <Button
