@@ -71,5 +71,7 @@
     <string name="change_user_password">Change user Password</string>
     <string name="active_user">Active user</string>
     <string name="admin_user">Admin user</string>
+    <string name="choose_user_type">Choose user type</string>
+    <string name="mail_manager_error">No Tienes ningun gestor de correo instalado</string>
 
 </resources>

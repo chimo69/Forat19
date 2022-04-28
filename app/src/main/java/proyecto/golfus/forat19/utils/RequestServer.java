@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.io.IOException;
 import java.util.Observable;
 
-import Forat19.Message;
+import Forat19.*;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 
@@ -82,8 +82,6 @@ public class RequestServer extends Observable {
             this.notifyObservers(reply);
             this.clearChanged();
             connectionOK = false;
-
-
         }
     }
 

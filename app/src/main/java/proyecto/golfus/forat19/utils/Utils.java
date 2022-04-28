@@ -2,6 +2,7 @@ package proyecto.golfus.forat19.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.provider.Settings;
@@ -17,6 +18,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Observer;
+
+import Forat19.Message;
+import Forat19.Users;
 import proyecto.golfus.forat19.*;
 
 /**
@@ -30,6 +35,8 @@ public class Utils extends AppCompatActivity {
      * @param context contexto
      * @return true si el dispositivo es una tablet
      */
+    private static SharedPreferences preferences;
+
     public static boolean esTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
@@ -143,6 +150,18 @@ public class Utils extends AppCompatActivity {
     public static String getDevice(Context context){
         String device  = Settings.Global.getString(context.getContentResolver(), Settings.Global.DEVICE_NAME);
         return device;
+    }
+
+    public static void sendRequest(Activity activity, String command, Users user){
+
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+        Message message = new Message(activeToken + "¬" + getDevice(activity), Global.LIST_USER_TYPES, Integer.toString(activeID), null);
+
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver((Observer) activity);
     }
 
 }

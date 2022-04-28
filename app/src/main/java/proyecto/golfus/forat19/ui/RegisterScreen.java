@@ -259,7 +259,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
             } else if (request.getParameters().equals(Global.OK)) {
 
                 String user = ((Users) request.getObject()).getUsername();
-                int typeUser = ((Users) request.getObject()).getId_usertype();
+                int typeUser = ((Users) request.getObject()).getId_user_type();
                 String activeToken = request.getToken();
                 int activeID = ((Users) request.getObject()).getId_user();
 

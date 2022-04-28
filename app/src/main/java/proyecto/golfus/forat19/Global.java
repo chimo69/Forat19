@@ -13,7 +13,8 @@ public class Global {
 
     // Tipos de usuarios
     public static final int TYPE_ADMIN_USER = 0;
-    public static final int TYPE_NORMAL_USER = 1;
+    public static final int TYPE_ADVANCED_USER = 1;
+    public static final int TYPE_NORMAL_USER = 2;
 
     // Preferences
     public static final String PREF_ACTIVE_USER="activeUser";
@@ -33,6 +34,7 @@ public class Global {
     public static final String LIST_ALL_USERS = "ListUser*";
     public static final String LIST_ACTIVE_USERS = "ListUserA";
     public static final String LIST_INACTIVE_USERS = "ListUserI";
+    public static final String LIST_USER_TYPES = "ListUserType";
 
     // Codigo recibidos
     public static final String OK = "Ok";

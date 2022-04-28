@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
             if (request.getCommand().equals(Global.VALIDATE_TOKEN) && request.getParameters().equals(Global.OK)) {
 
                 Log.d("INFO", "Usuario: " + ((Users) request.getObject()).getUsername());
-                Log.d("INFO", "Tipo: " + ((Users) request.getObject()).getId_usertype());
+                Log.d("INFO", "Tipo: " + ((Users) request.getObject()).getId_user_type());
 
                 editor.putString(Global.PREF_ACTIVE_USER, ((Users) request.getObject()).getUsername());
-                editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_usertype());
+                editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_user_type());
                 editor.putInt(Global.PREF_ACTIVE_ID, ((Users) request.getObject()).getId_user());
                 editor.apply();
 

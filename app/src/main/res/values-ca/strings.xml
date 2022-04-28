@@ -66,4 +66,6 @@
     <string name="change_user_password">Canviar password d\'usuari</string>
     <string name="active_user">Usuari actiu</string>
     <string name="admin_user">Usuari administrador</string>
+    <string name="choose_user_type">Escull tipus d\'usuari</string>
+    <string name="mail_manager_error">No tens cap gestor de correu</string>
 </resources>

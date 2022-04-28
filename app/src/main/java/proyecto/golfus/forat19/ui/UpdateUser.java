@@ -217,7 +217,7 @@ public class UpdateUser extends Fragment implements Observer {
                     } else if (request.getParameters().equals(Global.OK)) {
                         int activeID = ((Users) request.getObject()).getId_user();
                         String user = ((Users) request.getObject()).getUsername();
-                        int typeUser = ((Users) request.getObject()).getId_usertype();
+                        int typeUser = ((Users) request.getObject()).getId_user_type();
 
                         editor.putInt(Global.PREF_ACTIVE_ID, activeID);
                         editor.putString(Global.PREF_ACTIVE_USER, user);
@@ -254,7 +254,7 @@ public class UpdateUser extends Fragment implements Observer {
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         String active = user.getActive();
         String username = user.getUsername();
-        int typeUser = user.getId_usertype();
+        int typeUser = user.getId_user_type();
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
         Users toCheckUser = new Users(activeID, username, name, password, typeUser, active, email, phone, address);

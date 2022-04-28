@@ -22,8 +22,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import Forat19.Message;
 import Forat19.Users;
+import Forat19.Message;
+
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterList;
@@ -170,14 +171,18 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                            Fragment fragment = new AccountAdmin();
-                            Bundle args = new Bundle();
-                            args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
+                            if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
+                                Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                            fragment.setArguments(args);
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                                Fragment fragment = new AccountAdmin();
+                                Bundle args = new Bundle();
+                                args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
+
+                                fragment.setArguments(args);
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                            }
+
                         }
                     });
                 }

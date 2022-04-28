@@ -104,12 +104,16 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolderList
             name.setText(users.getName());
 
             id.setText(String.format("%06d", users.getId_user()));
+
             if (users.getActive().equals("S")) {
                 id.setBackgroundColor(itemView.getResources().getColor(R.color.green));
             } else {
                 id.setBackgroundColor(itemView.getResources().getColor(R.color.error));
             }
-            if (users.getId_usertype() == Global.TYPE_ADMIN_USER) {
+            if (users.getId_user()==0){
+                id.setBackgroundColor(itemView.getResources().getColor(R.color.grey));
+            }
+            if (users.getId_user_type() == Global.TYPE_ADMIN_USER) {
                 imageActive.setVisibility(View.VISIBLE);
             } else {
                 imageActive.setVisibility(View.INVISIBLE);
