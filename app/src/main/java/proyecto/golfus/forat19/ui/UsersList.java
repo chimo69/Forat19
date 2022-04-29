@@ -27,7 +27,7 @@ import Forat19.Message;
 
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
-import proyecto.golfus.forat19.adapterList.AdapterList;
+import proyecto.golfus.forat19.adapterList.AdapterUsersList;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -46,7 +46,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
     private Button btn_allUsers, btn_activeUsers, btn_inactiveUsers;
     private static ProgressBar loading;
     private SearchView searchUserList;
-    private AdapterList adapterList;
+    private AdapterUsersList adapterList;
 
     public UsersList() {
 
@@ -54,7 +54,6 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
 
     public static UsersList newInstance(String param1, String param2) {
         UsersList fragment = new UsersList();
-
         return fragment;
     }
 
@@ -166,7 +165,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapterList = new AdapterList(listUsers);
+                    adapterList = new AdapterUsersList(listUsers);
                     recyclerView.setAdapter(adapterList);
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override

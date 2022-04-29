@@ -17,18 +17,16 @@ import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 
 /**
- * Adaptador encargado de rellenar el RecyclerView
- *
+ * Adaptador encargado de rellenar el RecyclerView de usuarios *
  * @author Antonio Rodriguez Sirgado
  */
-public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolderList>implements View.OnClickListener{
+public class AdapterUsersList extends RecyclerView.Adapter<AdapterUsersList.ViewHolderList>implements View.OnClickListener{
 
     ArrayList<Users> listUsers;
     ArrayList<Users> listSearch;
     private View.OnClickListener listener;
 
-
-    public AdapterList(ArrayList<Users> listUsers) {
+    public AdapterUsersList(ArrayList<Users> listUsers) {
 
         this.listUsers = listUsers;
         listSearch = new ArrayList<>();
@@ -37,14 +35,14 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolderList
 
     @NonNull
     @Override
-    public AdapterList.ViewHolderList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
+    public AdapterUsersList.ViewHolderList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_list, null, false);
         view.setOnClickListener(this);
         return new ViewHolderList(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterList.ViewHolderList holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterUsersList.ViewHolderList holder, int position) {
         holder.fillList(listUsers.get(position));
     }
 

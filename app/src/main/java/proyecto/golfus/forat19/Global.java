@@ -35,6 +35,7 @@ public class Global {
     public static final String LIST_ACTIVE_USERS = "ListUserA";
     public static final String LIST_INACTIVE_USERS = "ListUserI";
     public static final String LIST_USER_TYPES = "ListUserType";
+    public static final String LIST_INSTALLATIONS = "ListInstallation";
 
     // Codigo recibidos
     public static final String OK = "Ok";

@@ -128,7 +128,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     loadFragment(new UsersList());
                     break;
                 case R.id.manageGreens:
-                    // TODO gestión de campos
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new InstallationsList());
                     break;
                 case R.id.myAccount:
                     drawerLayout.closeDrawer(GravityCompat.START);
