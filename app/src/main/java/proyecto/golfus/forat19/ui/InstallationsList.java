@@ -138,17 +138,16 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
                         @Override
                         public void onClick(View view) {
 
-                            /*
-                            if (listInstallations.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
-                                Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                                Fragment fragment = new AccountAdmin();
+                                Log.d("INFO","Instalación seleccionada: "+listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+
+                                Fragment fragment = new InstallationFragment();
                                 Bundle args = new Bundle();
-                                args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
+                                args.putSerializable("installation", listInstallations.get(recyclerView.getChildAdapterPosition(view)));
 
                                 fragment.setArguments(args);
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-                            }*/
+
 
                         }
                     });
