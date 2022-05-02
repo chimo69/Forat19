@@ -40,7 +40,7 @@ public class InstallationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
            Bundle args = this.getArguments();
-           installation = (Installations) args.getSerializable("installations");
+           installation = (Installations) args.getSerializable("installation");
         }
     }
 
@@ -56,7 +56,7 @@ public class InstallationFragment extends Fragment {
         region = view.findViewById(R.id.installation_Region);
         country= view.findViewById(R.id.installation_country);
         web = view.findViewById(R.id.installation_website);
-        mail = view.findViewById(R.id.user_mail);
+        mail = view.findViewById(R.id.installation_mail);
         phone = view.findViewById(R.id.installation_phone);
         fax = view.findViewById(R.id.installation_fax);
         mobile = view.findViewById(R.id.installation_mobile);
@@ -65,6 +65,7 @@ public class InstallationFragment extends Fragment {
         services = view.findViewById(R.id.installation_services);
         logo = view.findViewById(R.id.installation_logo);
 
+        // Rellenamos los datos obtenidos del servidor
         installationName.setText(installation.getInstallation());
         address.setText(installation.getAddress());
         zip.setText(installation.getZip_code());

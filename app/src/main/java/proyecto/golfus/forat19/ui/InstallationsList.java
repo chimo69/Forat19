@@ -27,7 +27,6 @@ import Forat19.Message;
 
 import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterInstallationsList;
-import proyecto.golfus.forat19.adapterList.AdapterUsersList;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -79,6 +78,10 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
     }
 
+    /**
+     * Pide al servidor informacion de las instalaciones
+     * @author Antonio Rodríguez Sirgado
+     */
     public void loadInstallations(){
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
@@ -95,6 +98,11 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
         return false;
     }
 
+    /**
+     * Actua cuando el texto introduccido en el campo de busqueda cambia
+     * @param newText texto introducido en el campo de busqueda
+     * @return false
+     */
     @Override
     public boolean onQueryTextChange(String newText) {
         adapterList.filter(newText);
@@ -117,7 +125,6 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
         } else if (arg instanceof Message) {
 
-
             request = (Message) arg;
             String command = request.getCommand();
 
@@ -125,9 +132,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
             Log.d("INFO", "Parametros recibido: " + request.getParameters());
             Log.d("INFO", "Comando recibido: " + request.getCommand());
 
+            // Rellenamos el Arraylist con el objeto recibido
             listInstallations = (ArrayList<Installations>) request.getObject();
-
-
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -137,25 +143,20 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-
                                 Log.d("INFO","Instalación seleccionada: "+listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
 
+                                // Creamos un bundle con los datos de la instalación seleccionada y cambiamos al fragment de instalación
                                 Fragment fragment = new InstallationFragment();
                                 Bundle args = new Bundle();
                                 args.putSerializable("installation", listInstallations.get(recyclerView.getChildAdapterPosition(view)));
-
                                 fragment.setArguments(args);
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-
-
                         }
                     });
                 }
             });
 
             InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
-
 
         }
     }

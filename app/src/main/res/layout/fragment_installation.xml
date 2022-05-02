@@ -7,352 +7,429 @@
     android:background="@drawable/fondo_golf"
     tools:context=".ui.InstallationFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <TableLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/installation_logo"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:src="@drawable/ic_start_game" />
-
-                <TextView
-                    android:id="@+id/installation_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Installation" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="@string/Address"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="ZIP Code"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_zip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/textView21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="5dp"
-                    android:text="City"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:text="TextView" />
-            </TableRow>
-
-            <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView23"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="Region"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_Region"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/textView25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="5dp"
-                    android:text="Country"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_country"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:text="TextView" />
-            </TableRow>
-
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/textView27"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="Website"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/textView29"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="@string/Email"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_mail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/textView31"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:text="@string/Phone_number"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/textView33"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="5dp"
-                    android:text="mobile"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:text="TextView" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/textView36"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="3dp"
-                    android:paddingBottom="10dp"
-                    android:text="TextView"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/installation_fax"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="3dp"
-                    android:text="Fax" />
-            </TableRow>
-
-        </TableLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView38"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="How to get"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/installation_howToGet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="TextView" />
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView3">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView41"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="About Installation"
-                android:textStyle="bold" />
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/installation_about"
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/installation_logo"
+                            android:layout_width="74dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:src="@drawable/ic_start_game" />
+
+                        <TextView
+                            android:id="@+id/installation_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textAlignment="center"
+                            android:textColor="@color/green"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="Installation" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/Address"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/zip_code"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_zip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:text="@string/city"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_city"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/region"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_Region"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:text="@string/country"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView27"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/website"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_website"
+                            android:layout_width="208dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView"
+                            android:textSize="14sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView29"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/Email"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_mail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:singleLine="false"
+                            android:text="TextView" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView31"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="3dp"
+                            android:text="@string/Phone_number"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="3dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp">
+
+                        <TextView
+                            android:id="@+id/textView33"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:text="@string/mobile"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_mobile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/textView36"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:text="@string/fax"
+                            android:textColor="@color/green"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/installation_fax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:paddingLeft="10dp"
+                            android:text="TextView" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="TextView" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView5">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="@string/how_to_get"
+                        android:textColor="@color/green"
+                        android:textStyle="bold" />
 
-            <TextView
+                    <TextView
+                        android:id="@+id/installation_howToGet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="TextView" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="Services"
-                android:textStyle="bold" />
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
-            <TextView
-                android:id="@+id/installation_services"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="@string/about_installation"
+                        android:textColor="@color/green"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/installation_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="TextView" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:text="TextView" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="@string/services"
+                        android:textColor="@color/green"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/installation_services"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginVertical="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="TextView" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

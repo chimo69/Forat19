@@ -73,5 +73,16 @@
     <string name="admin_user">Admin user</string>
     <string name="choose_user_type">Choose user type</string>
     <string name="mail_manager_error">No Tienes ningun gestor de correo instalado</string>
+    <string name="zip_code">ZIP Code</string>
+    <string name="city">City</string>
+    <string name="region">Region</string>
+    <string name="country">Country</string>
+    <string name="website">Website</string>
+    <string name="mobile">mobile</string>
+    <string name="fax">Fax</string>
+    <string name="how_to_get">How to get</string>
+    <string name="about_installation">About Installation</string>
+    <string name="services">Services</string>
+    <string name="centre_the_qr_code_inside_the_viewer">centre the QR code inside the viewer</string>
 
 </resources>

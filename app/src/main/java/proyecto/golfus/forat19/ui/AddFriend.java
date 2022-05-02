@@ -1,59 +1,76 @@
 package proyecto.golfus.forat19.ui;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import Forat19.Users;
 import Forat19.Message;
-
+import Forat19.Users;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.adapterList.AdapterAdminUsersList;
+import proyecto.golfus.forat19.adapterList.AdapterNormalUsersList;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 
-/**
- * Pantalla que muestra el listado de usuarios
- * @author Antonio Rodríguez Sirgado
- */
-public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener {
+public class AddFriend extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
+    private CameraSource cameraSource;
+    private String detectedUser;
+    private RecyclerView recyclerView;
+    private SearchView searchUserList;
+    private AdapterNormalUsersList adapterList;
     private SharedPreferences preferences;
     private Message request;
     private ArrayList<Users> listUsers;
-    private RecyclerView recyclerView;
-    private Button btn_allUsers, btn_activeUsers, btn_inactiveUsers;
-    private static ProgressBar loading;
-    private SearchView searchUserList;
-    private AdapterAdminUsersList adapterList;
+    private Button btnCodeQR;
 
-    public UsersList() {
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
 
+    public AddFriend() {
+        // Required empty public constructor
     }
 
-    public static UsersList newInstance(String param1, String param2) {
-        UsersList fragment = new UsersList();
+
+    public static AddFriend newInstance(String param1, String param2) {
+        AddFriend fragment = new AddFriend();
         return fragment;
     }
 
@@ -61,57 +78,54 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-
+        if (getArguments() != null) {
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_users_list, container, false);
-        recyclerView = view.findViewById(R.id.recyclerListUsers);
-        btn_allUsers = view.findViewById(R.id.btn_allUsers);
-        btn_activeUsers = view.findViewById(R.id.btn_ActiveUsers);
-        btn_inactiveUsers = view.findViewById(R.id.btn_InactiveUsers);
-        loading = view.findViewById(R.id.userlist_loading);
-        searchUserList = view.findViewById(R.id.searchUserList);
-        loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        btn_allUsers.setBackgroundColor(getResources().getColor(R.color.green));
-
-        // boton Todos los usuarios
-        btn_allUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeButtonColor(btn_allUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_ALL_USERS);
-            }
-        });
-        // boton usuarios activos
-        btn_activeUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeButtonColor(btn_activeUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_ACTIVE_USERS);
-            }
-        });
-        // boton usuarios inactivos
-        btn_inactiveUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeButtonColor(btn_inactiveUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_INACTIVE_USERS);
-            }
-        });
-
+        View view = inflater.inflate(R.layout.fragment_add_friend, container, false);
+        recyclerView = view.findViewById(R.id.RecyclerNormalListUser);
+        searchUserList = view.findViewById(R.id.searchNormalUserList);
+        btnCodeQR = view.findViewById(R.id.btn_qrcode);
         searchUserList.setOnQueryTextListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        loading.setVisibility(View.VISIBLE);
-        loadUsers(Global.LIST_ALL_USERS);
+        loadUsers(Global.LIST_ACTIVE_USERS);
+        btnCodeQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
+                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                intentIntegrator.setPrompt("Centra el codigo qr en el visor");
+                intentIntegrator.setCameraId(0);
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setBarcodeImageEnabled(true);
+                intentIntegrator.setOrientationLocked(true);
+                intentIntegrator.initiateScan();
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Utils.showToast(getActivity(), "Lectura cancelada", Toast.LENGTH_SHORT);
+            } else {
+                Utils.showToast(getActivity(), "Amigo añadido: " + result.getContents(), Toast.LENGTH_SHORT);
+                Log.d("INFO","Amigo añadido: "+result.getContents());
+            }
+        } else {
+            Utils.showToast(getActivity(), "Sin resultados", Toast.LENGTH_SHORT);
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("INFO","Amigo no añadido");
+        }
     }
 
     /**
@@ -122,9 +136,8 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
      * Mensaje = (token¬device,typeList, Id, null)
      *
      * @param typeList tipo de lista a mostrar
-     *
      */
-    public void loadUsers(String typeList){
+    public void loadUsers(String typeList) {
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
@@ -135,15 +148,27 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         request.addObserver(this);
     }
 
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapterList.filter(newText);
+        return false;
+    }
+
     /**
      * Permanece a la espera de que las variables cambien
-     * @author Antonio Rodriguez Sirgado
-     * @param o la clase observada
+     *
+     * @param o   la clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
-
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
@@ -164,13 +189,13 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapterList = new AdapterAdminUsersList(listUsers);
+                    adapterList = new AdapterNormalUsersList(listUsers);
                     recyclerView.setAdapter(adapterList);
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
+                            /*if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
                                 Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
                                 Fragment fragment = new AccountAdmin();
@@ -179,38 +204,14 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
 
                                 fragment.setArguments(args);
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-                            }
+                            }*/
 
                         }
                     });
                 }
             });
 
-            UsersList.loading.post(() -> UsersList.loading.setVisibility(View.INVISIBLE));
+            //UsersList.loading.post(() -> UsersList.loading.setVisibility(View.INVISIBLE));
         }
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        adapterList.filter(newText);
-        return false;
-    }
-
-    /**
-     * Cambia el color de fondo del boton recibido y pone los demas a gris
-     * @author Antonio Rodríguez Sirgado
-     * @param button boton recibido
-     */
-    public void changeButtonColor(Button button){
-        btn_allUsers.setBackgroundColor(getResources().getColor(R.color.grey));
-        btn_activeUsers.setBackgroundColor(getResources().getColor(R.color.grey));
-        btn_inactiveUsers.setBackgroundColor(getResources().getColor(R.color.grey));
-
-        button.setBackgroundColor(getResources().getColor(R.color.green));
     }
 }

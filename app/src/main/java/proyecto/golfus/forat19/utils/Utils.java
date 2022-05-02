@@ -152,7 +152,7 @@ public class Utils extends AppCompatActivity {
         return device;
     }
 
-    public static void sendRequest(Activity activity, String command, Users user){
+    public static void sendRequest(Activity activity, String command, String parameter, Users user){
 
         preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);

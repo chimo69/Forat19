@@ -13,8 +13,8 @@ public class Global {
 
     // Tipos de usuarios
     public static final int TYPE_ADMIN_USER = 0;
-    public static final int TYPE_ADVANCED_USER = 1;
-    public static final int TYPE_NORMAL_USER = 2;
+    public static final int TYPE_NORMAL_USER = 1;
+    public static final int TYPE_ADVANCED_USER = 2;
 
     // Preferences
     public static final String PREF_ACTIVE_USER="activeUser";

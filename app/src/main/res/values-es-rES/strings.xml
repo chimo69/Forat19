@@ -68,4 +68,15 @@
     <string name="admin_user">Usuario Administrador</string>
     <string name="choose_user_type">Escoge tipo de usuario</string>
     <string name="mail_manager_error">No Tienes ningun gestor de correo instalado</string>
+    <string name="zip_code">Código postal</string>
+    <string name="city">Ciudad</string>
+    <string name="country">País</string>
+    <string name="website">Página web</string>
+    <string name="mobile">Móvil</string>
+    <string name="fax">Fax</string>
+    <string name="how_to_get">Como llegar</string>
+    <string name="about_installation">Sobre la instalación</string>
+    <string name="region">Región</string>
+    <string name="centre_the_qr_code_inside_the_viewer">centre el codigo QR dentro del visor</string>
+    <string name="services">Servicios</string>
 </resources>

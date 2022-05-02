@@ -120,7 +120,9 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
 
+        //Utils.sendRequest(this,Global.LOGIN,sendMessage,null);
         mMessage = new Message(null+"¬"+Utils.getDevice(this), Global.LOGIN, sendMessage, null);
+
 
         Log.d("INFO", "Token enviado: " + mMessage.getToken());
         Log.d("INFO", "Parametro enviado: " + mMessage.getParameters());

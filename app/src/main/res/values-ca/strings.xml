@@ -68,4 +68,15 @@
     <string name="admin_user">Usuari administrador</string>
     <string name="choose_user_type">Escull tipus d\'usuari</string>
     <string name="mail_manager_error">No tens cap gestor de correu</string>
+    <string name="zip_code">Codi postal</string>
+    <string name="city">Ciutat</string>
+    <string name="country">País</string>
+    <string name="website">Pàgina web</string>
+    <string name="mobile">Mòbil</string>
+    <string name="fax">Fax</string>
+    <string name="how_to_get">Com arribar-hi</string>
+    <string name="about_installation">Sobre la instal·lació</string>
+    <string name="region">Regió</string>
+    <string name="centre_the_qr_code_inside_the_viewer">Centri el codi QR dins del visor</string>
+    <string name="services">Serveis</string>
 </resources>

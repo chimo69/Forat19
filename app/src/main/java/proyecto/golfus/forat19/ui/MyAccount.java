@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ import proyecto.golfus.forat19.utils.Utils;
 public class MyAccount extends Fragment implements Observer {
 
     private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo;
+    private ImageButton btnSeeFriends, btnAddFriends;
     private ImageView qrCode;
     private View view;
     private Button btnDelete, btnUpdate;
@@ -85,6 +87,8 @@ public class MyAccount extends Fragment implements Observer {
         preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         btnDelete = view.findViewById(R.id.btn_delete);
         btnUpdate = view.findViewById(R.id.btn_update);
+        btnAddFriends = view.findViewById(R.id.addFriends);
+        btnSeeFriends = view.findViewById(R.id.seeFriends);
         loading = view.findViewById(R.id.loading_myAccount);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -116,6 +120,14 @@ public class MyAccount extends Fragment implements Observer {
             }
         });
 
+        // Boton de añadir amigos
+        btnAddFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new AddFriend();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+            }
+        });
         getUser();
         return view;
     }
