@@ -97,36 +97,14 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         btnCodeQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
-                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                intentIntegrator.setPrompt("Centra el codigo qr en el visor");
-                intentIntegrator.setCameraId(0);
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setBarcodeImageEnabled(true);
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.initiateScan();
+                new IntentIntegrator(getActivity()).initiateScan();
+                Log.d("INFO","Camara iniciada");
             }
         });
 
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Utils.showToast(getActivity(), "Lectura cancelada", Toast.LENGTH_SHORT);
-            } else {
-                Utils.showToast(getActivity(), "Amigo añadido: " + result.getContents(), Toast.LENGTH_SHORT);
-                Log.d("INFO","Amigo añadido: "+result.getContents());
-            }
-        } else {
-            Utils.showToast(getActivity(), "Sin resultados", Toast.LENGTH_SHORT);
-            super.onActivityResult(requestCode, resultCode, data);
-            Log.d("INFO","Amigo no añadido");
-        }
-    }
 
     /**
      * <b>Carga la lista de usuarios del servidor</b><br><br>
@@ -158,6 +136,15 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     public boolean onQueryTextChange(String newText) {
         adapterList.filter(newText);
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
+        Log.d("INFO","Dato recibido en camara: "+ result.getContents());
+
     }
 
     /**
