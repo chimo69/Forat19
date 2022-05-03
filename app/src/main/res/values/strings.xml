@@ -84,5 +84,6 @@
     <string name="about_installation">About Installation</string>
     <string name="services">Services</string>
     <string name="centre_the_qr_code_inside_the_viewer">centre the QR code inside the viewer</string>
+    <string name="installations_management">Installations management</string>
 
 </resources>

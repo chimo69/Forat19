@@ -36,7 +36,7 @@
                     android:checkable="true"
                     android:id="@+id/manageGreens"
                     android:icon="@drawable/ic_manage_greens"
-                    android:title="@string/green_managementes" />
+                    android:title="@string/installations_management" />
             </menu>
         </item>
     </group>

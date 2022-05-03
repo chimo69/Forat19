@@ -79,4 +79,5 @@
     <string name="region">Región</string>
     <string name="centre_the_qr_code_inside_the_viewer">centre el codigo QR dentro del visor</string>
     <string name="services">Servicios</string>
+    <string name="installations_management">Gestión de instalaciones</string>
 </resources>

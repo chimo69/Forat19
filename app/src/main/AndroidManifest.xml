@@ -16,9 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
-            android:name=".utils.ScannerQrCode"
-            android:exported="false" />
-        <activity
             android:name=".ui.MenuPrincipal"
             android:exported="true" />
         <activity

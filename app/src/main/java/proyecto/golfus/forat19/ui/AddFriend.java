@@ -49,7 +49,10 @@ import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
-
+/**
+ * Pantalla para añadir amistades mediante listado o codigo QR
+ * @author Antonio Rodríguez Sirgado
+ */
 public class AddFriend extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
     private CameraSource cameraSource;
@@ -97,7 +100,13 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         btnCodeQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new IntentIntegrator(getActivity()).initiateScan();
+
+                IntentIntegrator.forSupportFragment(AddFriend.this)
+                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+                .setBeepEnabled(true)
+                .setPrompt("hola que tal")
+                .initiateScan();
+
                 Log.d("INFO","Camara iniciada");
             }
         });
@@ -138,11 +147,18 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         return false;
     }
 
+    /**
+     * Recibe el resultado del intent del lector de QR
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
+        Utils.showSnack(getView(),"Amigo añadido: "+result.getContents(),Snackbar.LENGTH_INDEFINITE);
         Log.d("INFO","Dato recibido en camara: "+ result.getContents());
 
     }

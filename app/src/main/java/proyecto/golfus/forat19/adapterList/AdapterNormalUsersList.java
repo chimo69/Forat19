@@ -3,7 +3,6 @@ package proyecto.golfus.forat19.adapterList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,19 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import Forat19.Users;
-import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de usuarios *
+ *
  * @author Antonio Rodriguez Sirgado
  */
-public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUsersList.ViewHolderList>implements View.OnClickListener{
+public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUsersList.ViewHolderNormalList> implements View.OnClickListener {
 
     ArrayList<Users> listUsers;
     ArrayList<Users> listSearch;
-    private final int ADMIN_USER = 0;
-    private final int NORMAL_USER= 1;
+
     private View.OnClickListener listener;
 
     public AdapterNormalUsersList(ArrayList<Users> listUsers) {
@@ -36,19 +34,21 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
 
     @NonNull
     @Override
-    public AdapterNormalUsersList.ViewHolderList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolderNormalList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        /*switch (viewType){
-            case ADMIN_USER:
-        }*/
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_normal_user_list, null, false);
         view.setOnClickListener(this);
-        return new ViewHolderList(view);
+        return new ViewHolderNormalList(view);
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterNormalUsersList.ViewHolderList holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolderNormalList holder, int position) {
+
+
         holder.fillList(listUsers.get(position));
+
+
     }
 
     @Override
@@ -63,8 +63,8 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
             listUsers.addAll(listSearch);
         } else {
             listUsers.clear();
-            for (Users l: listSearch) {
-                if (l.getUsername().toLowerCase().contains(txtSearch.toLowerCase())||l.getName().toLowerCase().contains(txtSearch.toLowerCase())){
+            for (Users l : listSearch) {
+                if (l.getUsername().toLowerCase().contains(txtSearch.toLowerCase()) || l.getName().toLowerCase().contains(txtSearch.toLowerCase())) {
                     listUsers.add(l);
                 }
             }
@@ -72,21 +72,22 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
         notifyDataSetChanged();
     }
 
-    public void setOnClickListener(View.OnClickListener listener){
-        this.listener=listener;
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
+
     @Override
     public void onClick(View view) {
-        if (listener!=null){
+        if (listener != null) {
             listener.onClick(view);
         }
     }
 
-    public class ViewHolderList extends RecyclerView.ViewHolder {
+    public class ViewHolderNormalList extends RecyclerView.ViewHolder {
         TextView username;
         TextView name;
 
-        public ViewHolderList(@NonNull View itemView) {
+        public ViewHolderNormalList(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.username);
             name = itemView.findViewById(R.id.name);
@@ -105,15 +106,5 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
 
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        switch (position){
-            case 0:
-                return ADMIN_USER;
-            case 1:
-                return NORMAL_USER;
-            default:
-                return super.getItemViewType(position);
-        }
-    }
+
 }

@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Locale;
 
 import Forat19.Installations;
@@ -26,6 +28,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment que muestra al Admin los datos de las instalaciones para poder gestionarlas
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class InstallationFragment extends Fragment {
@@ -51,8 +54,8 @@ public class InstallationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-           Bundle args = this.getArguments();
-           installation = (Installations) args.getSerializable("installation");
+            Bundle args = this.getArguments();
+            installation = (Installations) args.getSerializable("installation");
         }
     }
 
@@ -64,9 +67,9 @@ public class InstallationFragment extends Fragment {
         installationName = view.findViewById(R.id.installation_name);
         address = view.findViewById(R.id.installation_address);
         zip = view.findViewById(R.id.installation_zip);
-        city=view.findViewById(R.id.installation_city);
+        city = view.findViewById(R.id.installation_city);
         region = view.findViewById(R.id.installation_Region);
-        country= view.findViewById(R.id.installation_country);
+        country = view.findViewById(R.id.installation_country);
         web = view.findViewById(R.id.installation_website);
         mail = view.findViewById(R.id.installation_mail);
         phone = view.findViewById(R.id.installation_phone);
@@ -104,7 +107,14 @@ public class InstallationFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(web.getText().toString()));
-                startActivity(intent);
+
+                try {
+                    startActivity(intent);
+
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Utils.showSnack(getView(),"No se pudo abrir la página web", Snackbar.LENGTH_SHORT);
+                }
+
             }
         });
 
@@ -113,11 +123,11 @@ public class InstallationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},123);
-                }else{
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 123);
+                } else {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:"+phone.getText().toString()));
+                    intent.setData(Uri.parse("tel:" + phone.getText().toString()));
                     startActivity(intent);
                 }
             }
@@ -133,8 +143,8 @@ public class InstallationFragment extends Fragment {
 
                 try {
                     startActivity(intent);
-                }catch (android.content.ActivityNotFoundException ex){
-                    Utils.showToast(getActivity(),getString(R.string.mail_manager_error), Toast.LENGTH_SHORT);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Utils.showSnack(getView(),R.string.mail_manager_error,Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -142,12 +152,17 @@ public class InstallationFragment extends Fragment {
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String latitude="41.565";
-                String longitude="2.33376";
-                Uri uri = Uri.parse("geo:"+latitude+","+longitude);
-                Intent intent = new Intent (Intent.ACTION_VIEW, uri);
+                String latitude = "41.565";
+                String longitude = "2.33376";
+                Uri uri = Uri.parse("geo:" + latitude + "," + longitude);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.setPackage("com.google.android.apps.maps");
-                startActivity(intent);
+
+                try {
+                    startActivity(intent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Utils.showSnack(getView(),"No se pudo abrir la localización",Snackbar.LENGTH_SHORT);
+                }
             }
         });
 

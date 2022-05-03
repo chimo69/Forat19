@@ -60,12 +60,16 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         // comprobamos el tipo de usuario para diferenciar opciones de menu
         // 0 - Admin
         // 1 - Normal
+        // 2 - Advance
 
         switch (userType) {
             case Global.TYPE_ADMIN_USER:
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, true);
                 break;
             case Global.TYPE_NORMAL_USER:
+                navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
+                break;
+            case Global.TYPE_ADVANCED_USER:
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
                 break;
         }
@@ -121,7 +125,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     // TODO empezar un juego
                     break;
                 case R.id.searchGreen:
-                    // TODO buscar un campo
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new InstallationsList());
                     break;
                 case R.id.manageUSers:
                     drawerLayout.closeDrawer(GravityCompat.START);
@@ -157,7 +162,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     /**
      * muestra mensaje emergente de consulta
-     *
      * @author Antonio Rodriguez Sirgado
      */
     private void closeSession() {
