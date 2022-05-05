@@ -80,4 +80,13 @@
     <string name="centre_the_qr_code_inside_the_viewer">centre el codigo QR dentro del visor</string>
     <string name="services">Servicios</string>
     <string name="installations_management">Gestión de instalaciones</string>
+    <string name="without_courses">No dispone de recorridos</string>
+    <string name="search_installation">Buscar instalación</string>
+    <string name="add_course">Añadir recorrido</string>
+    <string name="course_name">Nombre de recorrido</string>
+    <string name="field_value">Valor de campo</string>
+    <string name="type">Tipo</string>
+    <string name="about_course">Sobre el recorrido</string>
+    <string name="lenght">Longitud</string>
+    <string name="new_course">Nuevo recorrido</string>
 </resources>

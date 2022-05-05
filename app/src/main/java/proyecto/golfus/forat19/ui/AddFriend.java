@@ -158,7 +158,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         super.onActivityResult(requestCode, resultCode, data);
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
-        Utils.showSnack(getView(),"Amigo añadido: "+result.getContents(),Snackbar.LENGTH_INDEFINITE);
+        Utils.showSnack(getView(),"Amigo añadido: "+result.getContents(),Snackbar.LENGTH_LONG);
         Log.d("INFO","Dato recibido en camara: "+ result.getContents());
 
     }

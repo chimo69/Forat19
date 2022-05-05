@@ -80,4 +80,13 @@
     <string name="centre_the_qr_code_inside_the_viewer">Centri el codi QR dins del visor</string>
     <string name="services">Serveis</string>
     <string name="installations_management">Gestió d\'instalacions</string>
+    <string name="without_courses">No disposa de recorreguts</string>
+    <string name="search_installation">Buscar instal·lació</string>
+    <string name="add_course">Afegir recorregut</string>
+    <string name="course_name">Nom de recorregut</string>
+    <string name="field_value">Valor de camp</string>
+    <string name="type">Tipus</string>
+    <string name="about_course">Sobre el recorregut</string>
+    <string name="lenght">Longitud</string>
+    <string name="new_course">Nou recorregut</string>
 </resources>

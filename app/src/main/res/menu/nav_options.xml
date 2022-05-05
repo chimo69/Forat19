@@ -15,10 +15,10 @@
             android:icon="@drawable/ic_start_game"
             android:title="@string/start_game" />
         <item
-            android:checkable="true"
             android:id="@+id/searchGreen"
+            android:checkable="true"
             android:icon="@drawable/ic_search"
-            android:title="@string/search_green" />
+            android:title="@string/search_installation" />
     </group>
 
 

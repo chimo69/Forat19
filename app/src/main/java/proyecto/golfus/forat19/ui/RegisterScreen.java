@@ -144,7 +144,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         editor = preferences.edit();
 
         Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
-        Message message = new Message(null+"¬"+Utils.getDevice(this), "AddUser", null, toCheckUser);
+        Message message = new Message(null+"¬"+Utils.getDevice(this), Global.ADD_USER, null, toCheckUser);
 
         RequestServer request = new RequestServer();
         request.request(message);

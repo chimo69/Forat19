@@ -9,21 +9,27 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
+import Forat19.Golf_Courses;
 import Forat19.Installations;
+import Forat19.Message;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
@@ -34,9 +40,14 @@ import proyecto.golfus.forat19.utils.Utils;
 public class InstallationFragment extends Fragment {
 
     private Installations installation;
+    private Message request;
     private ImageButton btnPhone, btnMail, btnWeb, btnMap;
-    private TextView installationName, address, zip, city, region, country, web, mail, phone, fax, mobile, howToGet, about, services;
+    private TextView installationName, address, zip, city, region, country, web, mail, phone, fax, mobile, howToGet, about, services, infoCourses;
+    private FloatingActionButton addCourse;
+    private ArrayList<Golf_Courses> listCourses;
     private ImageView logo;
+    private RecyclerView recyclerView;
+    private AdapterCoursesList adapterCoursesList;
 
     public InstallationFragment() {
         // Required empty public constructor
@@ -56,6 +67,7 @@ public class InstallationFragment extends Fragment {
         if (getArguments() != null) {
             Bundle args = this.getArguments();
             installation = (Installations) args.getSerializable("installation");
+            request = (Message) args.getSerializable("course");
         }
     }
 
@@ -83,6 +95,11 @@ public class InstallationFragment extends Fragment {
         btnMap = view.findViewById(R.id.btn_installation_map);
         btnPhone = view.findViewById(R.id.btn_installation_phone);
         btnWeb = view.findViewById(R.id.btn_installation_web);
+        recyclerView = view.findViewById(R.id.recyclerListCourses);
+        infoCourses = view.findViewById(R.id.infoCourses);
+        addCourse = view.findViewById(R.id.btn_addCourse);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         // Rellenamos los datos obtenidos del servidor
         installationName.setText(installation.getInstallation());
@@ -165,6 +182,41 @@ public class InstallationFragment extends Fragment {
                 }
             }
         });
+
+        listCourses = (ArrayList<Golf_Courses>) request.getObject();
+
+        if (listCourses.size()==0){
+            addCourse.setVisibility(View.VISIBLE);
+            addCourse.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new UpdateCourse();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                }
+            });
+        }
+
+
+        Log.d("INFO", "Numero de recorridos: "+String.valueOf(listCourses.size()));
+        adapterCoursesList = new AdapterCoursesList(listCourses);
+        recyclerView.setAdapter(adapterCoursesList);
+
+        adapterCoursesList.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Log.d("INFO","Recorrido seleccionado"+ listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
+                Fragment fragment = new CourseFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("course", listCourses.get(recyclerView.getChildAdapterPosition(view)));
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+            }
+        });
+        if (adapterCoursesList.getItemCount()==0){infoCourses.setText(R.string.without_courses);}
+
+        recyclerView.setAdapter(adapterCoursesList);
 
         return view;
     }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
 
@@ -33,6 +34,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Pantalla que muestra el listado de instalaciones
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class InstallationsList extends Fragment implements Observer, SearchView.OnQueryTextListener {
@@ -44,6 +46,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     private static ProgressBar loading;
     private SearchView searchInstallationList;
     private AdapterInstallationsList adapterList;
+    private Installations selectedInstallation;
+
 
     public InstallationsList() {
     }
@@ -68,7 +72,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
         loading = view.findViewById(R.id.installationList_loading);
         searchInstallationList = view.findViewById(R.id.searchInstallationList);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         searchInstallationList.setOnQueryTextListener(this);
         loading.setVisibility(View.VISIBLE);
 
@@ -82,16 +86,39 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * Pide al servidor informacion de las instalaciones
      * @author Antonio Rodríguez Sirgado
      */
-    public void loadInstallations(){
+    public void loadInstallations() {
         String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
         int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
         Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, Integer.toString(activeID), null);
-        Log.d("INFO", "Enviando token: " + activeToken);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
+
+    /**
+     * Pide al servidor informacion de los recorridos
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void loadGolfCourse(int installationId) {
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        //int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+
+        Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES, Integer.toString(installationId), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /*public void loadGolfCourseType(){
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+
+        Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_GOLF_COURSE_TYPE, Integer.toString(activeID), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }*/
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -100,6 +127,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
     /**
      * Actua cuando el texto introduccido en el campo de busqueda cambia
+     *
      * @param newText texto introducido en el campo de busqueda
      * @return false
      */
@@ -111,9 +139,10 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
     /**
      * Permanece a la espera de que las variables cambien
-     * @author Antonio Rodriguez Sirgado
-     * @param o la clase observada
+     *
+     * @param o   la clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
@@ -128,33 +157,44 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
             request = (Message) arg;
             String command = request.getCommand();
 
+
             Log.d("INFO", "Token recibido: " + request.getToken());
             Log.d("INFO", "Parametros recibido: " + request.getParameters());
             Log.d("INFO", "Comando recibido: " + request.getCommand());
 
-            // Rellenamos el Arraylist con el objeto recibido
-            listInstallations = (ArrayList<Installations>) request.getObject();
+            if (command.equals(Global.LIST_INSTALLATIONS)) {
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapterList = new AdapterInstallationsList(listInstallations);
-                    recyclerView.setAdapter(adapterList);
-                    adapterList.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                                Log.d("INFO","Instalación seleccionada: "+listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+                // Rellenamos el Arraylist con el objeto recibido
+                listInstallations = (ArrayList<Installations>) request.getObject();
 
-                                // Creamos un bundle con los datos de la instalación seleccionada y cambiamos al fragment de instalación
-                                Fragment fragment = new InstallationFragment();
-                                Bundle args = new Bundle();
-                                args.putSerializable("installation", listInstallations.get(recyclerView.getChildAdapterPosition(view)));
-                                fragment.setArguments(args);
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-                        }
-                    });
-                }
-            });
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterList = new AdapterInstallationsList(listInstallations);
+                        recyclerView.setAdapter(adapterList);
+                        adapterList.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.d("INFO", "Instalación seleccionada: " + listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+                                selectedInstallation = listInstallations.get(recyclerView.getChildAdapterPosition(view));
+                                loadGolfCourse(listInstallations.get(recyclerView.getChildAdapterPosition(view)).getId_installation());
+
+                            }
+                        });
+                    }
+                });
+            } else if (command.equals(Global.LIST_GOLF_COURSES)) {
+
+                Fragment fragment = new InstallationFragment();
+                Bundle args = new Bundle();
+
+                args.putSerializable("installation", selectedInstallation);
+                args.putSerializable("course", request);
+
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+
+            }
 
             InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
 

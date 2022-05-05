@@ -252,7 +252,7 @@ public class MyAccount extends Fragment implements Observer {
 
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 try {
-                    Bitmap bitmap = barcodeEncoder.encodeBitmap(userName, BarcodeFormat.QR_CODE, 750, 750);
+                    Bitmap bitmap = barcodeEncoder.encodeBitmap(userName, BarcodeFormat.QR_CODE, 500, 500);
                     qrCode.setImageBitmap(bitmap);
                 } catch (WriterException e) {
                     e.printStackTrace();

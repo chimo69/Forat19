@@ -16,11 +16,10 @@
             android:layout_height="wrap_content">
 
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
@@ -33,20 +32,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
                     <ImageView
                         android:id="@+id/imageView7"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1.2"
                         android:src="@drawable/ic_baseline_person_24" />
 
                     <TextView
                         android:id="@+id/txtUserInfo"
                         style="@style/Widget.AppCompat.TextView"
-                        android:layout_width="211dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_weight="0.6"
                         android:fontFamily="@font/goldman"
                         android:gravity="center_horizontal|center_vertical"
                         android:textColor="@color/green"
@@ -56,19 +59,27 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1.2"
                         android:orientation="vertical">
 
                         <ImageButton
                             android:id="@+id/seeFriends"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_weight="1"
                             app:srcCompat="@drawable/ic_baseline_person_24" />
 
                         <ImageButton
                             android:id="@+id/addFriends"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_weight="1"
                             app:srcCompat="@drawable/ic_add_user" />
                     </LinearLayout>
 
@@ -203,7 +214,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
@@ -219,13 +230,15 @@
 
                     <ImageView
                         android:id="@+id/qrCode"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
                         android:scaleType="center"
+                        android:scaleX="1.4"
+                        android:scaleY="1.4"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

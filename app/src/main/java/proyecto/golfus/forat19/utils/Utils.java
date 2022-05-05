@@ -29,14 +29,15 @@ import proyecto.golfus.forat19.*;
  * @author Antonio Rodríguez Sirgado
  */
 public class Utils extends AppCompatActivity {
+
+    private static SharedPreferences preferences;
+
     /**
      * Comprueba si el dispositivo es una tablet
      * @author Antonio Rodríguez Sirgado
      * @param context contexto
      * @return true si el dispositivo es una tablet
      */
-    private static SharedPreferences preferences;
-
     public static boolean esTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)

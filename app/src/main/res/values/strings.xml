@@ -85,5 +85,17 @@
     <string name="services">Services</string>
     <string name="centre_the_qr_code_inside_the_viewer">centre the QR code inside the viewer</string>
     <string name="installations_management">Installations management</string>
+    <string name="without_courses">No courses available</string>
+    <string name="search_installation">Search installation</string>
+    <string name="course_name">Course name</string>
+    <string name="slope" translatable="false">Slope</string>
+    <string name="field_value">Field value</string>
+    <string name="type">Type</string>
+    <string name="about_course">About course</string>
+    <string name="handicap" translatable="false">Handicap</string>
+    <string name="lenght">Lenght</string>
+    <string name="par" translatable="false">Par</string>
+    <string name="add_course">Add course</string>
+    <string name="new_course">new Course</string>
 
 </resources>

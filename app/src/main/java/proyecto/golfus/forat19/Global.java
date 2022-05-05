@@ -36,6 +36,9 @@ public class Global {
     public static final String LIST_INACTIVE_USERS = "ListUserI";
     public static final String LIST_USER_TYPES = "ListUserType";
     public static final String LIST_INSTALLATIONS = "ListInstallation";
+    public static final String LIST_GOLF_COURSES = "ListGolfCourse";
+    public static final String GET_GOLF_COURSE_TYPE ="GetGolfCourseType" ;
+    public static final String LIST_GOLF_COURSES_TYPE = "ListGolfCourseType";
 
     // Codigo recibidos
     public static final String OK = "Ok";
