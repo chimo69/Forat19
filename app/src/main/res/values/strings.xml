@@ -97,5 +97,8 @@
     <string name="par" translatable="false">Par</string>
     <string name="add_course">Add course</string>
     <string name="new_course">new Course</string>
+    <string name="call_could_not_be_made">Call could not be made</string>
+    <string name="Location_could_not_be_opened">Location could not be opened</string>
+    <string name="cant_open_web">Web could not be opened</string>
 
 </resources>

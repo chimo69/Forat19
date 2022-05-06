@@ -60,7 +60,6 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     private RecyclerView recyclerView;
     private SearchView searchUserList;
     private AdapterNormalUsersList adapterList;
-    private SharedPreferences preferences;
     private Message request;
     private ArrayList<Users> listUsers;
     private Button btnCodeQR;
@@ -80,7 +79,6 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         if (getArguments() != null) {
         }
     }
@@ -125,11 +123,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
      * @param typeList tipo de lista a mostrar
      */
     public void loadUsers(String typeList) {
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), typeList, Integer.toString(activeID), null);
-        Log.d("INFO", "Enviando token: " + activeToken);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), typeList, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

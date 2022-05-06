@@ -39,7 +39,6 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class InstallationsList extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
-    private SharedPreferences preferences;
     private Message request;
     private ArrayList<Installations> listInstallations;
     private RecyclerView recyclerView;
@@ -60,7 +59,6 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -87,10 +85,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadInstallations() {
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
-        Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, Integer.toString(activeID), null);
+        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, Utils.getActiveToken(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -101,10 +97,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGolfCourse(int installationId) {
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        //int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
-        Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES, Integer.toString(installationId), null);
+        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES, Integer.toString(installationId), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

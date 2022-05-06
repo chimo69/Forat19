@@ -164,11 +164,16 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                 String activeToken = request.getToken();
                 int activeID = ((Users) request.getObject()).getId_user();
 
-                editor.putString(Global.PREF_ACTIVE_USER, activeUser);
-                editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
-                editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
-                editor.putInt(Global.PREF_TYPE_USER, typeUser);
-                editor.putInt(Global.PREF_ACTIVE_ID,activeID);
+                //editor.putString(Global.PREF_ACTIVE_USER, activeUser);
+                //editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
+                //editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
+                //editor.putInt(Global.PREF_TYPE_USER, typeUser);
+                //editor.putInt(Global.PREF_ACTIVE_ID,activeID);
+                Utils.setSessionStatus(this,openSession.isChecked());
+                Utils.setActiveUser(this,activeUser);
+                Utils.setActiveToken(this,activeToken);
+                Utils.setActiveTypeUser(this,typeUser);
+                Utils.setActiveId(this,activeID);
                 editor.apply();
 
                 Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);

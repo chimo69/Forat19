@@ -1,7 +1,9 @@
 package proyecto.golfus.forat19.ui;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,13 +30,13 @@ import java.util.ArrayList;
 import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
+import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment que muestra al Admin los datos de las instalaciones para poder gestionarlas
- *
  * @author Antonio Rodríguez Sirgado
  */
 public class InstallationFragment extends Fragment {
@@ -50,9 +52,7 @@ public class InstallationFragment extends Fragment {
     private AdapterCoursesList adapterCoursesList;
 
     public InstallationFragment() {
-        // Required empty public constructor
     }
-
 
     public static InstallationFragment newInstance(String param1, String param2) {
         InstallationFragment fragment = new InstallationFragment();
@@ -129,7 +129,7 @@ public class InstallationFragment extends Fragment {
                     startActivity(intent);
 
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showSnack(getView(),"No se pudo abrir la página web", Snackbar.LENGTH_SHORT);
+                    Utils.showSnack(getView(),getString(R.string.cant_open_web), Snackbar.LENGTH_SHORT);
                 }
 
             }
@@ -145,11 +145,18 @@ public class InstallationFragment extends Fragment {
                 } else {
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(Uri.parse("tel:" + phone.getText().toString()));
-                    startActivity(intent);
+
+                    try {
+                        startActivity(intent);
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Utils.showSnack(getView(),getString(R.string.call_could_not_be_made),Snackbar.LENGTH_SHORT);
+                    }
+
                 }
             }
         });
 
+        // boton de correo
         btnMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +173,7 @@ public class InstallationFragment extends Fragment {
             }
         });
 
+        // boton de mapa
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,19 +186,25 @@ public class InstallationFragment extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showSnack(getView(),"No se pudo abrir la localización",Snackbar.LENGTH_SHORT);
+                    Utils.showSnack(getView(),getString(R.string.Location_could_not_be_opened),Snackbar.LENGTH_SHORT);
                 }
             }
         });
 
         listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
-        if (listCourses.size()==0){
+        if (Utils.getActiveTypeUser(getActivity())==0){
             addCourse.setVisibility(View.VISIBLE);
             addCourse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Fragment fragment = new UpdateCourse();
+                    Bundle args = new Bundle();
+                    args.putInt("idInstallation", installation.getId_installation());
+                    args.putString("nameInstallation", installation.getInstallation());
+                    args.putSerializable("installation", installation);
+                    fragment.setArguments(args);
+                    Log.d("INFO", String.valueOf(installation.getInstallation()));
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
                 }
             });

@@ -31,6 +31,7 @@ import proyecto.golfus.forat19.*;
 public class Utils extends AppCompatActivity {
 
     private static SharedPreferences preferences;
+    private static SharedPreferences.Editor editor;
 
     /**
      * Comprueba si el dispositivo es una tablet
@@ -164,6 +165,82 @@ public class Utils extends AppCompatActivity {
         request.request(message);
         request.addObserver((Observer) activity);
     }
+
+    /**
+     * Devuelve el id Activo guardado en la aplicacion
+     * @param activity activity donde se llama
+     * @return id Activo
+     */
+    public static String getActiveId(Activity activity){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+        return String.valueOf(activeID);
+    }
+
+    /**
+     * Devuelve el Token Activo guardado en la aplicacion
+     * @param activity activity donde se llama
+     * @return Token Activo
+     */
+    public static String getActiveToken(Activity activity){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        return String.valueOf(activeToken);
+    }
+
+    /**
+     * Devuelve el Tipo de Usuario Activo guardado en la aplicacion
+     * @param activity activity donde se llama
+     * @return Tipo de Usuario Activo
+     */
+    public static int getActiveTypeUser(Activity activity){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        int activeTypeUser = preferences.getInt(Global.PREF_TYPE_USER, 1);
+        return activeTypeUser;
+    }
+
+    /**
+     * Guarda en el movil el tipo de usuario
+     * @param activity actividad desde donde es llamado
+     * @param typeUser tipo de usuario activo
+     */
+    public static void setActiveTypeUser(Activity activity, int typeUser){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putInt(Global.PREF_TYPE_USER, typeUser);
+        editor.apply();
+    }
+
+    /**
+     * Guarda en el movil el token activo
+     * @param activity actividad desde donde es llamado
+     * @param token tipo de usuario activo
+     */
+    public static void setActiveToken(Activity activity, String token){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putString(Global.PREF_ACTIVE_TOKEN, token);
+        editor.apply();
+    }
+    public static void setActiveUser(Activity activity, String user){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putString(Global.PREF_ACTIVE_USER, user);
+        editor.apply();
+    }
+    public static void setSessionStatus(Activity activity, boolean status){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, status);
+        editor.apply();
+    }
+    public static void setActiveId(Activity activity, int id){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putInt(Global.PREF_ACTIVE_ID, id);
+        editor.apply();
+    }
+
 
 }
 

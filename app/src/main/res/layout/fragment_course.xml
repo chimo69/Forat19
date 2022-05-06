@@ -7,18 +7,6 @@
     android:background="@drawable/fondo_golf"
     tools:context=".ui.CourseFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
-        android:src="@drawable/ic_add_grey"
-        app:backgroundTint="@color/green" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -319,6 +307,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -340,42 +329,42 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/button5"
+                            android:id="@+id/btn_hole1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="1" />
 
                         <Button
-                            android:id="@+id/button6"
+                            android:id="@+id/btn_hole2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="2" />
 
                         <Button
-                            android:id="@+id/button"
+                            android:id="@+id/btn_hole3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="3" />
 
                         <Button
-                            android:id="@+id/button2"
+                            android:id="@+id/btn_hole4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="4" />
 
                         <Button
-                            android:id="@+id/button3"
+                            android:id="@+id/btn_hole5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="5" />
 
                         <Button
-                            android:id="@+id/button4"
+                            android:id="@+id/btn_hole6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -387,42 +376,42 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/button7"
+                            android:id="@+id/btn_hole7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="7" />
 
                         <Button
-                            android:id="@+id/button8"
+                            android:id="@+id/btn_hole8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="8" />
 
                         <Button
-                            android:id="@+id/button9"
+                            android:id="@+id/btn_hole9"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="9" />
 
                         <Button
-                            android:id="@+id/button10"
+                            android:id="@+id/btn_hole10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="10" />
 
                         <Button
-                            android:id="@+id/button11"
+                            android:id="@+id/btn_hole11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="11" />
 
                         <Button
-                            android:id="@+id/button12"
+                            android:id="@+id/btn_hole12"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -434,42 +423,42 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/button13"
+                            android:id="@+id/btn_hole13"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="13" />
 
                         <Button
-                            android:id="@+id/button14"
+                            android:id="@+id/btn_hole14"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="14" />
 
                         <Button
-                            android:id="@+id/button15"
+                            android:id="@+id/btn_hole15"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="15" />
 
                         <Button
-                            android:id="@+id/button16"
+                            android:id="@+id/btn_hole16"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="16" />
 
                         <Button
-                            android:id="@+id/button17"
+                            android:id="@+id/btn_hole17"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="17" />
 
                         <Button
-                            android:id="@+id/button18"
+                            android:id="@+id/btn_hole18"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -480,6 +469,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </TableLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardHoles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView10">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/holeContainer"
+                    android:name="proyecto.golfus.forat19.ui.HoleFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

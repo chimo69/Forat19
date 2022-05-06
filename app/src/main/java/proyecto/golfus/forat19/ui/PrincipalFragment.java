@@ -21,7 +21,6 @@ public class PrincipalFragment extends Fragment {
 
     public static PrincipalFragment newInstance() {
         PrincipalFragment fragment = new PrincipalFragment();
-
         return fragment;
     }
 

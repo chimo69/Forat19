@@ -125,16 +125,13 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     // TODO empezar un juego
                     break;
                 case R.id.searchGreen:
+                case R.id.manageGreens:
                     drawerLayout.closeDrawer(GravityCompat.START);
                     loadFragment(new InstallationsList());
                     break;
                 case R.id.manageUSers:
                     drawerLayout.closeDrawer(GravityCompat.START);
                     loadFragment(new UsersList());
-                    break;
-                case R.id.manageGreens:
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new InstallationsList());
                     break;
                 case R.id.myAccount:
                     drawerLayout.closeDrawer(GravityCompat.START);

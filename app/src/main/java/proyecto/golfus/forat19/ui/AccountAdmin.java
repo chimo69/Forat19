@@ -64,7 +64,6 @@ public class AccountAdmin extends Fragment implements Observer {
     private Button update;
     private CheckBox checkActiveUser, checkAdminUser;
     private Users user;
-    private SharedPreferences preferences;
     private Message request;
     private Boolean passwordChanged=false;
     private Spinner combobox;
@@ -130,8 +129,6 @@ public class AccountAdmin extends Fragment implements Observer {
         txtPhone.setText(user.getPhone());
         txtAddress.setText(user.getAddress());
         txtMail.setText(user.getEmail());
-
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
 
         user_types = new ArrayList<String>();
 
@@ -324,10 +321,7 @@ public class AccountAdmin extends Fragment implements Observer {
             pass = user.getPassword();
         }
 
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-
         AccountAdmin.loading.post(() -> AccountAdmin.loading.setVisibility(View.VISIBLE));
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
         String activeUser="N";
 
@@ -335,7 +329,7 @@ public class AccountAdmin extends Fragment implements Observer {
             activeUser="S";
         }
         Users toCheckUser = new Users(user.getId_user(), user.getUsername(), user.getName(), pass, TypeUserSelected, activeUser, user.getEmail(), user.getPhone(), user.getAddress());
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Integer.toString(activeID), toCheckUser);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
 
         RequestServer request = new RequestServer();
         request.request(message);
@@ -344,11 +338,13 @@ public class AccountAdmin extends Fragment implements Observer {
 
     }
 
+    /**
+     * Manda mensaje para cargar listado de tipos de usuario
+     * @author Antonio Rodriguez Sirgado
+     */
     private void loadTypeUsers(){
-       // Utils.sendRequest(getActivity(),Global.LIST_USER_TYPES,null);
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.LIST_USER_TYPES, Integer.toString(activeID), null);
+
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getContext()), Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

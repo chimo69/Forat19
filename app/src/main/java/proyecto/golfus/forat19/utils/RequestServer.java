@@ -55,7 +55,7 @@ public class RequestServer extends Observable {
     public void initializeTransaction(Message message) {
         if (connectionOK) {
             Log.d("INFO","Send:"+message.getCommand());
-            if (message instanceof Message){
+            if (message instanceof Message && message!=null){
                 send(message);
             }
         }

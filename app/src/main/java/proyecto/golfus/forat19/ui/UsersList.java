@@ -39,7 +39,6 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
-    private SharedPreferences preferences;
     private Message request;
     private ArrayList<Users> listUsers;
     private RecyclerView recyclerView;
@@ -60,8 +59,6 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-
     }
 
     @Override
@@ -125,11 +122,9 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
      *
      */
     public void loadUsers(String typeList){
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
 
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), typeList, Integer.toString(activeID), null);
-        Log.d("INFO", "Enviando token: " + activeToken);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), typeList, Utils.getActiveId(getActivity()), null);
+
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

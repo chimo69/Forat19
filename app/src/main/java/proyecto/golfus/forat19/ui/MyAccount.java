@@ -51,12 +51,10 @@ public class MyAccount extends Fragment implements Observer {
     private ImageView qrCode;
     private View view;
     private Button btnDelete, btnUpdate;
-    private SharedPreferences preferences;
     private static ProgressBar loading;
 
     Message request;
     Users user;
-
 
     public MyAccount() {
     }
@@ -84,7 +82,6 @@ public class MyAccount extends Fragment implements Observer {
         txtPhoneInfo = view.findViewById(R.id.txtPhoneInfo);
         txtAddressInfo = view.findViewById(R.id.txtAddressInfo);
         txtNameInfo = view.findViewById(R.id.txtNameInfo);
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         btnDelete = view.findViewById(R.id.btn_delete);
         btnUpdate = view.findViewById(R.id.btn_update);
         btnAddFriends = view.findViewById(R.id.addFriends);
@@ -138,10 +135,8 @@ public class MyAccount extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message mMessage = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, Integer.toString(activeID), null);
+        Message mMessage = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
 
         RequestServer request = new RequestServer();
         request.request(mMessage);
@@ -154,8 +149,8 @@ public class MyAccount extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void deleteUser() {
-        String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        Message mMessage = new Message(token + "¬" + Utils.getDevice(getActivity()), Global.DELETE_USER, null, user);
+
+        Message mMessage = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.DELETE_USER, null, user);
 
         RequestServer request = new RequestServer();
         request.request(mMessage);

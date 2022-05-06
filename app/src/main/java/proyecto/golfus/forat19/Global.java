@@ -39,6 +39,7 @@ public class Global {
     public static final String LIST_GOLF_COURSES = "ListGolfCourse";
     public static final String GET_GOLF_COURSE_TYPE ="GetGolfCourseType" ;
     public static final String LIST_GOLF_COURSES_TYPE = "ListGolfCourseType";
+    public static final String ADD_GOLF_COURSE = "AddGolfCourse";
 
     // Codigo recibidos
     public static final String OK = "Ok";

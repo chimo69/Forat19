@@ -89,4 +89,7 @@
     <string name="about_course">Sobre el recorregut</string>
     <string name="lenght">Longitud</string>
     <string name="new_course">Nou recorregut</string>
+    <string name="cant_open_web">No es va poder obrir la pàgina web</string>
+    <string name="call_could_not_be_made">No es va poder fer la trucada</string>
+    <string name="Location_could_not_be_opened">No es va poder obrir la localització</string>
 </resources>

@@ -31,9 +31,7 @@ import proyecto.golfus.forat19.utils.Utils;
 public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.ViewHolderList> implements View.OnClickListener {
     ArrayList<Golf_Courses> listCourses;
     ArrayList<Golf_Courses> listSearch;
-    ArrayList<Golf_Course_Types> listCourseTypes;
     private View.OnClickListener listener;
-    private SharedPreferences preferences;
 
     public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
@@ -80,7 +78,6 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.course_list_name);
-            type = itemView.findViewById(R.id.course_list_type);
         }
 
         /**
@@ -90,7 +87,6 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
          */
         public void fillList(Golf_Courses golf_courses) {
             name.setText(golf_courses.getGolf_course());
-            type.setText(Integer.toString(golf_courses.getId_golf_course_type()));
 
         }
 
