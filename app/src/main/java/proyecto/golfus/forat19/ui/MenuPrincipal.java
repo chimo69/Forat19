@@ -50,8 +50,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     private int userType;
     private String activeUser;
 
-    private SharedPreferences.Editor editor;
-    private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
     private boolean openSession;
 
     @Override
@@ -99,14 +99,18 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
         setToolBar();
-        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        /*
         activeUser = preferences.getString(Global.PREF_ACTIVE_USER, "");
         userType = preferences.getInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
-        openSession = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
+        openSession = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);*/
+        activeUser = Utils.getActiveUser(this);
+        userType = Utils.getActiveTypeUser(this);
+        openSession = Utils.getSessionStatus(this);
         loadingMenu = findViewById(R.id.loadingMenu);
         loadingMenu.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
-        editor = preferences.edit();
+        //editor = preferences.edit();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navView);
 
@@ -205,10 +209,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      */
     private void logoutUser() {
 
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        //String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
 
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(this), Global.LOGOUT, null, null);
-        Log.d("INFO", "Enviando token: " + activeToken);
+        Message message = new Message(Utils.getActiveToken(this) + "¬" + Utils.getDevice(this), Global.LOGOUT, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -252,10 +255,13 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 case Global.LOGOUT:
                     if (request.getParameters().equals(Global.OK)) {
 
-                        editor.putString(Global.PREF_ACTIVE_USER, null);
+                        /*editor.putString(Global.PREF_ACTIVE_USER, null);
                         editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
                         editor.putString(Global.PREF_ACTIVE_TOKEN, null);
-                        editor.apply();
+                        editor.apply();*/
+                        Utils.setActiveUser(this,null);
+                        Utils.setActiveToken(this,null);
+                        Utils.setActiveTypeUser(this,Global.TYPE_NORMAL_USER);
 
                         Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                         startActivity(intent);

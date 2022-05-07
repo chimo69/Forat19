@@ -42,8 +42,8 @@ public class UpdateUser extends Fragment implements Observer {
     private TextInputEditText txtPassword, txtRePassword;
     public static ProgressBar updateLoading;
     private Button btnUpdate;
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
     Message request;
     Users user;
 
@@ -90,8 +90,8 @@ public class UpdateUser extends Fragment implements Observer {
 
         btnUpdate = view.findViewById(R.id.btnUpdateOkOk);
 
-        preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        //preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //editor = preferences.edit();
 
         // Botón update
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -219,10 +219,13 @@ public class UpdateUser extends Fragment implements Observer {
                         String user = ((Users) request.getObject()).getUsername();
                         int typeUser = ((Users) request.getObject()).getId_user_type();
 
-                        editor.putInt(Global.PREF_ACTIVE_ID, activeID);
+                        /*editor.putInt(Global.PREF_ACTIVE_ID, activeID);
                         editor.putString(Global.PREF_ACTIVE_USER, user);
                         editor.putInt(Global.PREF_TYPE_USER, typeUser);
-                        editor.apply();
+                        editor.apply();*/
+                        Utils.setActiveId(getActivity(),activeID);
+                        Utils.setActiveTypeUser(getActivity(),typeUser);
+                        Utils.setActiveUser(getActivity(),user);
 
                         Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
 
@@ -251,14 +254,14 @@ public class UpdateUser extends Fragment implements Observer {
         String phone = txtPhone.getText().toString();
         String address = txtAddress.getText().toString();
 
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        String activeToken = Utils.getActiveToken(getActivity());
         String active = user.getActive();
         String username = user.getUsername();
         int typeUser = user.getId_user_type();
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
+        String activeID = Utils.getActiveId(getActivity());
 
-        Users toCheckUser = new Users(activeID, username, name, password, typeUser, active, email, phone, address);
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Integer.toString(activeID), toCheckUser);
+        Users toCheckUser = new Users(Integer.parseInt(activeID), username, name, password, typeUser, active, email, phone, address);
+        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, activeID, toCheckUser);
 
         RequestServer request = new RequestServer();
         request.request(message);
@@ -291,10 +294,10 @@ public class UpdateUser extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
+        String activeID = Utils.getActiveId(getActivity());
+        String activeToken = Utils.getActiveToken(getActivity());
 
-        Message mMessage = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, Integer.toString(activeID), null);
+        Message mMessage = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, activeID, null);
 
         RequestServer request = new RequestServer();
         request.request(mMessage);

@@ -334,7 +334,6 @@ public class AccountAdmin extends Fragment implements Observer {
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
-        //Utils.sendRequest(getActivity(),Global.UPDATE_USER,toCheckUser);
 
     }
 

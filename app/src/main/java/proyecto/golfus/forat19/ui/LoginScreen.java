@@ -48,8 +48,8 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private String device;
     private View view;
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
     public static Message mMessage;
 
     @Override
@@ -74,8 +74,8 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         loading = findViewById(R.id.progressBar);
         view = findViewById(R.id.layoutLogin);
 
-        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //editor = preferences.edit();
         loading.setVisibility(View.GONE);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -174,7 +174,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                 Utils.setActiveToken(this,activeToken);
                 Utils.setActiveTypeUser(this,typeUser);
                 Utils.setActiveId(this,activeID);
-                editor.apply();
+                //editor.apply();
 
                 Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
                 startActivity(intent);

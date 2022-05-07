@@ -2,10 +2,13 @@ package proyecto.golfus.forat19.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,17 +34,19 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para mostrar la informacion del recorrido seleccionado
+ *
  * @author Antonio Rodríguez Sirgado
  */
-public class CourseFragment extends Fragment implements Observer {
+public class CourseFragment extends Fragment implements View.OnClickListener , Observer {
 
     private Golf_Courses golf_course;
     private ArrayList<Golf_Course_Holes> holesList;
-    private TextView name, type, holes, par, length,  field, slope, about;
-    private Button h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18;
+    private TextView name, type, holes, par, length, field, slope, about;
+    private Button h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18;
     private CheckBox handicap;
     private Message request;
     private String courseType;
+    private CardView infoHole;
 
     public CourseFragment() {
         // Required empty public constructor
@@ -56,9 +61,10 @@ public class CourseFragment extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null){
+        if (getArguments() != null) {
             Bundle args = this.getArguments();
             golf_course = (Golf_Courses) args.getSerializable("course");
+            holesList = (ArrayList<Golf_Course_Holes>) golf_course.getList_golf_course_holes();
         }
     }
 
@@ -76,26 +82,49 @@ public class CourseFragment extends Fragment implements Observer {
         field = view.findViewById(R.id.golfCourseField);
         slope = view.findViewById(R.id.golfCourseSlope);
         about = view.findViewById(R.id.golfCourseAbout);
+        infoHole = view.findViewById(R.id.cardHoles);
 
-        h1= view.findViewById(R.id.btn_hole1);
+        h1 = view.findViewById(R.id.btn_hole1);
+        h2 = view.findViewById(R.id.btn_hole2);
+
+        h1.setOnClickListener(this);
+        h2.setOnClickListener(this);
 
         handicap.setEnabled(false);
         loadCourseType(golf_course.getId_golf_course_type());
-        holesList = (ArrayList<Golf_Course_Holes>) golf_course.getList_golf_course_holes();
+
         showInfo();
 
-        h1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadHole(1);
-            }
-        });
+        if (golf_course.getHoles()>0) {
+            h1.setVisibility(View.VISIBLE);
+            h2.setVisibility(View.VISIBLE);
+            h3.setVisibility(View.VISIBLE);
+            h4.setVisibility(View.VISIBLE);
+            h5.setVisibility(View.VISIBLE);
+            h6.setVisibility(View.VISIBLE);
+            h7.setVisibility(View.VISIBLE);
+            h8.setVisibility(View.VISIBLE);
+            h9.setVisibility(View.VISIBLE);
+        }
+
+        /*if (golf_course.getHoles()>9){
+            h10.setVisibility(View.VISIBLE);
+            h11.setVisibility(View.VISIBLE);
+            h12.setVisibility(View.VISIBLE);
+            h13.setVisibility(View.VISIBLE);
+            h14.setVisibility(View.VISIBLE);
+            h15.setVisibility(View.VISIBLE);
+            h16.setVisibility(View.VISIBLE);
+            h17.setVisibility(View.VISIBLE);
+            h18.setVisibility(View.VISIBLE);
+        }*/
 
         return view;
     }
 
     /**
      * Carga el tipo de recorrido
+     *
      * @param id recorrido a mostrar
      */
     private void loadCourseType(int id) {
@@ -109,16 +138,16 @@ public class CourseFragment extends Fragment implements Observer {
     /**
      * Muestra la información del recorrido en pantalla
      */
-    public void showInfo (){
+    public void showInfo() {
         // rellenamos la información con los datos recibidos
         name.setText(golf_course.getGolf_course());
         type.setText(courseType);
         holes.setText(Integer.toString(golf_course.getHoles()));
         par.setText(Integer.toString(golf_course.getPar()));
         length.setText(Integer.toString(golf_course.getLength()));
-        if (golf_course.getHandicap_calculation().equals("Y")){
+        if (golf_course.getHandicap_calculation().equals("Y")) {
             handicap.setChecked(true);
-        }else{
+        } else {
             handicap.setChecked(false);
         }
         field.setText(Float.toString(golf_course.getField_value()));
@@ -128,18 +157,17 @@ public class CourseFragment extends Fragment implements Observer {
     }
 
     /**
-     * Carga el fragment de hoyo seleccionado
+     * Carga el fragment de hoyo seleccionado     *
      * @param idHole hoyo a mostrar.
      */
-    public void loadHole(int idHole){
+    public void loadHole(int idHole) {
 
-        Golf_Course_Holes holeSelected = holesList.get(idHole);
+        Golf_Course_Holes holeSelected = holesList.get(idHole - 1);
         Fragment fragment = new HoleFragment();
         Bundle args = new Bundle();
         args.putSerializable("hole", holeSelected);
         fragment.setArguments(args);
-
-        //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment).commit();
     }
 
     /**
@@ -161,16 +189,93 @@ public class CourseFragment extends Fragment implements Observer {
             request = (Message) arg;
             String command = request.getCommand();
 
-            if (command.equals(Global.GET_GOLF_COURSE_TYPE)){
+            if (command.equals(Global.GET_GOLF_COURSE_TYPE)) {
                 courseType = ((Golf_Course_Types) request.getObject()).getGolf_course_type();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         showInfo();
                     }
                 });
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_hole1:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(1);
+                break;
+            case R.id.btn_hole2:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(2);
+                break;
+            case R.id.btn_hole3:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(3);
+                break;
+            case R.id.btn_hole4:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(4);
+                break;
+            case R.id.btn_hole5:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(5);
+                break;
+            case R.id.btn_hole6:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(6);
+                break;
+            case R.id.btn_hole7:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(7);
+                break;
+            case R.id.btn_hole8:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(8);
+                break;
+            case R.id.btn_hole9:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(9);
+                break;
+            case R.id.btn_hole10:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(10);
+                break;
+            case R.id.btn_hole11:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(11);
+                break;
+            case R.id.btn_hole12:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(12);
+                break;
+            case R.id.btn_hole13:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(13);
+                break;
+            case R.id.btn_hole14:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(14);
+                break;
+            case R.id.btn_hole15:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(15);
+                break;
+            case R.id.btn_hole16:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(16);
+                break;
+            case R.id.btn_hole17:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(17);
+                break;
+            case R.id.btn_hole18:
+                infoHole.setVisibility(View.VISIBLE);
+                loadHole(18);
+                break;
         }
     }
 }

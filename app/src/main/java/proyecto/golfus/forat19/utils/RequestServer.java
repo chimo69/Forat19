@@ -17,6 +17,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Clase encargada de realizar la conexión, enviar y recibir mensajes
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class RequestServer extends Observable {
@@ -35,29 +36,30 @@ public class RequestServer extends Observable {
 
     /**
      * Recibe un objeto Message, inicia la conexión y la transacción
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param message Mensaje recibido
+     * @author Antonio Rodríguez Sirgado
      */
     public void request(Message message) {
-        Thread thread = new Thread(() -> {
-
-            initializeConnection(IP, PORT);
-            initializeTransaction(message);
-        });
-        thread.start();
+        if (message.getCommand() != null) {
+            Thread thread = new Thread(() -> {
+                initializeConnection(IP, PORT);
+                initializeTransaction(message);
+            });
+            thread.start();
+        }
     }
 
     /**
      * Envia el objeto Message al servidor y recibe una respuesta
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param message mensaje recibido
+     * @author Antonio Rodríguez Sirgado
      */
     public void initializeTransaction(Message message) {
         if (connectionOK) {
-            Log.d("INFO","Send:"+message.getCommand());
-            if (message instanceof Message && message!=null){
-                send(message);
-            }
+            Log.d("INFO", "Peticion:" + message.getCommand());
+            send(message);
         }
         if (connectionOK) {
             retrieveData();
@@ -67,9 +69,10 @@ public class RequestServer extends Observable {
 
     /**
      * Inicia la conexión
-     * @author Antonio Rodríguez Sirgado
-     * @param ip dirección del servidor
+     *
+     * @param ip   dirección del servidor
      * @param port puerto del servidor
+     * @author Antonio Rodríguez Sirgado
      */
     public void initializeConnection(String ip, int port) {
         try {
@@ -89,8 +92,9 @@ public class RequestServer extends Observable {
 
     /**
      * Envía el objeto al servidor
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param o Objeto Message
+     * @author Antonio Rodríguez Sirgado
      */
     public void send(Object o) {
         try {
@@ -108,6 +112,7 @@ public class RequestServer extends Observable {
 
     /**
      * Cierra la conexión
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void closeConnection() {
@@ -130,8 +135,9 @@ public class RequestServer extends Observable {
 
     /**
      * Recoge del servidor un obeto Message y lo registra en el observador
-     * @author Antonio Rodriguez Sirgado
+     *
      * @return Mensaje recibido
+     * @author Antonio Rodriguez Sirgado
      */
     public Message retrieveData() {
         try {
@@ -139,7 +145,7 @@ public class RequestServer extends Observable {
             input = in.readObject();
             if (input instanceof Message) {
                 Message returnMessage = (Message) input;
-                Log.d("INFO", "Received message: " + returnMessage.getToken());
+                Log.d("INFO", "Respuesta: " + returnMessage.getCommand());
                 this.setChanged();
                 this.notifyObservers(returnMessage);
                 this.clearChanged();

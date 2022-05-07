@@ -55,8 +55,6 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class AddFriend extends Fragment implements Observer, SearchView.OnQueryTextListener {
 
-    private CameraSource cameraSource;
-    private String detectedUser;
     private RecyclerView recyclerView;
     private SearchView searchUserList;
     private AdapterNormalUsersList adapterList;
@@ -64,12 +62,9 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     private ArrayList<Users> listUsers;
     private Button btnCodeQR;
 
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
-
     public AddFriend() {
         // Required empty public constructor
     }
-
 
     public static AddFriend newInstance(String param1, String param2) {
         AddFriend fragment = new AddFriend();

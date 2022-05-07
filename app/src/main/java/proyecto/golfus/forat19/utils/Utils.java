@@ -167,6 +167,27 @@ public class Utils extends AppCompatActivity {
     }
 
     /**
+     * Devuelve el usuario activo guardado en la aplicacion
+     * @param activity activity donde se llama
+     * @return usuario activo
+     */
+    public static String getActiveUser(Activity activity){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        String activeUser = preferences.getString(Global.PREF_ACTIVE_USER, null);
+        return activeUser;
+    }
+    /**
+     * Devuelve si esta definido mantener sesion abierta
+     * @param activity activity donde se llama
+     * @return true si esta activo
+     */
+    public static Boolean getSessionStatus(Activity activity){
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        boolean status = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
+        return status;
+    }
+
+    /**
      * Devuelve el id Activo guardado en la aplicacion
      * @param activity activity donde se llama
      * @return id Activo
@@ -222,18 +243,36 @@ public class Utils extends AppCompatActivity {
         editor.putString(Global.PREF_ACTIVE_TOKEN, token);
         editor.apply();
     }
+
+    /**
+     * Guarda en el movil el usuario activo
+     * @param activity actividad desde donde es llamado
+     * @param user usuario activo
+     */
     public static void setActiveUser(Activity activity, String user){
         preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
         editor.putString(Global.PREF_ACTIVE_USER, user);
         editor.apply();
     }
+
+    /**
+     * Guarda en el movil el estado de la sesion
+     * @param activity actividad desde donde es llamado
+     * @param status estado de la sesion
+     */
     public static void setSessionStatus(Activity activity, boolean status){
         preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();
         editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, status);
         editor.apply();
     }
+
+    /**
+     * Guarda en el movil el id del usuario activo
+     * @param activity actividad desde donde es llamado
+     * @param id id del usuario activo
+     */
     public static void setActiveId(Activity activity, int id){
         preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
         editor = preferences.edit();

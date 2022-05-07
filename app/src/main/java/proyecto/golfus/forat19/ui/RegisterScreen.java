@@ -48,8 +48,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     private Button btnSave;
     private View view;
 
-    SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +99,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
         view = findViewById(R.id.layout_register);
 
-        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //editor = preferences.edit();
 
 
         // Boton de guardar
@@ -140,8 +140,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         String phone = txtPhone.getText().toString();
         String address = txtAddress.getText().toString();
 
-        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //editor = preferences.edit();
 
         Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
         Message message = new Message(null+"¬"+Utils.getDevice(this), Global.ADD_USER, null, toCheckUser);
@@ -263,11 +263,16 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                 String activeToken = request.getToken();
                 int activeID = ((Users) request.getObject()).getId_user();
 
-                editor.putString(Global.PREF_ACTIVE_USER, user);
+                /*editor.putString(Global.PREF_ACTIVE_USER, user);
                 editor.putInt(Global.PREF_ACTIVE_ID, activeID);
                 editor.putInt(Global.PREF_TYPE_USER, typeUser);
                 editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
-                editor.apply();
+                editor.apply();*/
+
+                Utils.setActiveId(this,activeID);
+                Utils.setActiveUser(this,user);
+                Utils.setActiveToken(this,activeToken);
+                Utils.setActiveTypeUser(this,typeUser);
 
                 Log.d("INFO", request.getParameters());
 

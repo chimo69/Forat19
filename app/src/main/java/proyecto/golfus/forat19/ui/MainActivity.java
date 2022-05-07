@@ -33,8 +33,8 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class MainActivity extends AppCompatActivity implements Observer {
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
     private static Button btn_tryAgain;
     private static ProgressBar loading;
     private ConstraintLayout constraintLayout;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        //editor = preferences.edit();
         constraintLayout = findViewById(R.id.layout_main);
         btn_tryAgain = findViewById(R.id.try_again);
         loading = findViewById(R.id.loading);
@@ -66,15 +66,15 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private void checkToken() {
 
         loading.setVisibility(View.VISIBLE);
-        String token = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        Boolean session = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);
+        String token = Utils.getActiveToken(this);
+        Boolean session = Utils.getSessionStatus(this);
 
         if (session && token!=null ) {
             Message message = new Message(token + "¬" + Utils.getDevice(this), Global.VALIDATE_TOKEN, null, null);
             RequestServer request = new RequestServer();
             request.request(message);
             request.addObserver(this);
-            //Utils.sendRequest(this,Global.VALIDATE_TOKEN,null,null);
+
         } else {
             Intent intent = new Intent(MainActivity.this, LoginScreen.class);
             startActivity(intent);
@@ -119,21 +119,32 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 Log.d("INFO", "Usuario: " + ((Users) request.getObject()).getUsername());
                 Log.d("INFO", "Tipo: " + ((Users) request.getObject()).getId_user_type());
 
+                /*
                 editor.putString(Global.PREF_ACTIVE_USER, ((Users) request.getObject()).getUsername());
                 editor.putInt(Global.PREF_TYPE_USER, ((Users) request.getObject()).getId_user_type());
                 editor.putInt(Global.PREF_ACTIVE_ID, ((Users) request.getObject()).getId_user());
-                editor.apply();
+                editor.apply();*/
+
+                Utils.setActiveUser(this,((Users) request.getObject()).getUsername());
+                Utils.setActiveTypeUser(this,((Users) request.getObject()).getId_user_type());
+                Utils.setActiveId(this,((Users) request.getObject()).getId_user());
 
                 Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                 startActivity(intent);
 
             } else {
 
+                /*
                 editor.putString(Global.PREF_ACTIVE_USER, "");
                 editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
                 editor.putString(Global.PREF_ACTIVE_TOKEN, null);
                 editor.putInt(Global.PREF_ACTIVE_ID, 0);
-                editor.apply();
+                editor.apply();*/
+
+                Utils.setActiveUser(this,"");
+                Utils.setActiveTypeUser(this,Global.TYPE_NORMAL_USER);
+                Utils.setActiveToken(this,null);
+                Utils.setActiveId(this,0);
 
                 Intent intent = new Intent(MainActivity.this, LoginScreen.class);
                 startActivity(intent);

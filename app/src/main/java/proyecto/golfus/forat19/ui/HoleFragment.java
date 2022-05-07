@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import proyecto.golfus.forat19.R;
 public class HoleFragment extends Fragment {
 
     private Golf_Course_Holes hole;
-    private TextView par, handicap, about, length;
+    private TextView par, handicap, about, length, numHole;
+    private String holeAbout;
+    private int holePar, holeHandicap, holeLength, holeNumber;
+
 
 
     public HoleFragment() {
@@ -35,6 +39,16 @@ public class HoleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             hole = (Golf_Course_Holes) getArguments().getSerializable("hole");
+            Log.d("INFO","hoyo: "+hole.getId_golf_course_hole());
+            Log.d("INFO","hoyo handicap: "+hole.getHandicap());
+            Log.d("INFO","hoyo par: "+hole.getPar());
+
+            holePar = hole.getPar();
+            holeAbout = hole.getAbout_golf_course_hole();
+            holeHandicap = hole.getHandicap();
+            holeLength = hole.getLength();
+            holeNumber = hole.getId_golf_course_hole();
+
         }
     }
 
@@ -46,13 +60,16 @@ public class HoleFragment extends Fragment {
         par = view.findViewById(R.id.hole_par);
         handicap = view.findViewById(R.id.hole_handicap);
         about = view.findViewById(R.id.hole_about);
-        length = view.findViewById(R.id.hole1_length);
+        length = view.findViewById(R.id.hole_length);
+        numHole = view.findViewById(R.id.numHole);
 
-        par.setText(hole.getPar());
-        handicap.setText(hole.getHandicap());
-        about.setText(hole.getAbout_golf_course_hole());
-        length.setText(hole.getLength());
+        par.setText(Integer.toString(holePar));
+        handicap.setText(Integer.toString(holeHandicap));
+        about.setText(holeAbout);
+        length.setText(Integer.toString(holeLength));
+        numHole.setText("Hole: "+Integer.toString(holeNumber));
 
         return view;
     }
+
 }
