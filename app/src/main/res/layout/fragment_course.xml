@@ -7,6 +7,18 @@
     android:background="@drawable/fondo_golf"
     tools:context=".ui.CourseFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnEditGolfCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_edit"
+        app:backgroundTint="@color/green" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,9 +35,9 @@
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,16 +52,18 @@
                         android:id="@+id/imageView10"
                         android:layout_width="75dp"
                         android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginVertical="10dp"
                         android:src="@drawable/ic_create_game" />
 
                     <TextView
                         android:id="@+id/golfCourseName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="18dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="2"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="Golf Course Name" />
@@ -58,7 +72,7 @@
                         android:id="@+id/golfCourseType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="24dp"
                         android:layout_weight="1"
                         android:textAlignment="textEnd"
@@ -73,9 +87,9 @@
                 android:id="@+id/cardView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -101,9 +115,9 @@
                 android:id="@+id/cardView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -275,9 +289,9 @@
                 android:id="@+id/cardView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -294,6 +308,7 @@
                         android:id="@+id/textView42"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:text="Información sobre el recorrido"
                         android:textColor="@color/green" />
 
@@ -301,18 +316,19 @@
                         android:id="@+id/golfCourseAbout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginTop="10dp"
                         android:text="TextView" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView10"
+                android:id="@+id/cardViewButtons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -334,7 +350,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="1"
-                            android:visibility="gone" />
+                            android:visibility="invisible" />
 
                         <Button
                             android:id="@+id/btn_hole2"
@@ -490,16 +506,16 @@
                 android:id="@+id/cardHoles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView10">
+                app:layout_constraintTop_toBottomOf="@+id/cardViewButtons">
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/holeContainer"

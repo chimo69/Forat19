@@ -92,4 +92,6 @@
     <string name="cant_open_web">No se pudo abrir la página web</string>
     <string name="call_could_not_be_made">No se pudo efectuar la llamada</string>
     <string name="Location_could_not_be_opened">No se pudo abrir la localización</string>
+    <string name="Hole">Hoyo</string>
+    <string name="user_features">Características del usuario</string>
 </resources>

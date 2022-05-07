@@ -42,8 +42,6 @@ public class UpdateUser extends Fragment implements Observer {
     private TextInputEditText txtPassword, txtRePassword;
     public static ProgressBar updateLoading;
     private Button btnUpdate;
-    //private SharedPreferences preferences;
-    //private SharedPreferences.Editor editor;
     Message request;
     Users user;
 
@@ -69,29 +67,19 @@ public class UpdateUser extends Fragment implements Observer {
 
         updateLoading = view.findViewById(R.id.update_loading);
         updateLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-
         txtPassword = view.findViewById(R.id.updatePassword);
         tilPassword = view.findViewById(R.id.LayoutUpdatePassword);
-
         txtRePassword = view.findViewById(R.id.accountUpdateRePassword);
         tilRePassword = view.findViewById(R.id.LayoutUpdateRePassword);
-
         txtName = view.findViewById(R.id.updateName);
         tilName = view.findViewById(R.id.LayoutUpdateName);
-
         txtMail = view.findViewById(R.id.updateMail);
         tilMail = view.findViewById(R.id.LayoutUpdateMail);
-
         txtPhone = view.findViewById(R.id.upadtePhone);
         tilPhone = view.findViewById(R.id.LayoutUpdatePhone);
-
         txtAddress = view.findViewById(R.id.updateAddress);
         tilAddress = view.findViewById(R.id.LayoutUpdateAddress);
-
         btnUpdate = view.findViewById(R.id.btnUpdateOkOk);
-
-        //preferences = this.getActivity().getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        //editor = preferences.edit();
 
         // Botón update
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -219,10 +207,6 @@ public class UpdateUser extends Fragment implements Observer {
                         String user = ((Users) request.getObject()).getUsername();
                         int typeUser = ((Users) request.getObject()).getId_user_type();
 
-                        /*editor.putInt(Global.PREF_ACTIVE_ID, activeID);
-                        editor.putString(Global.PREF_ACTIVE_USER, user);
-                        editor.putInt(Global.PREF_TYPE_USER, typeUser);
-                        editor.apply();*/
                         Utils.setActiveId(getActivity(),activeID);
                         Utils.setActiveTypeUser(getActivity(),typeUser);
                         Utils.setActiveUser(getActivity(),user);

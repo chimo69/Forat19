@@ -45,11 +45,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private Button login, register;
     private SwitchCompat openSession;
     public static ProgressBar loading;
-    private String device;
     private View view;
-
-    //private SharedPreferences preferences;
-    //private SharedPreferences.Editor editor;
     public static Message mMessage;
 
     @Override
@@ -73,9 +69,6 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         openSession = findViewById(R.id.openSession);
         loading = findViewById(R.id.progressBar);
         view = findViewById(R.id.layoutLogin);
-
-        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        //editor = preferences.edit();
         loading.setVisibility(View.GONE);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -120,9 +113,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
 
-        //Utils.sendRequest(this,Global.LOGIN,sendMessage,null);
         mMessage = new Message(null+"¬"+Utils.getDevice(this), Global.LOGIN, sendMessage, null);
-
 
         Log.d("INFO", "Token enviado: " + mMessage.getToken());
         Log.d("INFO", "Parametro enviado: " + mMessage.getParameters());
@@ -164,17 +155,11 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                 String activeToken = request.getToken();
                 int activeID = ((Users) request.getObject()).getId_user();
 
-                //editor.putString(Global.PREF_ACTIVE_USER, activeUser);
-                //editor.putBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, openSession.isChecked());
-                //editor.putString(Global.PREF_ACTIVE_TOKEN,activeToken);
-                //editor.putInt(Global.PREF_TYPE_USER, typeUser);
-                //editor.putInt(Global.PREF_ACTIVE_ID,activeID);
                 Utils.setSessionStatus(this,openSession.isChecked());
                 Utils.setActiveUser(this,activeUser);
                 Utils.setActiveToken(this,activeToken);
                 Utils.setActiveTypeUser(this,typeUser);
                 Utils.setActiveId(this,activeID);
-                //editor.apply();
 
                 Intent intent = new Intent(LoginScreen.this, MenuPrincipal.class);
                 startActivity(intent);

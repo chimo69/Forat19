@@ -1,9 +1,7 @@
 package proyecto.golfus.forat19.ui;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +28,6 @@ import java.util.ArrayList;
 import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
-import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
 import proyecto.golfus.forat19.utils.Utils;
@@ -198,7 +195,7 @@ public class InstallationFragment extends Fragment {
             addCourse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new UpdateCourse();
+                    Fragment fragment = new AddCourse();
                     Bundle args = new Bundle();
                     args.putInt("idInstallation", installation.getId_installation());
                     args.putString("nameInstallation", installation.getInstallation());

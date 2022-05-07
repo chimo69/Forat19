@@ -48,9 +48,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
     private Button btnSave;
     private View view;
 
-    //SharedPreferences preferences;
-    //private SharedPreferences.Editor editor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -67,41 +64,27 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
         txtUser = findViewById(R.id.registerUsername);
         tilUser =findViewById(R.id.LayoutRegisterUsername);
-
         txtPassword = findViewById(R.id.registerPassword);
         tilPassword = findViewById(R.id.LayoutRegisterPassword);
-
         txtRePassword = findViewById(R.id.registerRePassword);
         tilRePassword = findViewById(R.id.LayoutRegisterRePassword);
-
         txtName = findViewById(R.id.registerName);
         tilName =findViewById(R.id.LayoutRegisterName);
-
         txtMail = findViewById(R.id.registerMail);
         tilMail =findViewById(R.id.LayoutRegisterMail);
-
         txtPhone = findViewById(R.id.registerPhone);
         tilPhone =findViewById(R.id.LayoutRegisterPhone);
-
         txtAddress = findViewById(R.id.registerAddress);
         tilAddress =findViewById(R.id.LayoutRegisterAddress);
-
         btnSave = findViewById(R.id.btnRegisterOk);
-
         user = extras.getString(Global.EXTRA_USER);
         password = extras.getString(Global.EXTRA_PASSWORD);
-
         txtUser.setText(user);
         txtPassword.setText(password);
-
         registerLoading = findViewById(R.id.register_loading);
         registerLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
         view = findViewById(R.id.layout_register);
-
-        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        //editor = preferences.edit();
-
 
         // Boton de guardar
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -139,9 +122,6 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         String email = txtMail.getText().toString();
         String phone = txtPhone.getText().toString();
         String address = txtAddress.getText().toString();
-
-        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        //editor = preferences.edit();
 
         Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
         Message message = new Message(null+"¬"+Utils.getDevice(this), Global.ADD_USER, null, toCheckUser);
@@ -263,18 +243,10 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                 String activeToken = request.getToken();
                 int activeID = ((Users) request.getObject()).getId_user();
 
-                /*editor.putString(Global.PREF_ACTIVE_USER, user);
-                editor.putInt(Global.PREF_ACTIVE_ID, activeID);
-                editor.putInt(Global.PREF_TYPE_USER, typeUser);
-                editor.putString(Global.PREF_ACTIVE_TOKEN, activeToken);
-                editor.apply();*/
-
                 Utils.setActiveId(this,activeID);
                 Utils.setActiveUser(this,user);
                 Utils.setActiveToken(this,activeToken);
                 Utils.setActiveTypeUser(this,typeUser);
-
-                Log.d("INFO", request.getParameters());
 
                 Utils.showToast(this, getString(R.string.user_successfully_registered), Toast.LENGTH_SHORT);
 

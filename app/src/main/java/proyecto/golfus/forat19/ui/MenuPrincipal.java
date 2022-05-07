@@ -99,21 +99,14 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
         setToolBar();
-        //preferences = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        /*
-        activeUser = preferences.getString(Global.PREF_ACTIVE_USER, "");
-        userType = preferences.getInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
-        openSession = preferences.getBoolean(Global.PREF_OPEN_KEEP_SESSION_OPEN, false);*/
+
         activeUser = Utils.getActiveUser(this);
         userType = Utils.getActiveTypeUser(this);
         openSession = Utils.getSessionStatus(this);
         loadingMenu = findViewById(R.id.loadingMenu);
         loadingMenu.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-
-        //editor = preferences.edit();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navView);
-
         view = navigationView.getHeaderView(0);
         userMenu = view.findViewById(R.id.userMenu);
         userMenu.setText(activeUser);
@@ -209,8 +202,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      */
     private void logoutUser() {
 
-        //String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-
         Message message = new Message(Utils.getActiveToken(this) + "¬" + Utils.getDevice(this), Global.LOGOUT, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
@@ -255,10 +246,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 case Global.LOGOUT:
                     if (request.getParameters().equals(Global.OK)) {
 
-                        /*editor.putString(Global.PREF_ACTIVE_USER, null);
-                        editor.putInt(Global.PREF_TYPE_USER, Global.TYPE_NORMAL_USER);
-                        editor.putString(Global.PREF_ACTIVE_TOKEN, null);
-                        editor.apply();*/
                         Utils.setActiveUser(this,null);
                         Utils.setActiveToken(this,null);
                         Utils.setActiveTypeUser(this,Global.TYPE_NORMAL_USER);

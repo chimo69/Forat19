@@ -8,20 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import Forat19.Golf_Course_Holes;
+import Forat19.Golf_Courses;
 import proyecto.golfus.forat19.R;
 
 /**
  * Fragment para mostrar la informacion del hoyo seleccionado
  * @author Antonio Rodríguez Sirgado
  */
-public class HoleFragment extends Fragment {
+public class HoleFragment extends Fragment implements Observer {
 
     private Golf_Course_Holes hole;
+    private Golf_Courses course;
     private TextView par, handicap, about, length, numHole;
     private String holeAbout;
+    private Button update;
     private int holePar, holeHandicap, holeLength, holeNumber;
 
 
@@ -39,6 +46,8 @@ public class HoleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             hole = (Golf_Course_Holes) getArguments().getSerializable("hole");
+            course = (Golf_Courses) getArguments().getSerializable("course");
+
             Log.d("INFO","hoyo: "+hole.getId_golf_course_hole());
             Log.d("INFO","hoyo handicap: "+hole.getHandicap());
             Log.d("INFO","hoyo par: "+hole.getPar());
@@ -62,14 +71,26 @@ public class HoleFragment extends Fragment {
         about = view.findViewById(R.id.hole_about);
         length = view.findViewById(R.id.hole_length);
         numHole = view.findViewById(R.id.numHole);
+        update=view.findViewById(R.id.btn_updateHoleGo);
 
         par.setText(Integer.toString(holePar));
         handicap.setText(Integer.toString(holeHandicap));
         about.setText(holeAbout);
         length.setText(Integer.toString(holeLength));
-        numHole.setText("Hole: "+Integer.toString(holeNumber));
+        numHole.setText(getString(R.string.Hole)+": "+Integer.toString(holeNumber));
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new UpdateHole(course, hole);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment).commit();
+            }
+        });
         return view;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

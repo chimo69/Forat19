@@ -298,7 +298,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp"
-                    android:text="User features"
+                    android:text="@string/user_features"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 

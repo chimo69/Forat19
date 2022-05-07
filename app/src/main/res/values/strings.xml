@@ -100,5 +100,7 @@
     <string name="call_could_not_be_made">Call could not be made</string>
     <string name="Location_could_not_be_opened">Location could not be opened</string>
     <string name="cant_open_web">Web could not be opened</string>
+    <string name="Hole">Hole</string>
+    <string name="user_features">User features</string>
 
 </resources>
