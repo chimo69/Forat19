@@ -1,7 +1,5 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.lists;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +26,8 @@ import Forat19.Message;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterAdminUsersList;
+import proyecto.golfus.forat19.ui.update.UpdateUserAdmin;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -80,6 +80,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         btn_allUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideKeyboard(getActivity());
                 changeButtonColor(btn_allUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_ALL_USERS);
@@ -89,6 +90,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         btn_activeUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideKeyboard(getActivity());
                 changeButtonColor(btn_activeUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_ACTIVE_USERS);
@@ -98,9 +100,11 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         btn_inactiveUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideKeyboard(getActivity());
                 changeButtonColor(btn_inactiveUsers);
                 loading.setVisibility(View.VISIBLE);
                 loadUsers(Global.LIST_INACTIVE_USERS);
+
             }
         });
 
@@ -142,7 +146,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -168,7 +172,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                             if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
                                 Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                                Fragment fragment = new AccountAdmin();
+                                Fragment fragment = new UpdateUserAdmin();
                                 Bundle args = new Bundle();
                                 args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
 

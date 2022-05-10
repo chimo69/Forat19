@@ -1,40 +1,24 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.add;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -42,9 +26,9 @@ import java.util.Observer;
 import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
-import proyecto.golfus.forat19.adapterList.AdapterAdminUsersList;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterNormalUsersList;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -90,6 +74,8 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         loadUsers(Global.LIST_ACTIVE_USERS);
+
+        // boton agregar amistad por QR
         btnCodeQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +150,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -190,7 +176,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
                             /*if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
                                 Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                                Fragment fragment = new AccountAdmin();
+                                Fragment fragment = new UpdateUserAdmin();
                                 Bundle args = new Bundle();
                                 args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
 

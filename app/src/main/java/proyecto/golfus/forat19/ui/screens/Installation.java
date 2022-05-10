@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.screens;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,15 +28,17 @@ import java.util.ArrayList;
 import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.Global;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
+import proyecto.golfus.forat19.ui.add.AddCourse;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment que muestra al Admin los datos de las instalaciones para poder gestionarlas
  * @author Antonio Rodríguez Sirgado
  */
-public class InstallationFragment extends Fragment {
+public class Installation extends Fragment {
 
     private Installations installation;
     private Message request;
@@ -48,11 +50,11 @@ public class InstallationFragment extends Fragment {
     private RecyclerView recyclerView;
     private AdapterCoursesList adapterCoursesList;
 
-    public InstallationFragment() {
+    public Installation() {
     }
 
-    public static InstallationFragment newInstance(String param1, String param2) {
-        InstallationFragment fragment = new InstallationFragment();
+    public static Installation newInstance(String param1, String param2) {
+        Installation fragment = new Installation();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -113,6 +115,8 @@ public class InstallationFragment extends Fragment {
         howToGet.setText(installation.getHow_to_get());
         about.setText(installation.getAbout_installation());
         services.setText(installation.getServices());
+
+        Utils.hideKeyboard(getActivity());
 
         // boton de ir a web
         btnWeb.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +192,11 @@ public class InstallationFragment extends Fragment {
             }
         });
 
+
         listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
-        if (Utils.getActiveTypeUser(getActivity())==0){
+        // Boton añadir recorrido
+        if (Utils.getActiveTypeUser(getActivity())== Global.TYPE_ADMIN_USER){
             addCourse.setVisibility(View.VISIBLE);
             addCourse.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,7 +208,7 @@ public class InstallationFragment extends Fragment {
                     args.putSerializable("installation", installation);
                     fragment.setArguments(args);
                     Log.d("INFO", String.valueOf(installation.getInstallation()));
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "addCourse").addToBackStack(null).commit();
                 }
             });
         }
@@ -218,7 +224,7 @@ public class InstallationFragment extends Fragment {
             public void onClick(View view) {
 
                 Log.d("INFO","Recorrido seleccionado"+ listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
-                Fragment fragment = new CourseFragment();
+                Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", listCourses.get(recyclerView.getChildAdapterPosition(view)));
                 fragment.setArguments(args);

@@ -104,7 +104,7 @@ public class AdapterAdminUsersList extends RecyclerView.Adapter<AdapterAdminUser
 
             id.setText(String.format("%06d", users.getId_user()));
 
-            if (users.getActive().equals("S")) {
+            if (users.getActive().equals("Y")) {
                 id.setBackgroundColor(itemView.getResources().getColor(R.color.green));
             } else {
                 id.setBackgroundColor(itemView.getResources().getColor(R.color.error));

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#6C6E6B"
     android:orientation="horizontal"
-    tools:context=".ui.LoginScreen">
+    tools:context=".ui.start.LoginScreen">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

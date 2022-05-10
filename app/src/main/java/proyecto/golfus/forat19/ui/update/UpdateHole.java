@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.update;
 
 import android.os.Bundle;
 
@@ -20,12 +20,17 @@ import Forat19.Golf_Course_Holes;
 import Forat19.Golf_Courses;
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.screens.Course;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
-
+/**
+ * Fragment para la actualizacion de hoyos
+ * @author Antonio Rodríguez Sirgado
+ */
 public class UpdateHole extends Fragment implements Observer {
 
 
@@ -90,6 +95,10 @@ public class UpdateHole extends Fragment implements Observer {
         return view;
     }
 
+    /**
+     * <b>Envia mensaje para la actualizacion del hoyo</b><br>
+     * Mensaje = (token¬device, updateGolfCourseHole, idCourse¬idHole, hole)
+     */
     private void sendUpdateHole() {
 
         hole.setAbout_golf_course_hole(about.getText().toString());
@@ -104,12 +113,18 @@ public class UpdateHole extends Fragment implements Observer {
 
     }
 
+    /**
+     * Permanece a la espera de que el objeto observado varie
+     * @author Antonio Rodriguez Sirgado
+     * @param o clase observada
+     * @param arg objeto observado
+     */
     @Override
     public void update(Observable o, Object arg) {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -123,7 +138,7 @@ public class UpdateHole extends Fragment implements Observer {
             Log.d("INFO", "Comando recibido: " + request.getCommand());
 
             if (command.equals(Global.UPDATE_GOLF_COURSE_HOLE)) {
-                Fragment fragment = new CourseFragment();
+                Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", course);
                 fragment.setArguments(args);

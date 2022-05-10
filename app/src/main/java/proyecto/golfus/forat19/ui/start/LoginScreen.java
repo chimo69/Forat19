@@ -1,13 +1,11 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.start;
 
 import static proyecto.golfus.forat19.utils.Utils.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,6 +25,7 @@ import java.util.Observer;
 import Forat19.*;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.add.AddUser;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -92,7 +90,7 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
+                Intent intent = new Intent(LoginScreen.this, AddUser.class);
 
                 Bundle extras = new Bundle();
                 extras.putString(Global.EXTRA_USER, user.getText().toString());
@@ -102,6 +100,10 @@ public class LoginScreen extends AppCompatActivity implements Observer {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 

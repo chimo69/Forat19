@@ -1,9 +1,7 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.update;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -51,7 +49,7 @@ import proyecto.golfus.forat19.utils.Utils;
  * Fragment que muestra al Admin los datos del usuario para poder gestionarlo
  * @author Antonio Rodríguez Sirgado
  */
-public class AccountAdmin extends Fragment implements Observer {
+public class UpdateUserAdmin extends Fragment implements Observer {
 
     private static final String ARG_PARAM1 = "id";
     private static final String ARG_PARAM2 = "username";
@@ -72,12 +70,12 @@ public class AccountAdmin extends Fragment implements Observer {
     private ArrayList<User_Types> object_user_types;
     private Integer TypeUserSelected;
 
-    public AccountAdmin() {
+    public UpdateUserAdmin() {
         // Required empty public constructor
     }
 
-    public static AccountAdmin newInstance(int param1, String param2) {
-        AccountAdmin fragment = new AccountAdmin();
+    public static UpdateUserAdmin newInstance(int param1, String param2) {
+        UpdateUserAdmin fragment = new UpdateUserAdmin();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -188,6 +186,7 @@ public class AccountAdmin extends Fragment implements Observer {
             }
         });
 
+        // Boton llamar por telefono
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,6 +203,7 @@ public class AccountAdmin extends Fragment implements Observer {
             }
         });
 
+        // Boton escribir mail
         mail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,7 +279,7 @@ public class AccountAdmin extends Fragment implements Observer {
             }
 
         }
-        AccountAdmin.loading.post(() -> AccountAdmin.loading.setVisibility(View.INVISIBLE));
+        UpdateUserAdmin.loading.post(() -> UpdateUserAdmin.loading.setVisibility(View.INVISIBLE));
     }
 
     /**
@@ -310,7 +310,7 @@ public class AccountAdmin extends Fragment implements Observer {
 
     /**
      * <b>Comprueba en el servidor que los datos modificados sean correctos</b><br>
-     * Mensaje = (token¬device, updateUser, id, usuario)
+     * Mensaje = (token¬device, updateUser, id usuario, usuario)
      * @author Antonio Rodriguez Sirgado
      */
     private void checkDataUser() {
@@ -321,12 +321,12 @@ public class AccountAdmin extends Fragment implements Observer {
             pass = user.getPassword();
         }
 
-        AccountAdmin.loading.post(() -> AccountAdmin.loading.setVisibility(View.VISIBLE));
+        UpdateUserAdmin.loading.post(() -> UpdateUserAdmin.loading.setVisibility(View.VISIBLE));
 
         String activeUser="N";
 
         if (checkActiveUser.isChecked()){
-            activeUser="S";
+            activeUser="Y";
         }
         Users toCheckUser = new Users(user.getId_user(), user.getUsername(), user.getName(), pass, TypeUserSelected, activeUser, user.getEmail(), user.getPhone(), user.getAddress());
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
@@ -338,7 +338,8 @@ public class AccountAdmin extends Fragment implements Observer {
     }
 
     /**
-     * Manda mensaje para cargar listado de tipos de usuario
+     * <b>Manda mensaje para cargar listado de tipos de usuario</b><br>
+     * Mensaje = (token¬device, ListUserTypes, id usuario, null)
      * @author Antonio Rodriguez Sirgado
      */
     private void loadTypeUsers(){

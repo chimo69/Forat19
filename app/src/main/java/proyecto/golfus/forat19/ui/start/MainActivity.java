@@ -1,11 +1,9 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.start;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private static ProgressBar loading;
     private ConstraintLayout constraintLayout;
     private View view;
+
+    @Override
+    public void onBackPressed() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

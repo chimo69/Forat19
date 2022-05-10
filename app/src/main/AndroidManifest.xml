@@ -16,16 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
-            android:name=".ui.MenuPrincipal"
+            android:name=".ui.start.MenuPrincipal"
             android:exported="true" />
         <activity
-            android:name=".ui.RegisterScreen"
+            android:name=".ui.add.AddUser"
             android:exported="true" />
         <activity
-            android:name=".ui.LoginScreen"
+            android:name=".ui.start.LoginScreen"
             android:exported="true" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.start.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

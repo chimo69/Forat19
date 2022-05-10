@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.screens;
 
 import android.os.Bundle;
 
@@ -8,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link emptyHole#newInstance} factory method to
+ * Use the {@link EmptyHole#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class emptyHole extends Fragment {
+public class EmptyHole extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class emptyHole extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public emptyHole() {
+    public EmptyHole() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class emptyHole extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment emptyHole.
+     * @return A new instance of fragment EmptyHole.
      */
     // TODO: Rename and change types and number of parameters
-    public static emptyHole newInstance(String param1, String param2) {
-        emptyHole fragment = new emptyHole();
+    public static EmptyHole newInstance(String param1, String param2) {
+        EmptyHole fragment = new EmptyHole();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

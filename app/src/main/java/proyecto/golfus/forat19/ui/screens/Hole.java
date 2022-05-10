@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.screens;
 
 import android.os.Bundle;
 
@@ -11,18 +11,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import Forat19.Golf_Course_Holes;
 import Forat19.Golf_Courses;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.Global;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.update.UpdateHole;
+import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para mostrar la informacion del hoyo seleccionado
  * @author Antonio Rodríguez Sirgado
  */
-public class HoleFragment extends Fragment implements Observer {
+public class Hole extends Fragment {
 
     private Golf_Course_Holes hole;
     private Golf_Courses course;
@@ -31,13 +31,11 @@ public class HoleFragment extends Fragment implements Observer {
     private Button update;
     private int holePar, holeHandicap, holeLength, holeNumber;
 
-
-
-    public HoleFragment() {
+    public Hole() {
     }
 
-    public static HoleFragment newInstance() {
-        HoleFragment fragment = new HoleFragment();
+    public static Hole newInstance() {
+        Hole fragment = new Hole();
         return fragment;
     }
 
@@ -79,6 +77,11 @@ public class HoleFragment extends Fragment implements Observer {
         length.setText(Integer.toString(holeLength));
         numHole.setText(getString(R.string.Hole)+": "+Integer.toString(holeNumber));
 
+        if (Utils.getActiveTypeUser(getActivity())!= Global.TYPE_ADMIN_USER){
+            update.setVisibility(View.GONE);
+        }
+
+        // Boton de actualizar
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,8 +92,5 @@ public class HoleFragment extends Fragment implements Observer {
         return view;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
 
-    }
 }

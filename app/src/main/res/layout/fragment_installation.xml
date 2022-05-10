@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_golf"
-    tools:context=".ui.InstallationFragment">
+    tools:context=".ui.screens.Installation">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_addCourse"

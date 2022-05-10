@@ -1,10 +1,9 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.start;
 
 import static proyecto.golfus.forat19.utils.Utils.esTablet;
 
-import android.content.Context;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -25,12 +24,17 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.add.AddCourse;
+import proyecto.golfus.forat19.ui.lists.InstallationsList;
+import proyecto.golfus.forat19.ui.lists.UsersList;
+import proyecto.golfus.forat19.ui.screens.MyAccount;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -50,8 +54,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     private int userType;
     private String activeUser;
 
-    //private SharedPreferences.Editor editor;
-    //private SharedPreferences preferences;
     private boolean openSession;
 
     @Override
@@ -67,8 +69,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, true);
                 break;
             case Global.TYPE_NORMAL_USER:
-                navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
-                break;
             case Global.TYPE_ADVANCED_USER:
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
                 break;
@@ -83,6 +83,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+                Utils.hideKeyboard(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -143,6 +144,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
             }
             return false;
         });
+
+
     }
 
     private void setToolBar() {
@@ -179,16 +182,18 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
+        Log.d ("INFO","BackStacks: "+count);
+
         if (count == 0) {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else {
-                loadFragment(new PrincipalFragment());
+                loadFragment(new Principal());
             }
-            //super.onBackPressed();
 
         } else {
-            getSupportFragmentManager().popBackStack();
+            super.onBackPressed();
+            //getSupportFragmentManager().popBackStack();
         }
 
 

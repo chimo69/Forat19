@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.update;
 
 import android.os.Bundle;
 
@@ -19,11 +19,17 @@ import java.util.Observer;
 import Forat19.Golf_Courses;
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.screens.Course;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * Fragment para la actualizacion de un recorrido
+ * @author Antonio Rodríguez Sirgado
+ */
 public class UpdateCourse extends Fragment implements Observer {
 
     private TextView name, slope, field, about;
@@ -75,12 +81,18 @@ public class UpdateCourse extends Fragment implements Observer {
         return view;
     }
 
+    /**
+     * Permanece a la espera de que el objeto observado varie
+     * @author Antonio Rodriguez Sirgado
+     * @param o clase observada
+     * @param arg objeto observado
+     */
     @Override
     public void update(Observable o, Object arg) {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -88,14 +100,13 @@ public class UpdateCourse extends Fragment implements Observer {
             request = (Message) arg;
             String command = request.getCommand();
 
-
             Log.d("INFO", "Token recibido: " + request.getToken());
             Log.d("INFO", "Parametros recibido: " + request.getParameters());
             Log.d("INFO", "Comando recibido: " + request.getCommand());
 
             if (command.equals(Global.UPDATE_GOLF_COURSE)) {
 
-                Fragment fragment = new CourseFragment();
+                Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", course);
                 fragment.setArguments(args);
@@ -106,6 +117,11 @@ public class UpdateCourse extends Fragment implements Observer {
         }
     }
 
+    /**
+     * <b>Envia mensaje para la actualizacion del recorrido</b><br>
+     * Mensaje = (token¬device, updateGolfCourse, id usuario, course)
+     * @author Antonio Rodríguez Sirgado
+     */
     public void sendUpdateCourse () {
 
         course.setAbout_golf_course(about.getText().toString());

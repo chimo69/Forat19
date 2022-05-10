@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_golf"
-    tools:context=".ui.AddFriend">
+    tools:context=".ui.add.AddFriend">
 
     <LinearLayout
         android:layout_width="match_parent"

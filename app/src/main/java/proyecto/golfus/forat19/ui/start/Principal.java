@@ -1,4 +1,4 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.start;
 
 import android.os.Bundle;
 
@@ -14,13 +14,13 @@ import proyecto.golfus.forat19.*;
  * Fragment contenedor
  * @author Antonio Rodriguez Sirgado
  */
-public class PrincipalFragment extends Fragment {
+public class Principal extends Fragment {
 
-    public PrincipalFragment() {
+    public Principal() {
     }
 
-    public static PrincipalFragment newInstance() {
-        PrincipalFragment fragment = new PrincipalFragment();
+    public static Principal newInstance() {
+        Principal fragment = new Principal();
         return fragment;
     }
 

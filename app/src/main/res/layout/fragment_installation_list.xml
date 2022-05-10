@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo_golf"
     android:orientation="vertical"
-    tools:context=".ui.InstallationsList">
+    tools:context=".ui.lists.InstallationsList">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchInstallationList"

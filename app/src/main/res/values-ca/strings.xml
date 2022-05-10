@@ -94,4 +94,11 @@
     <string name="Location_could_not_be_opened">No es va poder obrir la localització</string>
     <string name="Hole">Forat</string>
     <string name="user_features">Caratcterístiques de l\'usuari</string>
+    <string name="number_of_holes">Nombre de forats</string>
+    <string name="delete_the_account">¿Segur que vols eliminar el compte?</string>
+    <string name="about_hole">Sobre el forat</string>
+    <string name="hole_editing">Editant forat</string>
+    <string name="course_added_ok">Recorregut afegit amb éxit</string>
+    <string name="course_added_error">Error afegint recorregut</string>
+    <string name="course_editing">Editant recorregut</string>
 </resources>

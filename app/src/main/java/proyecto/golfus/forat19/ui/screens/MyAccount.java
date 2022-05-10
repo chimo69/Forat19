@@ -1,18 +1,13 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.screens;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +31,10 @@ import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.start.LoginScreen;
+import proyecto.golfus.forat19.ui.start.Principal;
+import proyecto.golfus.forat19.ui.add.AddFriend;
+import proyecto.golfus.forat19.ui.update.UpdateUser;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -96,7 +95,7 @@ public class MyAccount extends Fragment implements Observer {
             public void onClick(View v) {
                 AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
                 confirmation.setTitle(R.string.attention);
-                confirmation.setMessage("¿Seguro que quieres eliminar la cuenta?");
+                confirmation.setMessage(R.string.delete_the_account);
                 confirmation.setCancelable(true);
                 confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
                     deleteUser();
@@ -170,7 +169,7 @@ public class MyAccount extends Fragment implements Observer {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -245,6 +244,7 @@ public class MyAccount extends Fragment implements Observer {
                 txtNameInfo.setText(name);
                 txtAddressInfo.setText(address);
 
+                // codigo QR
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 try {
                     Bitmap bitmap = barcodeEncoder.encodeBitmap(userName, BarcodeFormat.QR_CODE, 500, 500);

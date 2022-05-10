@@ -1,8 +1,5 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.screens;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -28,7 +25,9 @@ import Forat19.Golf_Course_Types;
 import Forat19.Golf_Courses;
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.start.Principal;
+import proyecto.golfus.forat19.ui.update.UpdateCourse;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -38,7 +37,7 @@ import proyecto.golfus.forat19.utils.Utils;
  *
  * @author Antonio Rodríguez Sirgado
  */
-public class CourseFragment extends Fragment implements View.OnClickListener, Observer {
+public class Course extends Fragment implements View.OnClickListener, Observer {
 
     private Golf_Courses golf_course;
     private ArrayList<Golf_Course_Holes> holesList;
@@ -51,13 +50,13 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
     private String courseType;
     private CardView infoHole, buttons;
 
-    public CourseFragment() {
+    public Course() {
         // Required empty public constructor
     }
 
 
-    public static CourseFragment newInstance(String param1, String param2) {
-        CourseFragment fragment = new CourseFragment();
+    public static Course newInstance(String param1, String param2) {
+        Course fragment = new Course();
         return fragment;
     }
 
@@ -88,6 +87,8 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
         infoHole = view.findViewById(R.id.cardHoles);
         buttons = view.findViewById(R.id.cardViewButtons);
         editCourse = view.findViewById(R.id.btnEditGolfCourse);
+
+        Utils.hideKeyboard(getActivity());
 
         if (Utils.getActiveTypeUser(getActivity()) != Global.TYPE_ADMIN_USER) {
             editCourse.setVisibility(View.INVISIBLE);
@@ -164,8 +165,9 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
     }
 
     /**
-     * Carga el tipo de recorrido
-     *
+     * <b>Carga info del tipo de recorrido</b><br>
+     * Mensaje = (token¬device, getGolfCourseType, id tipoRecorrido, null)
+     * @author Antonio Rodríguez Sirgado
      * @param id recorrido a mostrar
      */
     private void loadCourseType(int id) {
@@ -178,6 +180,7 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
 
     /**
      * Muestra la información del recorrido en pantalla
+     * @author Antonio Rodríguez Sirgado
      */
     public void showInfo() {
         // rellenamos la información con los datos recibidos
@@ -186,6 +189,7 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
         holes.setText(Integer.toString(golf_course.getHoles()));
         par.setText(Integer.toString(golf_course.getPar()));
         length.setText(Integer.toString(golf_course.getLength()));
+
         if (golf_course.getHandicap_calculation().equals("Y")) {
             handicap.setChecked(true);
         } else {
@@ -199,13 +203,13 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
 
     /**
      * Carga el fragment de hoyo seleccionado
-     *
+     * @author Antonio Rodríguez Sirgado
      * @param idHole hoyo a mostrar.
      */
     public void loadHole(int idHole) {
 
         Golf_Course_Holes holeSelected = holesList.get(idHole - 1);
-        Fragment fragment = new HoleFragment();
+        Fragment fragment = new Hole();
         Bundle args = new Bundle();
         args.putSerializable("hole", holeSelected);
         args.putSerializable("course", golf_course);
@@ -217,15 +221,15 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
     /**
      * Permanece a la espera de que las variables cambien
      *
+     * @author Antonio Rodriguez Sirgado
      * @param o   la clase observada
      * @param arg objeto observado
-     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -320,7 +324,6 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
                 infoHole.setVisibility(View.VISIBLE);
                 loadHole(18);
                 break;
-
             case R.id.btnEditGolfCourse:
                 Fragment fragment = new UpdateCourse();
                 Bundle args = new Bundle();
@@ -330,7 +333,7 @@ public class CourseFragment extends Fragment implements View.OnClickListener, Ob
                 infoHole.setVisibility(View.VISIBLE);
                 editCourse.setVisibility(View.INVISIBLE);
                 Log.d("INFO", "Ocultando botones");
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment,"updateCourse").commit();
                 break;
         }
     }

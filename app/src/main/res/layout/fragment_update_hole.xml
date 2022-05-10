@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.UpdateHole" >
+    tools:context=".ui.update.UpdateHole" >
 
     <LinearLayout
         android:id="@+id/holeTitle"
@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Hole editing"
+                android:text="@string/hole_editing"
                 android:textColor="@color/grey"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="About hole" />
+                    android:text="@string/about_hole" />
 
             </TableRow>
 

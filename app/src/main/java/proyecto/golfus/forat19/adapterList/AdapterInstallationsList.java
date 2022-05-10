@@ -17,7 +17,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de instalaciones
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstallationsList.ViewHolderList> implements View.OnClickListener {
 

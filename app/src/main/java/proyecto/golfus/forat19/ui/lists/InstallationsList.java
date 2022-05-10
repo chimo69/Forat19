@@ -1,7 +1,5 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.lists;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
@@ -22,12 +20,13 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
 
 import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterInstallationsList;
+import proyecto.golfus.forat19.ui.screens.Installation;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -81,19 +80,21 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     }
 
     /**
-     * Pide al servidor informacion de las instalaciones
+     * <b>Pide al servidor informacion de las instalaciones</b>
+     * Mensaje = (token¬device, listInstallation, null, null)
      * @author Antonio Rodríguez Sirgado
      */
     public void loadInstallations() {
 
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, Utils.getActiveToken(getActivity()), null);
+        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
 
     /**
-     * Pide al servidor informacion de los recorridos
+     * <b>Pide al servidor informacion de los recorridos</b><br>
+     * Mensaje = (token¬device, listGolfCourse, id instalacion, null)
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGolfCourse(int installationId) {
@@ -143,7 +144,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
@@ -179,7 +180,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
                 });
             } else if (command.equals(Global.LIST_GOLF_COURSES)) {
 
-                Fragment fragment = new InstallationFragment();
+                Fragment fragment = new Installation();
                 Bundle args = new Bundle();
 
                 args.putSerializable("installation", selectedInstallation);

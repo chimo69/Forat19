@@ -102,5 +102,12 @@
     <string name="cant_open_web">Web could not be opened</string>
     <string name="Hole">Hole</string>
     <string name="user_features">User features</string>
+    <string name="number_of_holes">Number of holes</string>
+    <string name="delete_the_account">Are you sure you want to delete the account?</string>
+    <string name="course_added_ok">Recorrido añadido con éxito</string>
+    <string name="course_added_error">Error al añadir recorrido</string>
+    <string name="hole_editing">Hole editing</string>
+    <string name="about_hole">About hole</string>
+    <string name="course_editing">Course editing</string>
 
 </resources>

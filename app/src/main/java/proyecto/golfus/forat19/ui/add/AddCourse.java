@@ -1,7 +1,10 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.add;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -28,23 +31,29 @@ import Forat19.Golf_Courses;
 import Forat19.Installations;
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.screens.Course;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para agregar un recorrido y sus hoyos
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class AddCourse extends Fragment implements Observer {
 
     private Message request;
 
+    private ArrayList<TextView> txtInfoCourse = new ArrayList<>();
+    private ArrayList<TextView> txtHole9 = new ArrayList<>();
+    private ArrayList<TextView> txtHole18 = new ArrayList<>();
     private Installations installation;
     private Golf_Courses newGolfCourse;
     private TextView title;
-    private Spinner combobox_type_course;
+    private Spinner combobox_type_course, combobox_holeNumber;
     private EditText name, slope, field_value, about;
     private EditText h1_par, h1_handicap, h1_length, h1_about;
     private EditText h2_par, h2_handicap, h2_length, h2_about;
@@ -65,10 +74,14 @@ public class AddCourse extends Fragment implements Observer {
     private EditText h17_par, h17_handicap, h17_length, h17_about;
     private EditText h18_par, h18_handicap, h18_length, h18_about;
 
+    private CardView hole10, hole11, hole12, hole13, hole14, hole15, hole16, hole17, hole18;
+
     ArrayList<Golf_Course_Types> object_course_types;
+    String[] numberHolesOptions = {"9", "18"};
+
 
     private FloatingActionButton addHoles;
-    private int typeSelected;
+    private int typeSelected, numberHolesSelected;
 
     public AddCourse() {
     }
@@ -87,6 +100,23 @@ public class AddCourse extends Fragment implements Observer {
         }
     }
 
+   /* @Override
+    public void onPause() {
+        super.onPause();
+        AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
+        confirmation.setTitle(R.string.attention);
+        confirmation.setMessage("No se ha guardado el recorrido, ¿Seguro que quieres salir?");
+        confirmation.setCancelable(true);
+        confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
+            return;
+        });
+        confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
+        });
+
+        confirmation.show();
+
+    }*/
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,15 +127,27 @@ public class AddCourse extends Fragment implements Observer {
         name = view.findViewById(R.id.addCourse_name);
         slope = view.findViewById(R.id.addCourse_Slope);
         field_value = view.findViewById(R.id.addCourse_FieldValue);
+
         about = view.findViewById(R.id.addCourse_about);
         addHoles = view.findViewById(R.id.btn_addHoles);
         combobox_type_course = view.findViewById(R.id.addCourse_type);
+        combobox_holeNumber = view.findViewById(R.id.addHoleNumber);
+
+        // Añadimos los textViews a un ArrayList
+        txtInfoCourse.add(name);
+        txtInfoCourse.add(slope);
+        txtInfoCourse.add(field_value);
+
+        combobox_holeNumber.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, numberHolesOptions));
 
         //hole 1
         h1_par = view.findViewById(R.id.hole1_par);
         h1_handicap = view.findViewById(R.id.hole1_handicap);
         h1_length = view.findViewById(R.id.hole1_length);
-        h1_about = view.findViewById(R.id.addCourse_about);
+        h1_about = view.findViewById(R.id.hole1_about);
+        txtHole9.add(h1_par);
+        txtHole9.add(h1_handicap);
+        txtHole9.add(h1_length);
 
         //hole 2
         h2_par = view.findViewById(R.id.hole2_par);
@@ -209,10 +251,23 @@ public class AddCourse extends Fragment implements Observer {
         h18_length = view.findViewById(R.id.hole18_length);
         h18_about = view.findViewById(R.id.hole18_about);
 
+        hole10 = view.findViewById(R.id.hole10);
+        hole11 = view.findViewById(R.id.hole11);
+        hole12 = view.findViewById(R.id.hole12);
+        hole13 = view.findViewById(R.id.hole13);
+        hole14 = view.findViewById(R.id.hole14);
+        hole15 = view.findViewById(R.id.hole15);
+        hole16 = view.findViewById(R.id.hole16);
+        hole17 = view.findViewById(R.id.hole17);
+        hole18 = view.findViewById(R.id.hole18);
+
         title.setText(installation.getInstallation());
+
+        name.requestFocus();
 
         loadCourseTypes();
 
+        // combobox tipo de recorrido
         combobox_type_course.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -223,7 +278,23 @@ public class AddCourse extends Fragment implements Observer {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
+        // combobox cantidad de hoyos
+        combobox_holeNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                numberHolesSelected = Integer.parseInt((String) combobox_holeNumber.getSelectedItem());
+                if (numberHolesSelected == 18) {
+                    show18Holes(true);
+                } else {
+                    show18Holes(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -231,6 +302,7 @@ public class AddCourse extends Fragment implements Observer {
         addHoles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideKeyboard(getActivity());
                 fillAllData();
             }
         });
@@ -238,7 +310,8 @@ public class AddCourse extends Fragment implements Observer {
     }
 
     /**
-     * Crea un objeto Golf_Course_holes y lo rellena con los datos de pantalla, despues crea un objeto Golf_Course y lo rellena con los holes     *
+     * Crea un objeto Golf_Course_holes y lo rellena con los datos de pantalla, despues crea un objeto Golf_Course y lo rellena con los holes
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void fillAllData() {
@@ -247,38 +320,25 @@ public class AddCourse extends Fragment implements Observer {
         String nameCourse = name.getText().toString();
         String aboutInst = about.getText().toString();
 
-        Float fieldValueInst = 0f;
-        int slopeInst = 0;
+        //Float fieldValueInst = null;
+        //int slopeInst = 0;
 
-        if (field_value.getText() != null && slope.getText() != null) {
-            fieldValueInst = Float.parseFloat(field_value.getText().toString());
-            slopeInst = Integer.parseInt(slope.getText().toString());
-        } else {
-            showError(slope);
-            return;
-        }
+        if (checkFields()) {
+            Float fieldValueInst = Float.parseFloat(field_value.getText().toString());
+            int slopeInst = Integer.parseInt(slope.getText().toString());
 
-        int par, handicap, length;
-        String about;
-
-        //hole 1
-        if (h1_par.getText() != null && h1_length.getText() != null && h1_handicap.getText() != null) {
-            par = Integer.parseInt(h1_par.getText().toString());
-            handicap = Integer.parseInt(h1_handicap.getText().toString());
-            length = Integer.parseInt(h1_length.getText().toString());
-            about = h1_about.getText().toString();
+            //hole 1
+            int par = Integer.parseInt(h1_par.getText().toString());
+            int handicap = Integer.parseInt(h1_handicap.getText().toString());
+            int length = Integer.parseInt(h1_length.getText().toString());
+            String about = h1_about.getText().toString();
             Golf_Course_Holes hole1;
 
             // Bucle falseado para probar rellenar todos los campos
-            for (int h = 1; h < 9; h++) {
+            for (int h = 1; h < numberHolesSelected + 1; h++) {
                 hole1 = new Golf_Course_Holes(0, h, par, handicap, length, about);
                 holes.add(hole1);
             }
-
-        } else {
-            showError(h1_par);
-            return;
-        }
 
         /*
         //hole 2
@@ -418,14 +478,49 @@ public class AddCourse extends Fragment implements Observer {
         Golf_Course_Holes hole18 = new Golf_Course_Holes(0, 18, par, handicap, length, about);
         holes.add(hole18);*/
 
-        newGolfCourse = new Golf_Courses(0, idInst, nameCourse, typeSelected, 0, 0, 0, "N", fieldValueInst, slopeInst, aboutInst, holes);
+            newGolfCourse = new Golf_Courses(0, idInst, nameCourse, typeSelected, 0, 0, 0, "N", fieldValueInst, slopeInst, aboutInst, holes);
         sendNewCourse();
+
+        }
+
+
+
+
+    }
+
+    private Boolean checkFields() {
+
+        for (TextView t : txtInfoCourse) {
+            if (t.getText().toString().isEmpty()) {
+                t.requestFocus();
+                showError(t);
+                return false;
+            }
+        }
+
+
+        if (h1_par.getText().toString().isEmpty()) {
+            showError(h1_par);
+            return false;
+        } else if (h1_handicap.getText().toString().isEmpty()) {
+            showError(h1_handicap);
+            return false;
+        } else if (h1_length.getText().toString().isEmpty()) {
+            showError(h1_length);
+            return false;
+        }
+
+        if (numberHolesSelected == 18) {
+        }
+        return true;
     }
 
     /**
-     * Carga los tipos de recorrido para mostrarlos en un combobox
+     * <b>Carga los tipos de recorrido para mostrarlos en un combobox</b><br>
+     * Mensaje = (token¬device, ListGolfCourseType, id usuario, null)
+     *
      * @author Antonio Rodríguez Sirgado
-     * */
+     */
     public void loadCourseTypes() {
 
         Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
@@ -446,13 +541,14 @@ public class AddCourse extends Fragment implements Observer {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         } else if (arg instanceof Message) {
 
             request = (Message) arg;
             String command = request.getCommand();
+            String parameter = request.getParameters();
 
             Log.d("INFO", "Token recibido: " + request.getToken());
             Log.d("INFO", "Parametros recibido: " + request.getParameters());
@@ -461,11 +557,9 @@ public class AddCourse extends Fragment implements Observer {
             if (command.equals(Global.LIST_GOLF_COURSES_TYPE)) {
 
                 ArrayList<String> course_types = new ArrayList<>();
-
                 object_course_types = (ArrayList<Golf_Course_Types>) request.getObject();
 
                 for (int i = 0; i < object_course_types.size(); i++) {
-
                     course_types.add(object_course_types.get(i).getGolf_course_type());
                 }
 
@@ -478,14 +572,21 @@ public class AddCourse extends Fragment implements Observer {
                 });
             } else if (command.equals(Global.ADD_GOLF_COURSE)) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showToast(getActivity(),"Recorrido añadido con éxito", Toast.LENGTH_SHORT);
-                        Fragment fragment = new PrincipalFragment();
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-                    }
-                });
+                if (parameter.equals(Global.OK)) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(getActivity(), getString(R.string.course_added_ok), Toast.LENGTH_SHORT);
+                            Fragment fragment = new Course();
+                            Bundle args = new Bundle();
+                            args.putSerializable("course", newGolfCourse);
+                            fragment.setArguments(args);
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        }
+                    });
+                } else {
+                    Utils.showToast(getActivity(), getString(R.string.course_added_error), Toast.LENGTH_SHORT);
+                }
             }
 
 
@@ -494,8 +595,9 @@ public class AddCourse extends Fragment implements Observer {
 
     /**
      * Muestra un error y pone el foco en el TextView enviado
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param textView Donde debe poner el foco
+     * @author Antonio Rodríguez Sirgado
      */
     public void showError(TextView textView) {
         Utils.showSnack(getView(), "Faltan campos por rellenar", Snackbar.LENGTH_SHORT);
@@ -503,7 +605,9 @@ public class AddCourse extends Fragment implements Observer {
     }
 
     /**
-     * Envia el mensaje con el nuevo recorrido creado
+     * <b>Envia el mensaje con el nuevo recorrido creado</b><br>
+     * Mensaje = (token¬device, addGolfCourse, id usuario, course)
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void sendNewCourse() {
@@ -512,5 +616,30 @@ public class AddCourse extends Fragment implements Observer {
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
+    }
+
+    public void show18Holes(Boolean visible) {
+        if (visible) {
+            hole10.setVisibility(View.VISIBLE);
+            hole11.setVisibility(View.VISIBLE);
+            hole12.setVisibility(View.VISIBLE);
+            hole13.setVisibility(View.VISIBLE);
+            hole14.setVisibility(View.VISIBLE);
+            hole15.setVisibility(View.VISIBLE);
+            hole16.setVisibility(View.VISIBLE);
+            hole17.setVisibility(View.VISIBLE);
+            hole18.setVisibility(View.VISIBLE);
+        } else {
+            hole10.setVisibility(View.GONE);
+            hole11.setVisibility(View.GONE);
+            hole12.setVisibility(View.GONE);
+            hole13.setVisibility(View.GONE);
+            hole14.setVisibility(View.GONE);
+            hole15.setVisibility(View.GONE);
+            hole16.setVisibility(View.GONE);
+            hole17.setVisibility(View.GONE);
+            hole18.setVisibility(View.GONE);
+        }
+
     }
 }

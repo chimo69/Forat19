@@ -1,12 +1,10 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.add;
 
 import static proyecto.golfus.forat19.utils.Utils.esTablet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -30,6 +28,7 @@ import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.start.LoginScreen;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -38,7 +37,7 @@ import proyecto.golfus.forat19.utils.Utils;
  * Pantalla de registro de usuario
  * @author Antonio Rodriguez Sirgado
  */
-public class RegisterScreen extends AppCompatActivity implements Observer {
+public class AddUser extends AppCompatActivity implements Observer {
 
     private String user, password;
     private TextView txtUser, txtName, txtMail, txtPhone, txtAddress;
@@ -100,7 +99,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                 } else {
                     registerLoading.setVisibility(View.VISIBLE);
                     checkDataUser();
-                    Utils.hideKeyboard(RegisterScreen.this);
+                    Utils.hideKeyboard(AddUser.this);
                     btnSave.setEnabled(false);
 
                 }
@@ -144,7 +143,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply){
             Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
-            RegisterScreen.registerLoading.post(() -> RegisterScreen.registerLoading.setVisibility(View.GONE));
+            AddUser.registerLoading.post(() -> AddUser.registerLoading.setVisibility(View.GONE));
         }else {
             Message request = (Message) arg;
 
@@ -157,7 +156,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                 Users newUser;
                 newUser = (Users) request.getObject();
 
-                RegisterScreen.this.runOnUiThread(new Runnable() {
+                AddUser.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
@@ -227,8 +226,8 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
                     }
                 });
 
-                RegisterScreen.registerLoading.post(() -> RegisterScreen.registerLoading.setVisibility(View.INVISIBLE));
-                RegisterScreen.this.runOnUiThread(new Runnable() {
+                AddUser.registerLoading.post(() -> AddUser.registerLoading.setVisibility(View.INVISIBLE));
+                AddUser.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         btnSave.setEnabled(true);
@@ -250,7 +249,7 @@ public class RegisterScreen extends AppCompatActivity implements Observer {
 
                 Utils.showToast(this, getString(R.string.user_successfully_registered), Toast.LENGTH_SHORT);
 
-                Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                Intent intent = new Intent(AddUser.this, LoginScreen.class);
                 startActivity(intent);
 
 

@@ -1,36 +1,27 @@
 package proyecto.golfus.forat19.adapterList;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import Forat19.Golf_Course_Types;
 import Forat19.Golf_Courses;
-import Forat19.Installations;
-import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
-import proyecto.golfus.forat19.ui.MainActivity;
-import proyecto.golfus.forat19.utils.RequestServer;
-import proyecto.golfus.forat19.utils.Utils;
+import proyecto.golfus.forat19.*;
 
 /**
- * @Author Antonio Rodríguez Sirgado
+ * Adaptador encargado de rellenar el RecyclerView de recorridos
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.ViewHolderList> implements View.OnClickListener {
     ArrayList<Golf_Courses> listCourses;
     ArrayList<Golf_Courses> listSearch;
+    String [] courseTypes = {"Golf", "Par 3", "P&P"};
+
     private View.OnClickListener listener;
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -78,6 +69,7 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.course_list_name);
+            type = itemView.findViewById(R.id.course_list_type);
         }
 
         /**
@@ -87,6 +79,7 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
          */
         public void fillList(Golf_Courses golf_courses) {
             name.setText(golf_courses.getGolf_course());
+            type.setText(courseTypes[golf_courses.getId_golf_course_type()-1]);
 
         }
 

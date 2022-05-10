@@ -1,7 +1,5 @@
-package proyecto.golfus.forat19.ui;
+package proyecto.golfus.forat19.ui.update;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +25,8 @@ import Forat19.Message;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.ui.screens.MyAccount;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -110,7 +110,7 @@ public class UpdateUser extends Fragment implements Observer {
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
             // Volvemos a fragment inicial
-            Fragment fragment = new PrincipalFragment();
+            Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
         } else {
             btnUpdate.setEnabled(true);
