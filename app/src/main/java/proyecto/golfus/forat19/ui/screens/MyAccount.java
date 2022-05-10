@@ -134,12 +134,7 @@ public class MyAccount extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-
-        Message mMessage = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
-
-        RequestServer request = new RequestServer();
-        request.request(mMessage);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.GET_USER,Utils.getActiveId(getActivity()), null);
     }
 
     /**
@@ -148,12 +143,7 @@ public class MyAccount extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void deleteUser() {
-
-        Message mMessage = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.DELETE_USER, null, user);
-
-        RequestServer request = new RequestServer();
-        request.request(mMessage);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.DELETE_USER, null, user);
     }
 
     /**
@@ -164,8 +154,6 @@ public class MyAccount extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-
-
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
             Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);

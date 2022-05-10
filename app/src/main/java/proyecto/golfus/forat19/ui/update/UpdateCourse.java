@@ -129,9 +129,7 @@ public class UpdateCourse extends Fragment implements Observer {
         course.setGolf_course(name.getText().toString());
         course.setSlope_value(Integer.parseInt(slope.getText().toString()));
 
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.UPDATE_GOLF_COURSE, Utils.getActiveId(getActivity()), course);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE, Utils.getActiveId(getActivity()), course);
+
     }
 }

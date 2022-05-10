@@ -44,7 +44,6 @@ public class LoginScreen extends AppCompatActivity implements Observer {
     private SwitchCompat openSession;
     public static ProgressBar loading;
     private View view;
-    public static Message mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,24 +108,13 @@ public class LoginScreen extends AppCompatActivity implements Observer {
 
     /**
      * <b>Construye el mensaje, lo manda al servidor y espera la respuesta para ver si es válida</b><br>
-     * Mensaje = (null¬device,Login,null)
+     * Mensaje = (null¬device,Login,user¬password,null)
      * @author Antonio Rodríguez Sirgado
      */
     private void checkTokenOnline() {
         String sendMessage = user.getText().toString() + "¬" + password.getText().toString();
-
-        mMessage = new Message(null+"¬"+Utils.getDevice(this), Global.LOGIN, sendMessage, null);
-
-        Log.d("INFO", "Token enviado: " + mMessage.getToken());
-        Log.d("INFO", "Parametro enviado: " + mMessage.getParameters());
-        Log.d("INFO", "Comando enviado: " + mMessage.getCommand());
-
-        RequestServer request = new RequestServer();
-        request.request(mMessage);
-        request.addObserver(this);
-
+        Utils.sendRequest(this,  Global.LOGIN,sendMessage,null);
         LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.VISIBLE));
-
     }
 
     /**

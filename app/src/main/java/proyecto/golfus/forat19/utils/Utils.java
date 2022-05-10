@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -154,16 +155,20 @@ public class Utils extends AppCompatActivity {
         return device;
     }
 
-    public static void sendRequest(Activity activity, String command, String parameter, Users user){
+    public static void sendRequest(Activity activity,  String command, String parameter, Object object){
 
-        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-        Message message = new Message(activeToken + "¬" + getDevice(activity), Global.LIST_USER_TYPES, Integer.toString(activeID), null);
+        String token=null;
+        if (!command.equals(Global.LOGIN)){token=getActiveToken(activity);}
+
+        Message message = new Message(token  + "¬" + getDevice(activity), command,  parameter, object);
 
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver((Observer) activity);
+
+        Log.d("INFO", "Token enviado: " + message.getToken());
+        Log.d("INFO", "Parametro enviado: " + message.getParameters());
+        Log.d("INFO", "Comando enviado: " + message.getCommand());
     }
 
     /**

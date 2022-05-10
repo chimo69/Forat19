@@ -126,12 +126,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
      *
      */
     public void loadUsers(String typeList){
-
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), typeList, Utils.getActiveId(getActivity()), null);
-
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),typeList, Utils.getActiveId(getActivity()),null);
     }
 
     /**

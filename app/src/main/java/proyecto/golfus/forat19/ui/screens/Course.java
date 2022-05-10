@@ -167,19 +167,17 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
     /**
      * <b>Carga info del tipo de recorrido</b><br>
      * Mensaje = (token¬device, getGolfCourseType, id tipoRecorrido, null)
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param id recorrido a mostrar
+     * @author Antonio Rodríguez Sirgado
      */
     private void loadCourseType(int id) {
-
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
     }
 
     /**
      * Muestra la información del recorrido en pantalla
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void showInfo() {
@@ -198,13 +196,13 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
         field.setText(Float.toString(golf_course.getField_value()));
         slope.setText(Integer.toString(golf_course.getSlope_value()));
         about.setText(golf_course.getAbout_golf_course());
-
     }
 
     /**
      * Carga el fragment de hoyo seleccionado
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param idHole hoyo a mostrar.
+     * @author Antonio Rodríguez Sirgado
      */
     public void loadHole(int idHole) {
 
@@ -221,9 +219,9 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
     /**
      * Permanece a la espera de que las variables cambien
      *
-     * @author Antonio Rodriguez Sirgado
      * @param o   la clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
@@ -333,7 +331,7 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
                 infoHole.setVisibility(View.VISIBLE);
                 editCourse.setVisibility(View.INVISIBLE);
                 Log.d("INFO", "Ocultando botones");
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment,"updateCourse").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment, "updateCourse").commit();
                 break;
         }
     }

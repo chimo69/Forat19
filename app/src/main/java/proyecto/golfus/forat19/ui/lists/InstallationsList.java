@@ -85,11 +85,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadInstallations() {
-
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_INSTALLATIONS, null, null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.LIST_INSTALLATIONS,null,null);
     }
 
     /**
@@ -98,22 +94,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGolfCourse(int installationId) {
-
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES, Integer.toString(installationId), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
     }
-
-    /*public void loadGolfCourseType(){
-        String activeToken = preferences.getString(Global.PREF_ACTIVE_TOKEN, null);
-        int activeID = preferences.getInt(Global.PREF_ACTIVE_ID, 0);
-
-        Forat19.Message message = new Forat19.Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_GOLF_COURSE_TYPE, Integer.toString(activeID), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }*/
 
     @Override
     public boolean onQueryTextSubmit(String query) {

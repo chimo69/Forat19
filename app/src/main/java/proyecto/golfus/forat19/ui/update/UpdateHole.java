@@ -88,7 +88,6 @@ public class UpdateHole extends Fragment implements Observer {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 sendUpdateHole();
             }
         });
@@ -100,17 +99,10 @@ public class UpdateHole extends Fragment implements Observer {
      * Mensaje = (token¬device, updateGolfCourseHole, idCourse¬idHole, hole)
      */
     private void sendUpdateHole() {
-
         hole.setAbout_golf_course_hole(about.getText().toString());
         int idHole = hole.getId_golf_course_hole();
         int idCourse = hole.getId_golf_course();
-
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
-
+        Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
     }
 
     /**
@@ -131,7 +123,6 @@ public class UpdateHole extends Fragment implements Observer {
 
             request = (Message) arg;
             String command = request.getCommand();
-
 
             Log.d("INFO", "Token recibido: " + request.getToken());
             Log.d("INFO", "Parametros recibido: " + request.getParameters());

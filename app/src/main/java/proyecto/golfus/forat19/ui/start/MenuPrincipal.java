@@ -206,12 +206,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void logoutUser() {
-
-        Message message = new Message(Utils.getActiveToken(this) + "¬" + Utils.getDevice(this), Global.LOGOUT, null, null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
+        Utils.sendRequest(this,Global.LOGOUT, null, null);
     }
 
     /**

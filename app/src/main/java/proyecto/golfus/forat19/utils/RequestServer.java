@@ -23,8 +23,8 @@ import proyecto.golfus.forat19.*;
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
-    private final String IP = "54.216.204.8";
-    //private final String IP = "192.168.1.33";
+    //private final String IP = "54.216.204.8";
+    private final String IP = "192.168.1.33";
 
     private Socket socket;
     private Object input;

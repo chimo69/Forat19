@@ -238,19 +238,13 @@ public class UpdateUser extends Fragment implements Observer {
         String phone = txtPhone.getText().toString();
         String address = txtAddress.getText().toString();
 
-        String activeToken = Utils.getActiveToken(getActivity());
         String active = user.getActive();
         String username = user.getUsername();
         int typeUser = user.getId_user_type();
         String activeID = Utils.getActiveId(getActivity());
 
         Users toCheckUser = new Users(Integer.parseInt(activeID), username, name, password, typeUser, active, email, phone, address);
-        Message message = new Message(activeToken + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, activeID, toCheckUser);
-
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
+        Utils.sendRequest(getActivity(),Global.UPDATE_USER, activeID, toCheckUser);
     }
 
     /**
@@ -259,16 +253,12 @@ public class UpdateUser extends Fragment implements Observer {
      */
     private void checkPassword() {
         if (!(txtPassword.getText().toString().equals(txtRePassword.getText().toString()))) {
-
             txtRePassword.requestFocus();
             tilPassword.setError(getResources().getString(R.string.error_rePassword));
             tilRePassword.setError("*");
-
         } else {
-
             checkDataUser();
             Utils.hideKeyboard(getActivity());
-
         }
     }
 
@@ -278,14 +268,7 @@ public class UpdateUser extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-        String activeID = Utils.getActiveId(getActivity());
-        String activeToken = Utils.getActiveToken(getActivity());
-
-        Message mMessage = new Message(activeToken + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, activeID, null);
-
-        RequestServer request = new RequestServer();
-        request.request(mMessage);
-        request.addObserver(this);
+        Utils.sendRequest(getActivity(),Global.GET_USER, Utils.getActiveId(getActivity()), null);
     }
 
     /**

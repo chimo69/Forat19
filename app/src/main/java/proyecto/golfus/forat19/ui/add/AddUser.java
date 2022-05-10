@@ -123,12 +123,7 @@ public class AddUser extends AppCompatActivity implements Observer {
         String address = txtAddress.getText().toString();
 
         Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
-        Message message = new Message(null+"¬"+Utils.getDevice(this), Global.ADD_USER, null, toCheckUser);
-
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
+        Utils.sendRequest(this,Global.ADD_USER,null,toCheckUser);
     }
 
     /**
@@ -171,7 +166,6 @@ public class AddUser extends AppCompatActivity implements Observer {
                         List<TextInputLayout> textInputLayoutsError = new ArrayList<TextInputLayout>();
                         List<TextView> textViewList = new ArrayList<TextView>();
                         List<Integer> errorMessage = new ArrayList<Integer>();
-
 
                         // campo usuario
                         if (newUser.getUsername().equals("*")) {

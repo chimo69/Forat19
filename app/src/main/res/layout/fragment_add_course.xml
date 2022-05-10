@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="60dp"
         android:clickable="true"
         android:src="@drawable/ic_done"
         app:backgroundTint="@color/green" />

@@ -60,8 +60,6 @@
     <string name="Account_deleted">Account deleted</string>
     <string name="Not_possible_to_delete_account">It has not been possible to delete the account</string>
     <string name="Data_properly_updated">Data properly updated</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="users_list">Users list</string>
     <string name="all_users">All users</string>
     <string name="active">Active</string>
@@ -109,5 +107,6 @@
     <string name="hole_editing">Hole editing</string>
     <string name="about_hole">About hole</string>
     <string name="course_editing">Course editing</string>
+    <string name="missing_field_to_be_filled_in">Missing field to be filled in</string>
 
 </resources>

@@ -329,12 +329,7 @@ public class UpdateUserAdmin extends Fragment implements Observer {
             activeUser="Y";
         }
         Users toCheckUser = new Users(user.getId_user(), user.getUsername(), user.getName(), pass, TypeUserSelected, activeUser, user.getEmail(), user.getPhone(), user.getAddress());
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getContext()), Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
-
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
+        Utils.sendRequest(getActivity(),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
     }
 
     /**
@@ -343,14 +338,7 @@ public class UpdateUserAdmin extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void loadTypeUsers(){
-
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getContext()), Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-
+        Utils.sendRequest(getActivity(),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
     }
-
-
 
 }

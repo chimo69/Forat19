@@ -479,11 +479,9 @@ public class AddCourse extends Fragment implements Observer {
         holes.add(hole18);*/
 
             newGolfCourse = new Golf_Courses(0, idInst, nameCourse, typeSelected, 0, 0, 0, "N", fieldValueInst, slopeInst, aboutInst, holes);
-        sendNewCourse();
+            sendNewCourse();
 
         }
-
-
 
 
     }
@@ -493,20 +491,19 @@ public class AddCourse extends Fragment implements Observer {
         for (TextView t : txtInfoCourse) {
             if (t.getText().toString().isEmpty()) {
                 t.requestFocus();
-                showError(t);
+                showError(t, getString(R.string.missing_field_to_be_filled_in));
                 return false;
             }
         }
 
-
         if (h1_par.getText().toString().isEmpty()) {
-            showError(h1_par);
+            showError(h1_par, getString(R.string.missing_field_to_be_filled_in));
             return false;
         } else if (h1_handicap.getText().toString().isEmpty()) {
-            showError(h1_handicap);
+            showError(h1_handicap, getString(R.string.missing_field_to_be_filled_in));
             return false;
         } else if (h1_length.getText().toString().isEmpty()) {
-            showError(h1_length);
+            showError(h1_length, getString(R.string.missing_field_to_be_filled_in));
             return false;
         }
 
@@ -523,10 +520,11 @@ public class AddCourse extends Fragment implements Observer {
      */
     public void loadCourseTypes() {
 
-        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
+        Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES_TYPE,null,null);
+        /*Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
-        request.addObserver(this);
+        request.addObserver(this);*/
     }
 
     /**
@@ -584,8 +582,18 @@ public class AddCourse extends Fragment implements Observer {
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                         }
                     });
+                } else if (parameter.equals("Error:1")) {
+                    Log.d("INFO", request.getMessageText());
+                    Log.d("INFO", "Slope: " + ((Golf_Courses) request.getObject()).getSlope_value());
+                    Log.d("INFO", "Name: " + ((Golf_Courses) request.getObject()).getGolf_course());
+                    Log.d("INFO", "Valor campo: " + ((Golf_Courses) request.getObject()).getField_value());
+
+                    Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
+
+                    checkErrorsServer((Golf_Courses) request.getObject());
+
                 } else {
-                    Utils.showToast(getActivity(), getString(R.string.course_added_error), Toast.LENGTH_SHORT);
+                    Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
                 }
             }
 
@@ -599,8 +607,8 @@ public class AddCourse extends Fragment implements Observer {
      * @param textView Donde debe poner el foco
      * @author Antonio Rodríguez Sirgado
      */
-    public void showError(TextView textView) {
-        Utils.showSnack(getView(), "Faltan campos por rellenar", Snackbar.LENGTH_SHORT);
+    public void showError(TextView textView, String textError) {
+        Utils.showSnack(getView(), textError, Snackbar.LENGTH_INDEFINITE);
         textView.requestFocus();
     }
 
@@ -641,5 +649,40 @@ public class AddCourse extends Fragment implements Observer {
             hole18.setVisibility(View.GONE);
         }
 
+    }
+
+    private void checkErrorsServer(Golf_Courses golf_courses) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (golf_courses.getGolf_course().equals("*")) {
+                    showError(name, "Error, el nombre debe ser como minimo de x caracteres");
+                } else if (golf_courses.getSlope_value() == -1) {
+                    showError(slope, "Error, el slope debe ser entre 55-155");
+                } else if (golf_courses.getField_value() == -1) {
+
+                } else if (golf_courses.getAbout_golf_course().equals("*")){
+
+                }
+
+                ArrayList<Golf_Course_Holes> hole = (ArrayList<Golf_Course_Holes>) golf_courses.getList_golf_course_holes();
+
+                Log.d("INFO","Comprobando hoyos: " + numberHolesSelected);
+                for (int i= 0; i< numberHolesSelected;i++){
+                    if (hole.get(i).getPar()==-1){
+                        Log.d("INFO","Error en el Par / hoyo: " + (i+1));
+                        showError(txtHole9.get((i*3)), "El par debe ser 3,4 o 5" );
+                        i=numberHolesSelected;
+                    } else if (hole.get(i).getHandicap()==-1){
+                        Log.d("INFO","Error en el Handicap / hoyo: " + (i+1));
+                        showError(txtHole9.get((i*3)+1), "El handicap debe ser como máximo "+numberHolesSelected );
+                        txtHole9.get((i*3)+1).setError("error");
+                        i=numberHolesSelected;
+                    }
+                }
+
+            }
+        });
     }
 }

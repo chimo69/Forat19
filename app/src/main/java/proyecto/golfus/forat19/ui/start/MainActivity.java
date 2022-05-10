@@ -68,11 +68,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         Boolean session = Utils.getSessionStatus(this);
 
         if (session && token!=null ) {
-            Message message = new Message(token + "¬" + Utils.getDevice(this), Global.VALIDATE_TOKEN, null, null);
-            RequestServer request = new RequestServer();
-            request.request(message);
-            request.addObserver(this);
-
+            Utils.sendRequest(this,Global.VALIDATE_TOKEN,null,null);
         } else {
             Intent intent = new Intent(MainActivity.this, LoginScreen.class);
             startActivity(intent);
