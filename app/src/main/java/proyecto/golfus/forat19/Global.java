@@ -7,6 +7,8 @@ package proyecto.golfus.forat19;
 public class Global {
 
     public static final int TIME_OUT_LIMIT=3000;
+    public static final String TAG="F19";
+    public static final String YES = "Y";
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
@@ -47,10 +49,11 @@ public class Global {
     public static final String ADD_GOLF_COURSE = "AddGolfCourse";
     public static final String UPDATE_GOLF_COURSE ="UpdateGolfCourse";
     public static final String UPDATE_GOLF_COURSE_HOLE = "UpdateGolfCourseHole" ;
+    public static final String LIST_GOLF_GAME_TYPE = "ListGolfGameType";
+    public static final String LIST_PLAYER_TYPE ="ListPlayerType" ;
 
     // Codigo recibidos
     public static final String OK = "Ok";
-
 
 
 }

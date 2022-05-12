@@ -136,7 +136,8 @@ public class UpdateUserAdmin extends Fragment implements Observer {
         combobox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("INFO","Item seleccionado: "+parent.getItemAtPosition(position));
+                Log.d(Global.TAG,"Item seleccionado: "+parent.getItemAtPosition(position));
+                Log.d(Global.TAG,"-------------------------------------------------");
                 TypeUserSelected = position;
                 if (position==0){
                     logo.setVisibility(View.VISIBLE);
@@ -237,15 +238,12 @@ public class UpdateUserAdmin extends Fragment implements Observer {
             request = (Message) arg;
 
             if (request.getCommand().equals(Global.LIST_USER_TYPES)){
-                Log.d("INFO", "Token recibido: " + request.getToken());
-                Log.d("INFO", "Parametros recibido: " + request.getParameters());
-                Log.d("INFO", "Comando recibido: " + request.getCommand());
 
                 object_user_types = (ArrayList<User_Types>) request.getObject();
 
                 for (int i = 0; i< object_user_types.size(); i++){
                   user_types.add(object_user_types.get(i).getUser_type());
-                  Log.d("INFO","Tipo jugador: "+ object_user_types.get(i).getUser_type());
+                  Log.d(Global.TAG,"Tipo jugador: "+ object_user_types.get(i).getUser_type());
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -261,10 +259,6 @@ public class UpdateUserAdmin extends Fragment implements Observer {
             }
             else if (request.getCommand().equals(Global.UPDATE_USER)){
                 user = (Users) request.getObject();
-
-                Log.d("INFO", "Token recibido: " + request.getToken());
-                Log.d("INFO", "Parametros recibido: " + request.getParameters());
-                Log.d("INFO", "Comando recibido: " + request.getCommand());
 
                 if (request.getParameters().equals("Error:1")){
                     getActivity().runOnUiThread(new Runnable() {
@@ -329,7 +323,11 @@ public class UpdateUserAdmin extends Fragment implements Observer {
             activeUser="Y";
         }
         Users toCheckUser = new Users(user.getId_user(), user.getUsername(), user.getName(), pass, TypeUserSelected, activeUser, user.getEmail(), user.getPhone(), user.getAddress());
-        Utils.sendRequest(getActivity(),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
+        //Utils.sendRequest(getActivity(),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -338,7 +336,11 @@ public class UpdateUserAdmin extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void loadTypeUsers(){
-        Utils.sendRequest(getActivity(),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
+        //Utils.sendRequest(getActivity(),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
 }

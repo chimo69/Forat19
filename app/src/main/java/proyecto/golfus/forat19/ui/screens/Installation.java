@@ -207,14 +207,14 @@ public class Installation extends Fragment {
                     args.putString("nameInstallation", installation.getInstallation());
                     args.putSerializable("installation", installation);
                     fragment.setArguments(args);
-                    Log.d("INFO", String.valueOf(installation.getInstallation()));
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "addCourse").addToBackStack(null).commit();
                 }
             });
         }
 
 
-        Log.d("INFO", "Numero de recorridos: "+String.valueOf(listCourses.size()));
+        Log.d(Global.TAG, "Numero de recorridos: "+ listCourses.size());
+        Log.d(Global.TAG,"-------------------------------------------------");
         adapterCoursesList = new AdapterCoursesList(listCourses);
         recyclerView.setAdapter(adapterCoursesList);
 
@@ -223,7 +223,8 @@ public class Installation extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.d("INFO","Recorrido seleccionado"+ listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
+                Log.d(Global.TAG,"Recorrido seleccionado: "+ listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
+                Log.d(Global.TAG,"-------------------------------------------------");
                 Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", listCourses.get(recyclerView.getChildAdapterPosition(view)));

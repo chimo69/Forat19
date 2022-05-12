@@ -102,4 +102,5 @@
     <string name="course_added_ok">Recorrido añadido con éxito</string>
     <string name="course_editing">Editando recorrido</string>
     <string name="missing_field_to_be_filled_in">Falta campo por rellenear</string>
+    <string name="create_player">Crear jugador</string>
 </resources>

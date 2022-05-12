@@ -5,6 +5,11 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/createPlayer"
+            android:checkable="true"
+            android:icon="@drawable/ic_create_player"
+            android:title="@string/create_player" />
+        <item
             android:id="@+id/createGame"
             android:checkable="true"
             android:icon="@drawable/ic_create_game"

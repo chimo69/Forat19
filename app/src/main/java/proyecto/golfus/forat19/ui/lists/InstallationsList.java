@@ -85,7 +85,11 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadInstallations() {
-        Utils.sendRequest(getActivity(),Global.LIST_INSTALLATIONS,null,null);
+        //Utils.sendRequest(getActivity(),Global.LIST_INSTALLATIONS,null,null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_INSTALLATIONS,null,null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -94,7 +98,12 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGolfCourse(int installationId) {
-        Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
+        //Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
+        loading.setVisibility(View.VISIBLE);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     @Override
@@ -134,11 +143,6 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
             request = (Message) arg;
             String command = request.getCommand();
 
-
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             if (command.equals(Global.LIST_INSTALLATIONS)) {
 
                 // Rellenamos el Arraylist con el objeto recibido
@@ -152,7 +156,8 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
                         adapterList.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Log.d("INFO", "Instalación seleccionada: " + listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+                                Log.d(Global.TAG, "Instalación seleccionada: " + listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+                                Log.d(Global.TAG,"-------------------------------------------------");
                                 selectedInstallation = listInstallations.get(recyclerView.getChildAdapterPosition(view));
                                 loadGolfCourse(listInstallations.get(recyclerView.getChildAdapterPosition(view)).getId_installation());
 
@@ -173,8 +178,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
             }
 
-            InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
-
         }
+        InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
     }
 }

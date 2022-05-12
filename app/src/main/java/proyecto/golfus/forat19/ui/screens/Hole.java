@@ -46,9 +46,8 @@ public class Hole extends Fragment {
             hole = (Golf_Course_Holes) getArguments().getSerializable("hole");
             course = (Golf_Courses) getArguments().getSerializable("course");
 
-            Log.d("INFO","hoyo: "+hole.getId_golf_course_hole());
-            Log.d("INFO","hoyo handicap: "+hole.getHandicap());
-            Log.d("INFO","hoyo par: "+hole.getPar());
+            Log.d(Global.TAG,"hoyo: "+hole.getId_golf_course_hole()+" handicap: "+hole.getHandicap()+" par: "+hole.getPar());
+            Log.d(Global.TAG,"-------------------------------------------------");
 
             holePar = hole.getPar();
             holeAbout = hole.getAbout_golf_course_hole();

@@ -118,10 +118,6 @@ public class UpdateUser extends Fragment implements Observer {
             String command = request.getCommand();
             user = (Users) request.getObject();
 
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             switch (command) {
                 case Global.GET_USER:
                     changeText();
@@ -217,9 +213,9 @@ public class UpdateUser extends Fragment implements Observer {
                         Fragment fragment = new MyAccount();
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-                        Log.d("INFO", request.getMessageText());
+                        Log.d(Global.TAG, request.getMessageText());
                     } else {
-                        Log.d("INFO", request.getMessageText());
+                        Log.d(Global.TAG, request.getMessageText());
                     }
             }
         }
@@ -244,7 +240,11 @@ public class UpdateUser extends Fragment implements Observer {
         String activeID = Utils.getActiveId(getActivity());
 
         Users toCheckUser = new Users(Integer.parseInt(activeID), username, name, password, typeUser, active, email, phone, address);
-        Utils.sendRequest(getActivity(),Global.UPDATE_USER, activeID, toCheckUser);
+        //Utils.sendRequest(getActivity(),Global.UPDATE_USER, activeID, toCheckUser);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_USER, activeID, toCheckUser);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -268,7 +268,11 @@ public class UpdateUser extends Fragment implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-        Utils.sendRequest(getActivity(),Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        //Utils.sendRequest(getActivity(),Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**

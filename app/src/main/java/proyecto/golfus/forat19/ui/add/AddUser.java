@@ -123,7 +123,11 @@ public class AddUser extends AppCompatActivity implements Observer {
         String address = txtAddress.getText().toString();
 
         Users toCheckUser = new Users(0, username, name, password, 0, null, email, phone, address);
-        Utils.sendRequest(this,Global.ADD_USER,null,toCheckUser);
+        //Utils.sendRequest(this,Global.ADD_USER,null,toCheckUser);
+        Message message = new Message(Utils.getActiveToken(this) + "¬" + Utils.getDevice(this),Global.ADD_USER,null,toCheckUser );
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -141,10 +145,6 @@ public class AddUser extends AppCompatActivity implements Observer {
             AddUser.registerLoading.post(() -> AddUser.registerLoading.setVisibility(View.GONE));
         }else {
             Message request = (Message) arg;
-
-            Log.d("INFO", "Token: " + request.getToken());
-            Log.d("INFO", "Parametros: " + request.getParameters());
-            Log.d("INFO", "Comando: " + request.getCommand());
 
             if (request.getParameters().equals("Error:1")) {
 
@@ -172,7 +172,6 @@ public class AddUser extends AppCompatActivity implements Observer {
                             textInputLayoutsError.add(tilUser);
                             textViewList.add(txtUser);
                             errorMessage.add(R.string.error_user);
-                            Log.d("INFO","Error: "+request.getMessageText());
 
                             // campo nombre
                         }

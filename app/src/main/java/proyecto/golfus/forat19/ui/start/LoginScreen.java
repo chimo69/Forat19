@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,7 +36,7 @@ import proyecto.golfus.forat19.utils.Utils;
  * Página de Login, primera página que se muestra al abrir la aplicación
  * @author Antonio Rodriguez Sirgado
  */
-public class LoginScreen extends AppCompatActivity implements Observer {
+public class LoginScreen extends AppCompatActivity implements Observer{
 
 
     private ImageView logo;
@@ -134,11 +136,6 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         }else if (arg instanceof Message){
             Message request = (Message) arg;
 
-            Log.d("INFO", "Token: " + request.getToken());
-            Log.d("INFO", "Parametros: " + request.getParameters());
-            Log.d("INFO", "Comando: " + request.getCommand());
-            Log.d("INFO", "Respuesta: " + request.getMessageText());
-
             if (request.getParameters().equals(Global.OK)) {
                 String activeUser = ((Users) request.getObject()).getUsername();
                 int typeUser = ((Users)request.getObject()).getId_user_type();
@@ -171,4 +168,5 @@ public class LoginScreen extends AppCompatActivity implements Observer {
         }
 
     }
+
 }

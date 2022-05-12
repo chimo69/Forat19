@@ -272,7 +272,7 @@ public class AddCourse extends Fragment implements Observer {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeSelected = object_course_types.get(position).getId_golf_course_type();
-                Log.d("INFO", "Tipo recorrido seleccionado: " + typeSelected);
+                Log.d(Global.TAG, "Tipo recorrido seleccionado: " + typeSelected);
 
             }
 
@@ -520,11 +520,11 @@ public class AddCourse extends Fragment implements Observer {
      */
     public void loadCourseTypes() {
 
-        Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES_TYPE,null,null);
-        /*Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
+        //Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES_TYPE,null,null);
+        Forat19.Message message = new Forat19.Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
-        request.addObserver(this);*/
+        request.addObserver(this);
     }
 
     /**
@@ -547,10 +547,6 @@ public class AddCourse extends Fragment implements Observer {
             request = (Message) arg;
             String command = request.getCommand();
             String parameter = request.getParameters();
-
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
 
             if (command.equals(Global.LIST_GOLF_COURSES_TYPE)) {
 
@@ -583,10 +579,10 @@ public class AddCourse extends Fragment implements Observer {
                         }
                     });
                 } else if (parameter.equals("Error:1")) {
-                    Log.d("INFO", request.getMessageText());
-                    Log.d("INFO", "Slope: " + ((Golf_Courses) request.getObject()).getSlope_value());
-                    Log.d("INFO", "Name: " + ((Golf_Courses) request.getObject()).getGolf_course());
-                    Log.d("INFO", "Valor campo: " + ((Golf_Courses) request.getObject()).getField_value());
+
+                    Log.d(Global.TAG, "Slope: " + ((Golf_Courses) request.getObject()).getSlope_value());
+                    Log.d(Global.TAG, "Name: " + ((Golf_Courses) request.getObject()).getGolf_course());
+                    Log.d(Global.TAG, "Valor campo: " + ((Golf_Courses) request.getObject()).getField_value());
 
                     Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
 
@@ -668,14 +664,14 @@ public class AddCourse extends Fragment implements Observer {
 
                 ArrayList<Golf_Course_Holes> hole = (ArrayList<Golf_Course_Holes>) golf_courses.getList_golf_course_holes();
 
-                Log.d("INFO","Comprobando hoyos: " + numberHolesSelected);
+                Log.d(Global.TAG,"Comprobando hoyos: " + numberHolesSelected);
                 for (int i= 0; i< numberHolesSelected;i++){
                     if (hole.get(i).getPar()==-1){
-                        Log.d("INFO","Error en el Par / hoyo: " + (i+1));
+                        Log.d(Global.TAG,"Error en el Par / hoyo: " + (i+1));
                         showError(txtHole9.get((i*3)), "El par debe ser 3,4 o 5" );
                         i=numberHolesSelected;
                     } else if (hole.get(i).getHandicap()==-1){
-                        Log.d("INFO","Error en el Handicap / hoyo: " + (i+1));
+                        Log.d(Global.TAG,"Error en el Handicap / hoyo: " + (i+1));
                         showError(txtHole9.get((i*3)+1), "El handicap debe ser como máximo "+numberHolesSelected );
                         txtHole9.get((i*3)+1).setError("error");
                         i=numberHolesSelected;

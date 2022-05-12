@@ -2,7 +2,6 @@ package proyecto.golfus.forat19.ui.start;
 
 import static proyecto.golfus.forat19.utils.Utils.esTablet;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
@@ -24,19 +23,18 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
-import proyecto.golfus.forat19.ui.add.AddCourse;
+import proyecto.golfus.forat19.ui.add.AddGame;
+import proyecto.golfus.forat19.ui.add.AddPlayer;
 import proyecto.golfus.forat19.ui.lists.InstallationsList;
 import proyecto.golfus.forat19.ui.lists.UsersList;
 import proyecto.golfus.forat19.ui.screens.MyAccount;
 import proyecto.golfus.forat19.utils.Reply;
-import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
@@ -116,8 +114,13 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
 
+                case R.id.createPlayer:
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new AddPlayer());
+                    break;
                 case R.id.createGame:
-                    // TODO crear un juego
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    loadFragment(new AddGame());
                     break;
                 case R.id.startGame:
                     // TODO empezar un juego
@@ -235,11 +238,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
         } else if (arg instanceof Message) {
             Message request = (Message) arg;
-
-            Log.d("INFO", "Token: " + request.getToken());
-            Log.d("INFO", "Parametros: " + request.getParameters());
-            Log.d("INFO", "Comando: " + request.getCommand());
-
             String command = request.getCommand();
 
             switch (command) {
@@ -253,7 +251,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                         Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                         startActivity(intent);
                     } else {
-                        Log.d("INFO", request.getParameters());
+                        Log.d(Global.TAG, request.getMessageText());
                     }
                     break;
 

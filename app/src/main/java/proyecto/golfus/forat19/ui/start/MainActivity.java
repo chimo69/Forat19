@@ -101,15 +101,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             Message request = (Message) arg;
 
-            Log.d("INFO", "Token: " + request.getToken());
-            Log.d("INFO", "Parametros: " + request.getParameters());
-            Log.d("INFO", "Comando: " + request.getCommand());
-            Log.d("INFO", "Respuesta: " + request.getMessageText());
-
             if (request.getCommand().equals(Global.VALIDATE_TOKEN) && request.getParameters().equals(Global.OK)) {
 
-                Log.d("INFO", "Usuario: " + ((Users) request.getObject()).getUsername());
-                Log.d("INFO", "Tipo: " + ((Users) request.getObject()).getId_user_type());
+                Log.d(Global.TAG, "Usuario: " + ((Users) request.getObject()).getUsername());
+                Log.d(Global.TAG, "Tipo: " + ((Users) request.getObject()).getId_user_type());
 
                 Utils.setActiveUser(this,((Users) request.getObject()).getUsername());
                 Utils.setActiveTypeUser(this,((Users) request.getObject()).getId_user_type());

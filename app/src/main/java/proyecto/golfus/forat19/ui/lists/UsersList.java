@@ -126,7 +126,11 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
      *
      */
     public void loadUsers(String typeList){
-        Utils.sendRequest(getActivity(),typeList, Utils.getActiveId(getActivity()),null);
+        //Utils.sendRequest(getActivity(),typeList, Utils.getActiveId(getActivity()),null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),typeList, Utils.getActiveId(getActivity()),null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -147,13 +151,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         } else if (arg instanceof Message) {
             request = (Message) arg;
             String command = request.getCommand();
-
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             listUsers = (ArrayList<Users>) request.getObject();
-
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -165,7 +163,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
                         public void onClick(View view) {
 
                             if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
-                                Log.d("INFO","Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+                                Log.d(Global.TAG,"Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
 
                                 Fragment fragment = new UpdateUserAdmin();
                                 Bundle args = new Bundle();

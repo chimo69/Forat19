@@ -41,6 +41,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para mostrar la cuenta del usuario
+ *
  * @author Antonio Rodriguez Sirgado
  */
 public class MyAccount extends Fragment implements Observer {
@@ -131,23 +132,34 @@ public class MyAccount extends Fragment implements Observer {
     /**
      * <b>Consigue los datos del usuario solicitado por ID</b><br>
      * Mensaje = (token¬device, getUser, id, null)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
-        Utils.sendRequest(getActivity(),Global.GET_USER,Utils.getActiveId(getActivity()), null);
+        //Utils.sendRequest(getActivity(), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
      * <b>Desactiva al usuario solicitado por ID</b><br>
      * Mensaje= (token¬device, deleteUser, null, usuario)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void deleteUser() {
-        Utils.sendRequest(getActivity(),Global.DELETE_USER, null, user);
+        //Utils.sendRequest(getActivity(), Global.DELETE_USER, null, user);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.DELETE_USER, null, user );
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
      * Permanece a la espera de que las variables cambien
+     *
      * @param o   la clase observada
      * @param arg objeto observado
      * @author Antonio Rodriguez Sirgado
@@ -165,16 +177,14 @@ public class MyAccount extends Fragment implements Observer {
             String command = request.getCommand();
             user = (Users) request.getObject();
 
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
             switch (command) {
                 case Global.GET_USER:
                     if (request.getParameters().equals(Global.OK)) {
 
-                        Log.d("INFO", "USER:" + ((Users) request.getObject()).getUsername());
-                        Log.d("INFO", "MAIL: " + ((Users) request.getObject()).getEmail());
-
+                        Log.d(Global.TAG, "USUARIO: " + ((Users) request.getObject()).getUsername());
+                        Log.d(Global.TAG, "NOMBRE: " + ((Users) request.getObject()).getName());
+                        Log.d(Global.TAG, "MAIL: " + ((Users) request.getObject()).getEmail());
+                        Log.d(Global.TAG,"-------------------------------------------------");
                         changeText();
                     }
                     break;
@@ -192,7 +202,6 @@ public class MyAccount extends Fragment implements Observer {
                         startActivity(intent);
                     } else {
                         Utils.showSnack(getView(), R.string.Not_possible_to_delete_account, Snackbar.LENGTH_LONG);
-                        Log.d("INFO", "Imposible eliminar");
                     }
             }
 
@@ -202,6 +211,7 @@ public class MyAccount extends Fragment implements Observer {
 
     /**
      * Cambia el texto del usuario con los datos obtenidos
+     *
      * @author Antonio Rodriguez Sirgado
      */
     public void changeText() {

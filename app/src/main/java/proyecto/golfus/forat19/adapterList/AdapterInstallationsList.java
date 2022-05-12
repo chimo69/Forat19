@@ -17,6 +17,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de instalaciones
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstallationsList.ViewHolderList> implements View.OnClickListener {
@@ -27,17 +28,21 @@ public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstal
 
     public AdapterInstallationsList(ArrayList<Installations> listInstallations) {
         this.listInstallations = listInstallations;
-        Log.d("INFO","Instal recibida: " + listInstallations.get(0).getInstallation());
+        for (Installations i : listInstallations) {
+            Log.d(Global.TAG, "Instalación recibida: " + i.getInstallation());
+        }
+        Log.d(Global.TAG,"-------------------------------------------------");
         listSearch = new ArrayList<>();
         listSearch.addAll(listInstallations);
     }
 
-    public void setOnClickListener(View.OnClickListener listener){
-        this.listener=listener;
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
+
     @Override
     public void onClick(View view) {
-        if (listener!=null){
+        if (listener != null) {
             listener.onClick(view);
         }
     }
@@ -67,8 +72,8 @@ public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstal
             listInstallations.addAll(listSearch);
         } else {
             listInstallations.clear();
-            for (Installations i: listSearch) {
-                if (i.getInstallation().toLowerCase().contains(txtSearch.toLowerCase())){
+            for (Installations i : listSearch) {
+                if (i.getInstallation().toLowerCase().contains(txtSearch.toLowerCase())) {
                     listInstallations.add(i);
                 }
             }

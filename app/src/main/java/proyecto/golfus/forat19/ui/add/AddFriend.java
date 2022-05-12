@@ -86,7 +86,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
                 .setPrompt("hola que tal")
                 .initiateScan();
 
-                Log.d("INFO","Camara iniciada");
+                Log.d(Global.TAG,"Camara iniciada");
             }
         });
 
@@ -134,7 +134,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
         Utils.showSnack(getView(),"Amigo añadido: "+result.getContents(),Snackbar.LENGTH_LONG);
-        Log.d("INFO","Dato recibido en camara: "+ result.getContents());
+        Log.d(Global.TAG,"Dato recibido en camara: "+ result.getContents());
 
     }
 
@@ -157,12 +157,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
             request = (Message) arg;
             String command = request.getCommand();
 
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             listUsers = (ArrayList<Users>) request.getObject();
-
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override

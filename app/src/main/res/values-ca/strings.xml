@@ -102,4 +102,5 @@
     <string name="course_added_error">Error afegint recorregut</string>
     <string name="course_editing">Editant recorregut</string>
     <string name="missing_field_to_be_filled_in">Falta camp per emplenar</string>
+    <string name="create_player">Crear jugador</string>
 </resources>

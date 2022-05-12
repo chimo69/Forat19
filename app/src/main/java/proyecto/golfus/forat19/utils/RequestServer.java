@@ -2,6 +2,8 @@ package proyecto.golfus.forat19.utils;
 
 import android.util.Log;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
@@ -23,8 +25,8 @@ import proyecto.golfus.forat19.*;
 public class RequestServer extends Observable {
 
     private final int PORT = 5050;
-    //private final String IP = "54.216.204.8";
-    private final String IP = "192.168.1.33";
+    private final String IP = "54.216.204.8";
+    //private final String IP = "192.168.1.33";
 
     private Socket socket;
     private Object input;
@@ -32,7 +34,6 @@ public class RequestServer extends Observable {
     private ObjectInputStream in = null;
     private Boolean connectionOK = true;
     private Reply reply;
-
 
     /**
      * Recibe un objeto Message, inicia la conexión y la transacción
@@ -58,7 +59,6 @@ public class RequestServer extends Observable {
      */
     public void initializeTransaction(Message message) {
         if (connectionOK) {
-            Log.d("INFO", "Peticion:" + message.getCommand());
             send(message);
         }
         if (connectionOK) {
@@ -78,10 +78,10 @@ public class RequestServer extends Observable {
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(ip, port), Global.TIME_OUT_LIMIT);
-            Log.d("INFO", "Connect to :" + socket.getInetAddress().getHostName());
+            Log.d(Global.TAG, "Connect to :" + socket.getInetAddress().getHostName());
             connectionOK = true;
         } catch (Exception e) {
-            Log.d("INFO:", "Exception on connection innitialization: " + e.getMessage());
+            Log.d(Global.TAG, "Exception on connection innitialization: " + e.getMessage());
             reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
             this.setChanged();
             this.notifyObservers(reply);
@@ -98,11 +98,17 @@ public class RequestServer extends Observable {
      */
     public void send(Object o) {
         try {
-            Log.d("INFO", "Sending message");
+            Log.d(Global.TAG, "Enviando mensaje...");
+            Log.d(Global.TAG, "Token enviado: " + ((Message) o).getToken());
+            Log.d(Global.TAG, "Parametro enviado: " + ((Message) o).getParameters());
+            Log.d(Global.TAG, "Comando enviado: " + ((Message) o).getCommand());
+            Log.d(Global.TAG,"-------------------------------------------------");
             out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(o);
+
+
         } catch (IOException e) {
-            Log.d("INFO", "IOException on send: " + e.getMessage());
+            Log.d(Global.TAG, "IOException on send: " + e.getMessage());
             reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
             this.setChanged();
             this.notifyObservers(reply);
@@ -120,9 +126,9 @@ public class RequestServer extends Observable {
             out.close();
             in.close();
             socket.close();
-            Log.d("INFO", "Connection ended");
+            Log.d(Global.TAG, "Connection ended");
         } catch (IOException e) {
-            Log.d("INFO", "IOException on closeConnection()");
+            Log.d(Global.TAG, "IOException on closeConnection()");
             reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
             this.setChanged();
             this.notifyObservers(reply);
@@ -145,7 +151,14 @@ public class RequestServer extends Observable {
             input = in.readObject();
             if (input instanceof Message) {
                 Message returnMessage = (Message) input;
-                Log.d("INFO", "Respuesta: " + returnMessage.getCommand());
+
+                Log.d(Global.TAG, "Mensaje recibido:");
+                Log.d(Global.TAG, "Token: " + returnMessage.getToken());
+                Log.d(Global.TAG, "Parametros: " + returnMessage.getParameters());
+                Log.d(Global.TAG, "Comando: " + returnMessage.getCommand());
+                Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());
+                Log.d(Global.TAG,"-------------------------------------------------");
+
                 this.setChanged();
                 this.notifyObservers(returnMessage);
                 this.clearChanged();
@@ -154,10 +167,13 @@ public class RequestServer extends Observable {
                 closeConnection();
             }
         } catch (IOException e) {
-            Log.d("INFO", "IOException on retrieveData: " + e.toString());
+            Log.d(Global.TAG, "IOException on retrieveData: " + e.toString());
             Reply reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+            this.setChanged();
+            this.notifyObservers(reply);
+            this.clearChanged();
         } catch (ClassNotFoundException e) {
-            Log.d("INFO", "ClassNotFoundException: " + e.toString());
+            Log.d(Global.TAG, "ClassNotFoundException: " + e.toString());
             reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
             this.setChanged();
             this.notifyObservers(reply);

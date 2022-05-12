@@ -1,5 +1,6 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import Forat19.Golf_Courses;
+import Forat19.Installations;
 import proyecto.golfus.forat19.*;
 
 /**
@@ -39,6 +41,11 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         this.listCourses = listCourses;
         listSearch = new ArrayList<>();
         listSearch.addAll(listCourses);
+
+        for (Golf_Courses g : listCourses) {
+            Log.d(Global.TAG, "recorrido recibido: " + g.getGolf_course());
+        }
+        if (listCourses.size()>0){Log.d(Global.TAG,"-------------------------------------------------");}
     }
 
     @NonNull

@@ -108,5 +108,8 @@
     <string name="about_hole">About hole</string>
     <string name="course_editing">Course editing</string>
     <string name="missing_field_to_be_filled_in">Missing field to be filled in</string>
+    <string name="create_player">Create player</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

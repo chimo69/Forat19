@@ -100,10 +100,6 @@ public class UpdateCourse extends Fragment implements Observer {
             request = (Message) arg;
             String command = request.getCommand();
 
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             if (command.equals(Global.UPDATE_GOLF_COURSE)) {
 
                 Fragment fragment = new Course();
@@ -129,7 +125,11 @@ public class UpdateCourse extends Fragment implements Observer {
         course.setGolf_course(name.getText().toString());
         course.setSlope_value(Integer.parseInt(slope.getText().toString()));
 
-        Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE, Utils.getActiveId(getActivity()), course);
+        //Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE, Utils.getActiveId(getActivity()), course);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_GOLF_COURSE, Utils.getActiveId(getActivity()), course);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
 
     }
 }

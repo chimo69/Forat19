@@ -102,7 +102,11 @@ public class UpdateHole extends Fragment implements Observer {
         hole.setAbout_golf_course_hole(about.getText().toString());
         int idHole = hole.getId_golf_course_hole();
         int idCourse = hole.getId_golf_course();
-        Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
+        //Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -124,16 +128,11 @@ public class UpdateHole extends Fragment implements Observer {
             request = (Message) arg;
             String command = request.getCommand();
 
-            Log.d("INFO", "Token recibido: " + request.getToken());
-            Log.d("INFO", "Parametros recibido: " + request.getParameters());
-            Log.d("INFO", "Comando recibido: " + request.getCommand());
-
             if (command.equals(Global.UPDATE_GOLF_COURSE_HOLE)) {
                 Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", course);
                 fragment.setArguments(args);
-                Log.d("INFO", "Pulsado boton update");
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
 
             }

@@ -172,7 +172,11 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
      * @author Antonio Rodríguez Sirgado
      */
     private void loadCourseType(int id) {
-        Utils.sendRequest(getActivity(), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
+        //Utils.sendRequest(getActivity(), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
+        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -188,7 +192,7 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
         par.setText(Integer.toString(golf_course.getPar()));
         length.setText(Integer.toString(golf_course.getLength()));
 
-        if (golf_course.getHandicap_calculation().equals("Y")) {
+        if (golf_course.getHandicap_calculation().equals(Global.YES)) {
             handicap.setChecked(true);
         } else {
             handicap.setChecked(false);
@@ -330,7 +334,7 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
                 buttons.setVisibility(View.GONE);
                 infoHole.setVisibility(View.VISIBLE);
                 editCourse.setVisibility(View.INVISIBLE);
-                Log.d("INFO", "Ocultando botones");
+                Log.d(Global.TAG, "Ocultando botones");
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment, "updateCourse").commit();
                 break;
         }
