@@ -1,11 +1,14 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,12 +25,14 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
 
     ArrayList<Users> listUsers;
     ArrayList<Users> listSearch;
+    Context context;
 
     private View.OnClickListener listener;
 
-    public AdapterNormalUsersList(ArrayList<Users> listUsers) {
+    public AdapterNormalUsersList(ArrayList<Users> listUsers, Context context) {
 
         this.listUsers = listUsers;
+        this.context=context;
         listSearch = new ArrayList<>();
         listSearch.addAll(listUsers);
     }
@@ -44,11 +49,8 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderNormalList holder, int position) {
-
-
+        holder.cv.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
         holder.fillList(listUsers.get(position));
-
-
     }
 
     @Override
@@ -86,11 +88,13 @@ public class AdapterNormalUsersList extends RecyclerView.Adapter<AdapterNormalUs
     public class ViewHolderNormalList extends RecyclerView.ViewHolder {
         TextView username;
         TextView name;
+        CardView cv;
 
         public ViewHolderNormalList(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.username);
             name = itemView.findViewById(R.id.name);
+            cv = itemView.findViewById(R.id.item_cv_normalUser);
         }
 
         /**

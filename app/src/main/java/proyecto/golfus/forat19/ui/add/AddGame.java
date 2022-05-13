@@ -2,7 +2,10 @@ package proyecto.golfus.forat19.ui.add;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,47 +49,32 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class AddGame extends Fragment implements Observer {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Button createGame;
+    private ImageButton deleteCourse;
     private TextView numberOfGamers, courseSelected;
     private Spinner courseType, gameType;
     private List<String> listCourseType = new ArrayList<String>();
     private List<String> listGameType = new ArrayList<String>();
     private ArrayList<Users> listFriends;
     private ArrayList<Golf_Courses> listCourses;
-    private ArrayList<Users> listPlayers= new ArrayList<Users>();
+    private ArrayList<Users> listPlayers = new ArrayList<Users>();
     private SearchView searchFriendsList, searchCoursesList;
     private RecyclerView rw_friends, rw_courses, rw_players;
     private AdapterNormalUsersList adapterNormalUsersList;
     private AdapterCoursesList adapterCoursesList;
     private AdapterPlayersList adapterPlayersList;
+    private CardView cv_courseSelected, cv_players, cv_playersTitle, cv_selectPlayer, cv_number;
 
     private Message request;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public AddGame() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddGame.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddGame newInstance(String param1, String param2) {
+    public static AddGame newInstance() {
         AddGame fragment = new AddGame();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,8 +83,6 @@ public class AddGame extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -108,8 +96,38 @@ public class AddGame extends Fragment implements Observer {
         rw_friends = view.findViewById(R.id.newGame_recyclerFriends);
         rw_courses = view.findViewById(R.id.newGame_recyclerCourse);
         rw_players = view.findViewById(R.id.newGame_RecyclerPlayers);
-
+        cv_courseSelected = view.findViewById(R.id.createGame_cvCourse);
+        cv_playersTitle = view.findViewById(R.id.createGame_cvPlayerTitle);
+        cv_players = view.findViewById(R.id.creatGame_cvPlayers);
+        cv_selectPlayer = view.findViewById(R.id.createGame_cvSelectPlayer);
+        cv_number = view.findViewById(R.id.createGame_cvNumber);
+        createGame = view.findViewById(R.id.createGame_btnCreateGame);
+        deleteCourse = view.findViewById(R.id.createGame_btnDeleteCourse);
         searchFriendsList = view.findViewById(R.id.newGame_searchFriend);
+        searchCoursesList = view.findViewById(R.id.newGame_searchCourse);
+        numberOfGamers = view.findViewById(R.id.createGame_number);
+        courseSelected = view.findViewById(R.id.createGame_selectCourse);
+
+        // Boton crear juego
+        createGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listPlayers.size() > 1) {
+
+                } else {
+                    Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
+                }
+            }
+        });
+
+        // Boton eliminar recorrido actual
+        deleteCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseSelected(false);
+            }
+        });
+
         searchFriendsList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -123,7 +141,6 @@ public class AddGame extends Fragment implements Observer {
             }
         });
 
-        searchCoursesList = view.findViewById(R.id.newGame_searchCourse);
         searchCoursesList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -132,29 +149,30 @@ public class AddGame extends Fragment implements Observer {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //adapterCoursesList.filter(newText);
+                adapterCoursesList.filter(newText);
                 return false;
             }
         });
 
-        numberOfGamers = view.findViewById(R.id.createGame_number);
         numberOfGamers.setText(String.valueOf(listPlayers.size()));
-        courseSelected=view.findViewById(R.id.createGame_selectCourse);
 
         rw_friends.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rw_courses.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rw_players.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(rw_players);
         adapterPlayersList = new AdapterPlayersList(listPlayers);
+
         rw_players.setAdapter(adapterPlayersList);
 
+        // Campo de busqueda de recorridos
         searchCoursesList.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rw_courses.setVisibility(View.VISIBLE);
+
             }
         });
 
+        // Spinner de seleccion de tipo de recorrido
         courseType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -167,6 +185,7 @@ public class AddGame extends Fragment implements Observer {
             }
         });
 
+        // Spinner de seleccion de tipo de juego
         gameType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -183,6 +202,7 @@ public class AddGame extends Fragment implements Observer {
         loadCourseType();
         loadFriends();
         loadCourses();
+        loadMyAccount();
 
         return view;
     }
@@ -251,14 +271,28 @@ public class AddGame extends Fragment implements Observer {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapterNormalUsersList = new AdapterNormalUsersList(listFriends);
+                            adapterNormalUsersList = new AdapterNormalUsersList(listFriends, getContext());
                             rw_friends.setAdapter(adapterNormalUsersList);
                             adapterNormalUsersList.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    listPlayers.add(listFriends.get(rw_friends.getChildAdapterPosition(v)));
-                                    adapterPlayersList.notifyItemInserted(listPlayers.size()+1);
-                                    numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                                    if (listPlayers.size() < Global.MAX_GAMERS) {
+                                        boolean idFound = false;
+                                        for (Users u : listPlayers) {
+                                            if (listFriends.get(rw_friends.getChildAdapterPosition(v)).getId_user() == u.getId_user()) {
+                                                idFound = true;
+                                            }
+                                        }
+                                        if (!idFound) {
+                                            listPlayers.add(listFriends.get(rw_friends.getChildAdapterPosition(v)));
+                                            adapterPlayersList.notifyItemInserted(listPlayers.size() + 1);
+                                            numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                                        } else {
+                                            Utils.showSnack(getView(), getString(R.string.player_already_in_the_match), Snackbar.LENGTH_LONG);
+                                        }
+                                    } else {
+                                        Utils.showSnack(getView(), getString(R.string.match_is_complete), Snackbar.LENGTH_LONG);
+                                    }
                                 }
                             });
                         }
@@ -270,31 +304,50 @@ public class AddGame extends Fragment implements Observer {
                     request = (Message) arg;
                     listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
-                    Log.d(Global.TAG,"Recorridos recibidos: " + listCourses.size());
+                    Log.d(Global.TAG, "Recorridos recibidos: " + listCourses.size());
 
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapterCoursesList = new AdapterCoursesList(listCourses);
+                            adapterCoursesList = new AdapterCoursesList(listCourses, getContext());
                             rw_courses.setAdapter(adapterCoursesList);
                             adapterCoursesList.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    showSelectPlayer();
                                     Log.d(Global.TAG, String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v))));
                                     courseSelected.setText(String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v)).getGolf_course()));
                                     rw_courses.setVisibility(View.GONE);
+                                    courseSelected(true);
 
                                 }
                             });
                         }
                     });
+                    break;
 
+                case Global.GET_USER:
+                    request = (Message) arg;
+                    listPlayers.add((Users) request.getObject());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapterPlayersList.notifyItemInserted(listPlayers.size() + 1);
+                            numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                        }
+                    });
                     break;
             }
         }
     }
 
+    /**
+     * <b>Envia el mensaje para cargar los tipos de recorrido</b><br>
+     * Mensaje = (token¬device, listGolfCourseType, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
     public void loadCourseType() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
@@ -302,6 +355,12 @@ public class AddGame extends Fragment implements Observer {
         request.addObserver(this);
     }
 
+    /**
+     * <b>Envia el mensaje para cargar los tipos de juego</b><br>
+     * Mensaje = (token¬device, listGolfGameType, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
     public void loadGameType() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_TYPE, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
@@ -309,6 +368,12 @@ public class AddGame extends Fragment implements Observer {
         request.addObserver(this);
     }
 
+    /**
+     * <b>Envia el mensaje para cargar listado de amigos</b><br>
+     * Mensaje = (token¬device, listActiveUsers, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
     public void loadFriends() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_ACTIVE_USERS, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
@@ -316,12 +381,81 @@ public class AddGame extends Fragment implements Observer {
         request.addObserver(this);
     }
 
-    public void loadCourses(){
+    /**
+     * <b>Envia el mensaje para cargar los recorridos</b><br>
+     * Mensaje = (token¬device, listGolfCourse, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void loadCourses() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_COURSES, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
 
+    /**
+     * <b>Envia el mensaje para cargar datos del usuario actual</b><br>
+     * Mensaje = (token¬device, getUser, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void loadMyAccount() {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
 
+    ItemTouchHelper.SimpleCallback itemTouch = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            if (viewHolder.getAbsoluteAdapterPosition() != 0) {
+                listPlayers.remove(viewHolder.getAdapterPosition());
+                adapterPlayersList.notifyDataSetChanged();
+                numberOfGamers.setText(String.valueOf(listPlayers.size()));
+            } else {
+                adapterPlayersList.notifyDataSetChanged();
+                Utils.showSnack(getView(), getString(R.string.host_player_cannot_be_removed), Snackbar.LENGTH_LONG);
+            }
+        }
+    };
+
+    /**
+     * Segun si ha sido o no seleccionado el recorrido muestra u oculta otros paneles
+     * @author Antonio Rodríguez Sirgado
+     * @param isSelected true si el recorrido ha sido seleccionado
+     */
+    public void courseSelected(boolean isSelected) {
+        if (isSelected) {
+            deleteCourse.setVisibility(View.VISIBLE);
+            cv_courseSelected.setCardBackgroundColor(getResources().getColor(R.color.green));
+            searchCoursesList.setVisibility(View.GONE);
+            rw_courses.setVisibility(View.GONE);
+        } else {
+            courseSelected.setText("Select course");
+            deleteCourse.setVisibility(View.GONE);
+            cv_courseSelected.setCardBackgroundColor(getResources().getColor(R.color.grey));
+            searchCoursesList.setVisibility(View.VISIBLE);
+            rw_courses.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Muestra los campos de los jugadores
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void showSelectPlayer() {
+        rw_friends.setVisibility(View.VISIBLE);
+        cv_number.setVisibility(View.VISIBLE);
+        cv_players.setVisibility(View.VISIBLE);
+        cv_playersTitle.setVisibility(View.VISIBLE);
+        cv_selectPlayer.setVisibility(View.VISIBLE);
+        searchFriendsList.setVisibility(View.VISIBLE);
+    }
 }

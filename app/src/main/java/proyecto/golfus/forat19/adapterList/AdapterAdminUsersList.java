@@ -1,12 +1,15 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -25,10 +28,12 @@ public class AdapterAdminUsersList extends RecyclerView.Adapter<AdapterAdminUser
     ArrayList<Users> listUsers;
     ArrayList<Users> listSearch;
     private View.OnClickListener listener;
+    Context context;
 
-    public AdapterAdminUsersList(ArrayList<Users> listUsers) {
+    public AdapterAdminUsersList(ArrayList<Users> listUsers, Context context) {
 
         this.listUsers = listUsers;
+        this.context= context;
         listSearch = new ArrayList<>();
         listSearch.addAll(listUsers);
     }
@@ -44,6 +49,7 @@ public class AdapterAdminUsersList extends RecyclerView.Adapter<AdapterAdminUser
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAdminUsersList.ViewHolderList holder, int position) {
+        holder.cv.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
         holder.fillList(listUsers.get(position));
     }
 
@@ -83,6 +89,7 @@ public class AdapterAdminUsersList extends RecyclerView.Adapter<AdapterAdminUser
         TextView name;
         TextView id;
         ImageView imageActive;
+        CardView cv;
 
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +97,7 @@ public class AdapterAdminUsersList extends RecyclerView.Adapter<AdapterAdminUser
             name = itemView.findViewById(R.id.name);
             id = itemView.findViewById(R.id.id);
             imageActive = itemView.findViewById(R.id.imageActive);
+            cv = itemView.findViewById(R.id.item_cv_userAdmin);
         }
 
         /**

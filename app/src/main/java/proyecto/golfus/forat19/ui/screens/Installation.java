@@ -215,7 +215,7 @@ public class Installation extends Fragment {
 
         Log.d(Global.TAG, "Numero de recorridos: "+ listCourses.size());
         Log.d(Global.TAG,"-------------------------------------------------");
-        adapterCoursesList = new AdapterCoursesList(listCourses);
+        adapterCoursesList = new AdapterCoursesList(listCourses, getContext());
         recyclerView.setAdapter(adapterCoursesList);
 
         adapterCoursesList.setOnClickListener(new View.OnClickListener() {

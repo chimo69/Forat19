@@ -1,18 +1,22 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import Forat19.Golf_Courses;
 import Forat19.Installations;
+import Forat19.Users;
 import proyecto.golfus.forat19.*;
 
 /**
@@ -23,6 +27,7 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
     ArrayList<Golf_Courses> listCourses;
     ArrayList<Golf_Courses> listSearch;
     String [] courseTypes = {"Golf", "Par 3", "P&P"};
+    Context context;
 
     private View.OnClickListener listener;
 
@@ -37,8 +42,9 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         }
     }
 
-    public AdapterCoursesList(ArrayList<Golf_Courses> listCourses) {
+    public AdapterCoursesList(ArrayList<Golf_Courses> listCourses, Context context) {
         this.listCourses = listCourses;
+        this.context= context;
         listSearch = new ArrayList<>();
         listSearch.addAll(listCourses);
 
@@ -58,7 +64,8 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCoursesList.ViewHolderList holder, int position) {
-    holder.fillList(listCourses.get(position));
+        holder.cv.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition));
+        holder.fillList(listCourses.get(position));
     }
 
     @Override
@@ -69,14 +76,15 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
 
 
     public class ViewHolderList extends RecyclerView.ViewHolder {
-
         TextView name;
         TextView type;
+        CardView cv;
 
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.course_list_name);
             type = itemView.findViewById(R.id.course_list_type);
+            cv = itemView.findViewById(R.id.item_cvCourse);
         }
 
         /**
@@ -90,6 +98,22 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
 
         }
 
+    }
+
+    public void filter(String txtSearch) {
+        int sizeText = txtSearch.length();
+        if (sizeText == 0) {
+            listCourses.clear();
+            listCourses.addAll(listSearch);
+        } else {
+            listCourses.clear();
+            for (Golf_Courses l : listSearch) {
+                if (l.getGolf_course().toLowerCase().contains(txtSearch.toLowerCase()) || l.getGolf_course().toLowerCase().contains(txtSearch.toLowerCase())) {
+                    listCourses.add(l);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 

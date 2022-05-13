@@ -1,13 +1,16 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -24,10 +27,12 @@ public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstal
 
     ArrayList<Installations> listInstallations;
     ArrayList<Installations> listSearch;
+    Context context;
     private View.OnClickListener listener;
 
-    public AdapterInstallationsList(ArrayList<Installations> listInstallations) {
+    public AdapterInstallationsList(ArrayList<Installations> listInstallations, Context context) {
         this.listInstallations = listInstallations;
+        this.context= context;
         for (Installations i : listInstallations) {
             Log.d(Global.TAG, "Instalación recibida: " + i.getInstallation());
         }
@@ -57,6 +62,7 @@ public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstal
 
     @Override
     public void onBindViewHolder(@NonNull AdapterInstallationsList.ViewHolderList holder, int position) {
+        holder.cv.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
         holder.fillList(listInstallations.get(position));
     }
 
@@ -85,12 +91,14 @@ public class AdapterInstallationsList extends RecyclerView.Adapter<AdapterInstal
         ImageView logo;
         TextView installation;
         TextView address;
+        CardView cv;
 
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
             logo = itemView.findViewById(R.id.installationListLogo);
             installation = itemView.findViewById(R.id.installationList_installation);
             address = itemView.findViewById(R.id.installationList_address);
+            cv = itemView.findViewById(R.id.item_cv_installation);
 
         }
 

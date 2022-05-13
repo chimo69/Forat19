@@ -103,4 +103,14 @@
     <string name="course_editing">Editando recorrido</string>
     <string name="missing_field_to_be_filled_in">Falta campo por rellenear</string>
     <string name="create_player">Crear jugador</string>
+    <string name="not_enough_gamers">No hay jugadores suficientes</string>
+    <string name="player_already_in_the_match">Este jugador ya está en el partido</string>
+    <string name="match_is_complete">La partida está completa</string>
+    <string name="host_player_cannot_be_removed">El jugador anfitrion no puede ser eliminado</string>
+    <string name="new_game">Nueva partida</string>
+    <string name="select_course_type">Selecciona tipo de recorrido</string>
+    <string name="select_game_type">Selecciona tipo de juego</string>
+    <string name="select_course">Selecciona recorrido</string>
+    <string name="select_player">Selecciona jugador</string>
+    <string name="players">Jugadores</string>
 </resources>

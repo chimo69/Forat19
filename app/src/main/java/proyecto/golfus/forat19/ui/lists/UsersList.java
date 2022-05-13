@@ -156,7 +156,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapterList = new AdapterAdminUsersList(listUsers);
+                    adapterList = new AdapterAdminUsersList(listUsers, getContext());
                     recyclerView.setAdapter(adapterList);
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override

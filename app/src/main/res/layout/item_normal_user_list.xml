@@ -9,6 +9,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/item_cv_normalUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
@@ -42,22 +43,12 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/username"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="name" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
                 android:layout_marginEnd="8dp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                card_view:srcCompat="@drawable/ic_done" />
+                tools:text="name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

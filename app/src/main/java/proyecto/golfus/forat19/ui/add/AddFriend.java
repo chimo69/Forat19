@@ -162,7 +162,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapterList = new AdapterNormalUsersList(listUsers);
+                    adapterList = new AdapterNormalUsersList(listUsers, getContext());
                     recyclerView.setAdapter(adapterList);
                     adapterList.setOnClickListener(new View.OnClickListener() {
                         @Override

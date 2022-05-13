@@ -151,7 +151,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapterList = new AdapterInstallationsList(listInstallations);
+                        adapterList = new AdapterInstallationsList(listInstallations, getContext());
                         recyclerView.setAdapter(adapterList);
                         adapterList.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -9,6 +9,7 @@ public class Global {
     public static final int TIME_OUT_LIMIT=3000;
     public static final String TAG="F19";
     public static final String YES = "Y";
+    public static final int MAX_GAMERS = 4;
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
