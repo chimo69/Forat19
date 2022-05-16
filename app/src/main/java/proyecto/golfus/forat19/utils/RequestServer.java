@@ -168,6 +168,7 @@ public class RequestServer extends Observable {
 
             Log.d(Global.TAG, "Enviando mensaje...");
             Log.d(Global.TAG, "Token enviado: " + o.getToken());
+            Log.d(Global.TAG, "Comando enviado: " + o.getCommand());
             Log.d(Global.TAG, "Parametro enviado: " + o.getParameters());
             Log.d(Global.TAG, "-------------------------------------------------");
 

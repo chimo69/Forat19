@@ -6,7 +6,10 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,13 +27,16 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
+import Forat19.Players;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
+import proyecto.golfus.forat19.adapterList.AdapterPlayerTypeList;
 import proyecto.golfus.forat19.ui.start.LoginScreen;
 import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.ui.add.AddFriend;
@@ -46,12 +52,16 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class MyAccount extends Fragment implements Observer {
 
-    private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo;
+    private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo, infoPlayers;
+    private CardView cvInfoPlayer;
     private ImageButton btnSeeFriends, btnAddFriends;
     private ImageView qrCode;
     private View view;
     private Button btnDelete, btnUpdate;
     private static ProgressBar loading;
+    private RecyclerView recyclerView;
+    private AdapterPlayerTypeList adapterPlayersList;
+    private ArrayList<Players> listPlayers = new ArrayList<>();
 
     Message request;
     Users user;
@@ -77,6 +87,8 @@ public class MyAccount extends Fragment implements Observer {
         super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.fragment_my_account, container, false);
         qrCode = view.findViewById(R.id.qrCode);
+        cvInfoPlayer = view.findViewById(R.id.CardView5);
+        infoPlayers = view.findViewById(R.id.myAccount_infoPlayers);
         txtUserInfo = view.findViewById(R.id.txtUserInfo);
         txtMailInfo = view.findViewById(R.id.txtMailInfo);
         txtPhoneInfo = view.findViewById(R.id.txtPhoneInfo);
@@ -86,6 +98,10 @@ public class MyAccount extends Fragment implements Observer {
         btnUpdate = view.findViewById(R.id.btn_update);
         btnAddFriends = view.findViewById(R.id.addFriends);
         btnSeeFriends = view.findViewById(R.id.seeFriends);
+        recyclerView = view.findViewById(R.id.rw_myaccount_typePlayer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        adapterPlayersList = new AdapterPlayerTypeList(listPlayers, getContext());
+        recyclerView.setAdapter(adapterPlayersList);
         loading = view.findViewById(R.id.loading_myAccount);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
@@ -126,35 +142,8 @@ public class MyAccount extends Fragment implements Observer {
             }
         });
         getUser();
+
         return view;
-    }
-
-    /**
-     * <b>Consigue los datos del usuario solicitado por ID</b><br>
-     * Mensaje = (token¬device, getUser, id, null)
-     *
-     * @author Antonio Rodriguez Sirgado
-     */
-    private void getUser() {
-        //Utils.sendRequest(getActivity(), Global.GET_USER, Utils.getActiveId(getActivity()), null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
-
-    /**
-     * <b>Desactiva al usuario solicitado por ID</b><br>
-     * Mensaje= (token¬device, deleteUser, null, usuario)
-     *
-     * @author Antonio Rodriguez Sirgado
-     */
-    private void deleteUser() {
-        //Utils.sendRequest(getActivity(), Global.DELETE_USER, null, user);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.DELETE_USER, null, user );
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
     }
 
     /**
@@ -175,7 +164,7 @@ public class MyAccount extends Fragment implements Observer {
         } else if (arg instanceof Message) {
             request = (Message) arg;
             String command = request.getCommand();
-            user = (Users) request.getObject();
+            //user = (Users) request.getObject();
 
             switch (command) {
                 case Global.GET_USER:
@@ -184,8 +173,9 @@ public class MyAccount extends Fragment implements Observer {
                         Log.d(Global.TAG, "USUARIO: " + ((Users) request.getObject()).getUsername());
                         Log.d(Global.TAG, "NOMBRE: " + ((Users) request.getObject()).getName());
                         Log.d(Global.TAG, "MAIL: " + ((Users) request.getObject()).getEmail());
-                        Log.d(Global.TAG,"-------------------------------------------------");
+                        Log.d(Global.TAG, "-------------------------------------------------");
                         changeText();
+                        getTypePlayers();
                     }
                     break;
 
@@ -203,6 +193,34 @@ public class MyAccount extends Fragment implements Observer {
                     } else {
                         Utils.showSnack(getView(), R.string.Not_possible_to_delete_account, Snackbar.LENGTH_LONG);
                     }
+                case Global.LIST_USER_PLAYER:
+                    if (request.getParameters().equals(Global.OK)) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listPlayers = (ArrayList<Players>) request.getObject();
+                                if (listPlayers.size() > 0) {
+                                    adapterPlayersList = new AdapterPlayerTypeList(listPlayers, getContext());
+                                    recyclerView.setAdapter(adapterPlayersList);
+
+                                    // Seleccion de jugadores
+                                    adapterPlayersList.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Log.d(Global.TAG, "Jugador seleccionado: " + listPlayers.get(recyclerView.getChildAdapterPosition(v)).getPlayer_type().getPlayer_type());
+                                            Fragment fragment = new Player(listPlayers.get(recyclerView.getChildAdapterPosition(v)));
+                                            cvInfoPlayer.setVisibility(View.VISIBLE);
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_infoPlayer, fragment).commit();
+                                        }
+                                    });
+                                } else {
+                                    infoPlayers.setText("No dispone de jugadores");
+                                    infoPlayers.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
+                    }
+                    break;
             }
 
         }
@@ -254,5 +272,42 @@ public class MyAccount extends Fragment implements Observer {
             }
         });
     }
+
+    /**
+     * <b>Consigue los datos del usuario solicitado por ID</b><br>
+     * Mensaje = (token¬device, getUser, id, null)
+     *
+     * @author Antonio Rodriguez Sirgado
+     */
+    private void getUser() {
+        //Utils.sendRequest(getActivity(), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * <b>Desactiva al usuario solicitado por ID</b><br>
+     * Mensaje= (token¬device, deleteUser, null, usuario)
+     *
+     * @author Antonio Rodriguez Sirgado
+     */
+    private void deleteUser() {
+        //Utils.sendRequest(getActivity(), Global.DELETE_USER, null, user);
+        user = (Users) request.getObject();
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.DELETE_USER, null, user);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    private void getTypePlayers() {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_PLAYER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
 
 }

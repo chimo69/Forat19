@@ -60,6 +60,8 @@ public class Global {
     public static final String LIST_PLAYER_TYPE ="ListPlayerType" ;
     public static final String LIST_PLAYER_DATA = "ListPlayerData";
     public static final String ADD_PLAYER = "AddPlayer";
+    public static final String LIST_USER_PLAYER = "ListUserPlayer";
+    public static final String GET_PLAYER = "GetPlayer" ;
 
     // Codigo recibidos
     public static final String OK = "Ok";

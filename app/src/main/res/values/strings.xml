@@ -120,5 +120,7 @@
     <string name="players">Players</string>
     <string name="not_enough_gamers">There are not enough players</string>
     <string name="player_already_in_the_match">This player is already in the match</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -21,11 +21,11 @@ import proyecto.golfus.forat19.*;
  */
 public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHolderList> {
 
-    ArrayList<Player_Data> listPlayerData;
+    ArrayList<String> listPlayerData;
     String [] dataEntries;
 
 
-    public AdapterDataList(ArrayList<Player_Data> listPlayerData) {
+    public AdapterDataList(ArrayList<String> listPlayerData) {
         this.listPlayerData = listPlayerData;
         dataEntries = new String[listPlayerData.size()];
     }
@@ -41,9 +41,11 @@ public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHo
         return dataEntries;
     }
 
+    public void setDataEntries(String [] dataEntries){this.dataEntries = dataEntries;}
+
     @Override
     public void onBindViewHolder(@NonNull AdapterDataList.ViewHolderList holder, int position) {
-        holder.fillList(listPlayerData.get(position));
+        holder.fillList(listPlayerData.get(position), dataEntries[position]);
     }
 
     @Override
@@ -78,9 +80,9 @@ public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHo
             });
         }
 
-        public void fillList(Player_Data playerData) {
-            typeData.setText(playerData.getPlayer_data());
-
+        public void fillList(String playerData, String data) {
+            typeData.setText(playerData);
+            entryData.setText(data);
         }
 
     }

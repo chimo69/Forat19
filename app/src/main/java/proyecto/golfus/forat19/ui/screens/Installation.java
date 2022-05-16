@@ -36,6 +36,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment que muestra al Admin los datos de las instalaciones para poder gestionarlas
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class Installation extends Fragment {
@@ -130,7 +131,7 @@ public class Installation extends Fragment {
                     startActivity(intent);
 
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showSnack(getView(),getString(R.string.cant_open_web), Snackbar.LENGTH_SHORT);
+                    Utils.showSnack(getView(), getString(R.string.cant_open_web), Snackbar.LENGTH_SHORT);
                 }
 
             }
@@ -150,7 +151,7 @@ public class Installation extends Fragment {
                     try {
                         startActivity(intent);
                     } catch (android.content.ActivityNotFoundException ex) {
-                        Utils.showSnack(getView(),getString(R.string.call_could_not_be_made),Snackbar.LENGTH_SHORT);
+                        Utils.showSnack(getView(), getString(R.string.call_could_not_be_made), Snackbar.LENGTH_SHORT);
                     }
 
                 }
@@ -169,7 +170,7 @@ public class Installation extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showSnack(getView(),R.string.mail_manager_error,Snackbar.LENGTH_SHORT);
+                    Utils.showSnack(getView(), R.string.mail_manager_error, Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -187,7 +188,7 @@ public class Installation extends Fragment {
                 try {
                     startActivity(intent);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showSnack(getView(),getString(R.string.Location_could_not_be_opened),Snackbar.LENGTH_SHORT);
+                    Utils.showSnack(getView(), getString(R.string.Location_could_not_be_opened), Snackbar.LENGTH_SHORT);
                 }
             }
         });
@@ -196,7 +197,7 @@ public class Installation extends Fragment {
         listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
         // Boton añadir recorrido
-        if (Utils.getActiveTypeUser(getActivity())== Global.TYPE_ADMIN_USER){
+        if (Utils.getActiveTypeUser(getActivity()) == Global.TYPE_ADMIN_USER) {
             addCourse.setVisibility(View.VISIBLE);
             addCourse.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,8 +214,8 @@ public class Installation extends Fragment {
         }
 
 
-        Log.d(Global.TAG, "Numero de recorridos: "+ listCourses.size());
-        Log.d(Global.TAG,"-------------------------------------------------");
+        Log.d(Global.TAG, "Numero de recorridos: " + listCourses.size());
+        Log.d(Global.TAG, "-------------------------------------------------");
         adapterCoursesList = new AdapterCoursesList(listCourses, getContext());
         recyclerView.setAdapter(adapterCoursesList);
 
@@ -223,8 +224,8 @@ public class Installation extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.d(Global.TAG,"Recorrido seleccionado: "+ listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
-                Log.d(Global.TAG,"-------------------------------------------------");
+                Log.d(Global.TAG, "Recorrido seleccionado: " + listCourses.get(recyclerView.getChildAdapterPosition(view)).getGolf_course());
+                Log.d(Global.TAG, "-------------------------------------------------");
                 Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", listCourses.get(recyclerView.getChildAdapterPosition(view)));
@@ -232,7 +233,9 @@ public class Installation extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
             }
         });
-        if (adapterCoursesList.getItemCount()==0){infoCourses.setText(R.string.without_courses);}
+        if (adapterCoursesList.getItemCount() == 0) {
+            infoCourses.setText(R.string.without_courses);
+        }
 
         recyclerView.setAdapter(adapterCoursesList);
 

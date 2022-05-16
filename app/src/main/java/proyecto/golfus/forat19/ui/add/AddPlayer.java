@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.zxing.common.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,8 @@ public class AddPlayer extends Fragment implements Observer {
     private int playerTypeSelected;
     private ArrayList<Player_Types> objectPlayerTypes;
     private Player_Types playerTypesSelected;
-    private ArrayList<Player_Data> objectPlayerData;
+    private ArrayList<Player_Data> playerData;
+    private ArrayList<String> listPlayerData = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterDataList adapterDataList;
 
@@ -95,6 +95,7 @@ public class AddPlayer extends Fragment implements Observer {
                 playerTypesSelected = objectPlayerTypes.get(position);
                 Log.d(Global.TAG,"Tipo jugador seleccionado: "+playerTypeSelected+" - "+ objectPlayerTypes.get(position).getPlayer_type());
                 loadDataPlayer();
+                listPlayerData.clear();
             }
 
             @Override
@@ -143,13 +144,17 @@ public class AddPlayer extends Fragment implements Observer {
                     }
                 });
             } else if (request.getCommand().equals(Global.LIST_PLAYER_DATA)){
-                objectPlayerData =  (ArrayList<Player_Data>)request.getObject();
-                Log.d(Global.TAG, String.valueOf(objectPlayerData.size()));
+
+                playerData = (ArrayList<Player_Data>) request.getObject();
+
+                for (Player_Data p: (ArrayList<Player_Data>)request.getObject()){
+                    listPlayerData.add (p.getPlayer_data());
+                }
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapterDataList = new AdapterDataList(objectPlayerData);
+                        adapterDataList = new AdapterDataList(listPlayerData);
                         recyclerView.setAdapter(adapterDataList);
                     }
                 });
@@ -188,17 +193,15 @@ public class AddPlayer extends Fragment implements Observer {
      */
     private void sendDataPlayers() {
         String[] dataEntries = adapterDataList.getDataEntries();
-        List <Player_Information> listInformation = new ArrayList<>();
+        List <Player_Information> information = new ArrayList<>();
+        List<Player_Information> listData = new ArrayList<>();
 
-        for (int i=0; i<dataEntries.length; i++) {
-
-            Log.d(Global.TAG, "Dato: "+ dataEntries[i]);
-            Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), objectPlayerData.get(i), dataEntries[i]);
-            listInformation.add(playerInformation);
+        for (int i =0; i <playerData.size();i++){
+            Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), playerData.get(i), dataEntries[i]);
+            listData.add(playerInformation);
         }
 
-        Players newPlayer = new Players(0, playerTypesSelected, Global.activeUser,null,null);
-        newPlayer.setPlayer_information(listInformation);
+        Players newPlayer = new Players(0, playerTypesSelected, Global.activeUser,null, listData);
 
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.ADD_PLAYER, null, newPlayer);
         RequestServer request = new RequestServer();
