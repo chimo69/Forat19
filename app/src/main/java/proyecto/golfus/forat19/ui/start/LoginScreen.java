@@ -137,6 +137,8 @@ public class LoginScreen extends AppCompatActivity implements Observer{
             Message request = (Message) arg;
 
             if (request.getParameters().equals(Global.OK)) {
+                Global.activeUser = (Users) request.getObject();
+
                 String activeUser = ((Users) request.getObject()).getUsername();
                 int typeUser = ((Users)request.getObject()).getId_user_type();
                 String activeToken = request.getToken();

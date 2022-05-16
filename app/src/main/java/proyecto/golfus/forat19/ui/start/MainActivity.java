@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 Log.d(Global.TAG, "Usuario: " + ((Users) request.getObject()).getUsername());
                 Log.d(Global.TAG, "Tipo: " + ((Users) request.getObject()).getId_user_type());
 
+                Global.activeUser = (Users) request.getObject();
                 Utils.setActiveUser(this,((Users) request.getObject()).getUsername());
                 Utils.setActiveTypeUser(this,((Users) request.getObject()).getId_user_type());
                 Utils.setActiveId(this,((Users) request.getObject()).getId_user());

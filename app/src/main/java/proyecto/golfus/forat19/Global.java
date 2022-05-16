@@ -1,11 +1,17 @@
 package proyecto.golfus.forat19;
 
+import java.security.Key;
+
+import Forat19.Users;
+
 /**
  * Conjunto de variables globales y preferencias
  * @author Antonio Rodríguez Sirgado
  */
 public class Global {
 
+    public static Users activeUser;
+    public static Key serverKey;
     public static final int TIME_OUT_LIMIT=3000;
     public static final String TAG="F19";
     public static final String YES = "Y";
@@ -20,9 +26,9 @@ public class Global {
     public static final int TYPE_ADVANCED_USER = 2;
 
     // Tipos de recorrido
-    public static final int TYPE_GOLF = 0;
-    public static final int TYPE_PANDP = 1;
+    public static final int TYPE_GOLF = 1;
     public static final int TYPE_PAR3 = 2;
+    public static final int TYPE_PANDP = 3;
 
     // Preferences
     public static final String PREF_ACTIVE_USER="activeUser";
@@ -52,6 +58,8 @@ public class Global {
     public static final String UPDATE_GOLF_COURSE_HOLE = "UpdateGolfCourseHole" ;
     public static final String LIST_GOLF_GAME_TYPE = "ListGolfGameType";
     public static final String LIST_PLAYER_TYPE ="ListPlayerType" ;
+    public static final String LIST_PLAYER_DATA = "ListPlayerData";
+    public static final String ADD_PLAYER = "AddPlayer";
 
     // Codigo recibidos
     public static final String OK = "Ok";

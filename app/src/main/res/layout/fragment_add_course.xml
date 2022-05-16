@@ -106,7 +106,7 @@
 
                         <EditText
                             android:id="@+id/addCourse_name"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_weight="10"
@@ -131,7 +131,7 @@
 
                         <EditText
                             android:id="@+id/addCourse_Slope"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_weight="10"
@@ -156,7 +156,7 @@
 
                         <EditText
                             android:id="@+id/addCourse_FieldValue"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_weight="10"
@@ -230,7 +230,7 @@
 
                         <EditText
                             android:id="@+id/addCourse_about"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_weight="10"
@@ -295,7 +295,7 @@
 
                                 <EditText
                                     android:id="@+id/hole1_par"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:inputType="number"
@@ -311,7 +311,7 @@
 
                                 <EditText
                                     android:id="@+id/hole1_handicap"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:inputType="number"
@@ -327,7 +327,7 @@
 
                                 <EditText
                                     android:id="@+id/hole1_length"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:inputType="number"

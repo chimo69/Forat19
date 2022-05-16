@@ -3,6 +3,8 @@ package proyecto.golfus.forat19.ui.add;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.common.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +24,14 @@ import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
+import Forat19.Player_Data;
+import Forat19.Player_Information;
 import Forat19.Player_Types;
+import Forat19.Players;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.adapterList.AdapterDataList;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -35,38 +43,23 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class AddPlayer extends Fragment implements Observer {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private Button createPlayer;
     private Spinner playerType;
     private Message request;
     private List<String> listPlayerTypes = new ArrayList<String>();
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int playerTypeSelected;
+    private ArrayList<Player_Types> objectPlayerTypes;
+    private Player_Types playerTypesSelected;
+    private ArrayList<Player_Data> objectPlayerData;
+    private RecyclerView recyclerView;
+    private AdapterDataList adapterDataList;
 
     public AddPlayer() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddPlayer.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddPlayer newInstance(String param1, String param2) {
+    public static AddPlayer newInstance() {
         AddPlayer fragment = new AddPlayer();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,8 +68,6 @@ public class AddPlayer extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -86,13 +77,36 @@ public class AddPlayer extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_player, container, false);
         playerType = view.findViewById(R.id.createPlayer_GameType);
-
-
-
+        recyclerView = view.findViewById(R.id.recyclerListDataPlayer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        createPlayer = view.findViewById(R.id.btn_createPlayer);
+        createPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendDataPlayers();
+            }
+        });
         loadPlayerTypes();
+
+        playerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                playerTypeSelected =  objectPlayerTypes.get(position).getId_player_type();
+                playerTypesSelected = objectPlayerTypes.get(position);
+                Log.d(Global.TAG,"Tipo jugador seleccionado: "+playerTypeSelected+" - "+ objectPlayerTypes.get(position).getPlayer_type());
+                loadDataPlayer();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         return view;
 
     }
+
+
 
     /**
      * Permanece a la espera de que el objeto observado varie
@@ -111,7 +125,7 @@ public class AddPlayer extends Fragment implements Observer {
 
             if (request.getCommand().equals(Global.LIST_PLAYER_TYPE)) {
 
-                ArrayList<Player_Types> objectPlayerTypes =  (ArrayList<Player_Types>)request.getObject();
+                objectPlayerTypes =  (ArrayList<Player_Types>)request.getObject();
 
                 Log.d(Global.TAG, "Tipos de juegadores recibidos: " + objectPlayerTypes.size());
 
@@ -128,6 +142,20 @@ public class AddPlayer extends Fragment implements Observer {
 
                     }
                 });
+            } else if (request.getCommand().equals(Global.LIST_PLAYER_DATA)){
+                objectPlayerData =  (ArrayList<Player_Data>)request.getObject();
+                Log.d(Global.TAG, String.valueOf(objectPlayerData.size()));
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterDataList = new AdapterDataList(objectPlayerData);
+                        recyclerView.setAdapter(adapterDataList);
+                    }
+                });
+            } else if (request.getCommand().equals(Global.ADD_PLAYER)){
+                Fragment fragment = new Principal();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
             }
         }
     }
@@ -148,9 +176,34 @@ public class AddPlayer extends Fragment implements Observer {
      * @author Antonio Rodríguez Sirgado
      */
     public void loadDataPlayer(){
-        /*Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_PLAYER_TYPE, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_PLAYER_DATA, Integer.toString(playerTypeSelected), null);
         RequestServer request = new RequestServer();
         request.request(message);
-        request.addObserver(this);*/
+        request.addObserver(this);
+    }
+
+    /**
+     * Rellena el DataPlayer con todos los PlayerInformation y envia el mensaje al servidor
+     * @author Antonio Rodriguez Sirgado
+     */
+    private void sendDataPlayers() {
+        String[] dataEntries = adapterDataList.getDataEntries();
+        List <Player_Information> listInformation = new ArrayList<>();
+
+        for (int i=0; i<dataEntries.length; i++) {
+
+            Log.d(Global.TAG, "Dato: "+ dataEntries[i]);
+            Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), objectPlayerData.get(i), dataEntries[i]);
+            listInformation.add(playerInformation);
+        }
+
+        Players newPlayer = new Players(0, playerTypesSelected, Global.activeUser,null,null);
+        newPlayer.setPlayer_information(listInformation);
+
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.ADD_PLAYER, null, newPlayer);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+
     }
 }
