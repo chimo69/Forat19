@@ -21,12 +21,13 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de recorridos
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.ViewHolderList> implements View.OnClickListener {
     ArrayList<Golf_Courses> listCourses;
     ArrayList<Golf_Courses> listSearch;
-    String [] courseTypes = {"Golf", "Par 3", "P&P"};
+    String[] courseTypes = {"Golf", "Par 3", "P&P"};
     Context context;
 
     private View.OnClickListener listener;
@@ -44,14 +45,16 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
 
     public AdapterCoursesList(ArrayList<Golf_Courses> listCourses, Context context) {
         this.listCourses = listCourses;
-        this.context= context;
+        this.context = context;
         listSearch = new ArrayList<>();
         listSearch.addAll(listCourses);
 
         for (Golf_Courses g : listCourses) {
             Log.d(Global.TAG, "recorrido recibido: " + g.getGolf_course());
         }
-        if (listCourses.size()>0){Log.d(Global.TAG,"-------------------------------------------------");}
+        if (listCourses.size() > 0) {
+            Log.d(Global.TAG, "-------------------------------------------------");
+        }
     }
 
     @NonNull
@@ -74,7 +77,6 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
     }
 
 
-
     public class ViewHolderList extends RecyclerView.ViewHolder {
         TextView name;
         TextView type;
@@ -94,10 +96,12 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
          */
         public void fillList(Golf_Courses golf_courses) {
             name.setText(golf_courses.getGolf_course());
-            type.setText(courseTypes[golf_courses.getId_golf_course_type()-1]);
-
+            if (golf_courses.getId_installation() == 0) {
+                type.setText(golf_courses.getGolf_course_type().getGolf_course_type());
+            } else {
+                type.setText(courseTypes[golf_courses.getId_golf_course_type() - 1]);
+            }
         }
-
     }
 
     public void filter(String txtSearch) {

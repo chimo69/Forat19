@@ -166,18 +166,20 @@ public class AddPlayer extends Fragment implements Observer {
     }
 
     /**
-     * Lanza mensaje para la carga de tipos de jugador
+     * <b>Lanza mensaje para la carga de tipos de jugador</b><br>
+     * Mensaje = (token¬device, ListPlayerType, null, null)
      * @author Antonio Rodríguez Sirgado
      */
     public void loadPlayerTypes() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_PLAYER_TYPE, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_PLAYER_TYPE, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
 
     /**
-     * Lanza mensaje para la carga de informacion a rellenar por tipo de jugador
+     * <b>Lanza mensaje para la carga de informacion a rellenar por tipo de jugador</b><br>
+     * Mensaje = (token¬device, ListPlayerData, tipo de jugador seleccionado, null)
      * @author Antonio Rodríguez Sirgado
      */
     public void loadDataPlayer(){
@@ -188,12 +190,12 @@ public class AddPlayer extends Fragment implements Observer {
     }
 
     /**
-     * Rellena el DataPlayer con todos los PlayerInformation y envia el mensaje al servidor
+     * <b>Rellena el DataPlayer con todos los PlayerInformation y envia el mensaje al servidor</b><br>
+     * Mensaje = (token¬device, AddPlayer, null, new Player)
      * @author Antonio Rodriguez Sirgado
      */
     private void sendDataPlayers() {
         String[] dataEntries = adapterDataList.getDataEntries();
-        List <Player_Information> information = new ArrayList<>();
         List<Player_Information> listData = new ArrayList<>();
 
         for (int i =0; i <playerData.size();i++){

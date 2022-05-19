@@ -10,20 +10,15 @@
             android:icon="@drawable/ic_create_player"
             android:title="@string/create_player" />
         <item
-            android:id="@+id/createGame"
-            android:checkable="true"
-            android:icon="@drawable/ic_create_game"
-            android:title="@string/create_game" />
-        <item
-            android:id="@+id/startGame"
-            android:checkable="true"
-            android:icon="@drawable/ic_start_game"
-            android:title="@string/start_game" />
-        <item
             android:id="@+id/searchGreen"
             android:checkable="true"
             android:icon="@drawable/ic_search"
             android:title="@string/search_installation" />
+        <item
+            android:id="@+id/createGame"
+            android:checkable="true"
+            android:icon="@drawable/ic_create_game"
+            android:title="@string/create_game" />
     </group>
 
 

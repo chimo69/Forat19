@@ -2,11 +2,8 @@ package proyecto.golfus.forat19.utils;
 
 import android.util.Log;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -57,7 +54,7 @@ public class RequestServer extends Observable {
         if (message.getCommand() != null) {
             Thread thread = new Thread(() -> {
                 if (message.getCommand().equals(Global.LOGIN) || message.getCommand().equals(Global.VALIDATE_TOKEN)) {
-                    newLogin();
+                    getKey();
                     message.setObject(clientKey);
                 }
                 initializeTransaction(message);
@@ -97,7 +94,7 @@ public class RequestServer extends Observable {
      *
      * @author Antonio Rodríguez Sirgado
      */
-    private void newLogin() {
+    private void getKey() {
 
         try {
             initializeConnection(IP, PORT);
@@ -232,7 +229,8 @@ public class RequestServer extends Observable {
                 this.clearChanged();
                 closeConnection();
 
-            } else if (input instanceof Message) {
+            }
+            if (input instanceof Message) {
                 Message returnMessage = (Message) input;
 
                 Log.d(Global.TAG, "Mensaje recibido sin encriptar:");
@@ -242,12 +240,16 @@ public class RequestServer extends Observable {
                 if (!returnMessage.getParameters().equals(Global.OK)){Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());}
                 Log.d(Global.TAG, "-------------------------------------------------");
 
-                this.setChanged();
-                this.notifyObservers(returnMessage);
-                this.clearChanged();
+                //this.setChanged();
+                //this.notifyObservers(returnMessage);
+                //this.clearChanged();
+                /*if (returnMessage.getCommand().equals(Global.KO)){
+                    newLogin();
+                }*/
                 closeConnection();
 
             } else {
+                getKey();
                 closeConnection();
             }
         } catch (IOException e) {
@@ -296,17 +298,20 @@ public class RequestServer extends Observable {
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      * @throws IllegalBlockSizeException
-     * @throws BadPaddingException
      * @throws IOException
      * @throws ClassNotFoundException
      * @author Antonio Rodríguez Sirgado
      */
-    private Message desencryptMessage(SealedObject so) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException, ClassNotFoundException {
+    private Message desencryptMessage(SealedObject so) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, IOException, ClassNotFoundException {
         Log.d(Global.TAG,"Desencriptando mensaje...");
         SealedObject sealed = so;
         Cipher dcipher = Cipher.getInstance("AES");
         dcipher.init(Cipher.DECRYPT_MODE, Global.serverKey);
-        input = sealed.getObject(dcipher);
+        try {
+            input = sealed.getObject(dcipher);
+        } catch (BadPaddingException ex){
+            Log.d(Global.TAG,"Clave recibida erronea");
+        }
         Message returnMessage = (Message) input;
         Log.d(Global.TAG,"Mensaje desencriptado");
         Log.d(Global.TAG, "-------------------------------------------------");

@@ -113,4 +113,12 @@
     <string name="players">Jugadors</string>
     <string name="not_enough_gamers">No hi ha suficientes jugadors</string>
     <string name="player_already_in_the_match">Aquest jugador ja és a la partida</string>
+    <string name="new_gamer">Nou jugador</string>
+    <string name="choose_game_type">Escull tipus de joc</string>
+    <string name="add_with_qr_code">Afegir amb codi QR</string>
+    <string name="hello_blank_fragment">Hola fragment en blanc</string>
+    <string name="Friendship_added">Amistat afegida amb éxit</string>
+    <string name="Are_you_sure_eliminate_friendship">Estàs segur de que vols borrar aquesta amistad?</string>
+    <string name="friendship_request">Sol·licituts d\'amistat</string>
+    <string name="no_pending_applications">Sense sol·licituts pendents</string>
 </resources>

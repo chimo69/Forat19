@@ -2,6 +2,7 @@ package proyecto.golfus.forat19.ui.screens;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
+import Forat19.Player_Data;
 import Forat19.Player_Information;
 import Forat19.Players;
 import proyecto.golfus.forat19.Global;
@@ -30,6 +32,7 @@ import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 public class Player extends Fragment implements Observer {
+
 
     private Players players;
     private Players player;
@@ -75,12 +78,37 @@ public class Player extends Fragment implements Observer {
         update = view.findViewById(R.id.btn_updatePlayer);
 
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlayer();
+            }
+        });
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         if (players != null) {
             Log.d(Global.TAG, "Tipo jugador recibido: " + players.getPlayer_type().getPlayer_type());
             loadPlayerInformation();
         }
         return view;
+    }
+
+    private void updatePlayer() {
+        String[] dataEntries = adapterDataList.getDataEntries();
+        List<Player_Information> listData = new ArrayList<>();
+
+        for (int i =0; i <listPlayerData.size();i++){
+            Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), player.getPlayer_information().get(i).getPlayer_data(), dataEntries[i]);
+            listData.add(playerInformation);
+        }
+
+        Players playerUpdated = new Players(player.getId_player(), player.getPlayer_type(), Global.activeUser,player.getActive(), listData);
+
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_PLAYER, null, playerUpdated);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 
     /**
@@ -112,7 +140,6 @@ public class Player extends Fragment implements Observer {
             if (request.getCommand().equals(Global.GET_PLAYER)) {
                 player = (Players) request.getObject();
 
-
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -130,6 +157,17 @@ public class Player extends Fragment implements Observer {
                         adapterDataList.setDataEntries(information);
 
                         recyclerView.setAdapter(adapterDataList);
+
+                    }
+                });
+            } else if (request.getCommand().equals(Global.UPDATE_PLAYER)){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Utils.showSnack(getView(), "Player succesfully upgraded", Snackbar.LENGTH_LONG);
+                        Fragment fragment = new MyAccount();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
                     }
                 });

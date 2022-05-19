@@ -2,6 +2,7 @@ package proyecto.golfus.forat19;
 
 import java.security.Key;
 
+import Forat19.Players;
 import Forat19.Users;
 
 /**
@@ -10,9 +11,17 @@ import Forat19.Users;
  */
 public class Global {
 
-    public static Users activeUser;
+    public static final String CHECKED = "Checked";
+    public static final String CREATE = "C";
+    public static final String START = "S";
+    public static final String END = "E";
+    public static final String SHOW_CREATED_GAMES = "C";
+    public static final String SHOW_STARTED_GAMES = "S";
+    public static final String SHOW_ENDED_GAMES = "E";
+    public static Users activeUser=null;
+    public static Players activePlayer=null;
     public static Key serverKey;
-    public static final int TIME_OUT_LIMIT=3000;
+    public static final int TIME_OUT_LIMIT=6000;
     public static final String TAG="F19";
     public static final String YES = "Y";
     public static final int MAX_GAMERS = 4;
@@ -62,9 +71,19 @@ public class Global {
     public static final String ADD_PLAYER = "AddPlayer";
     public static final String LIST_USER_PLAYER = "ListUserPlayer";
     public static final String GET_PLAYER = "GetPlayer" ;
+    public static final String UPDATE_PLAYER = "UpdatePlayer";
+    public static final String ADD_USER_RELATIONSHIP ="AddUserRelationship" ;
+    public static final String LIST_USER_RELATIONSHIP_I ="ListUserRelationshipI" ;
+    public static final String LIST_USER_RELATIONSHIP_O ="ListUserRelationshipO" ;
+    public static final String DELETE_USER_RELATIONSHIP = "DeleteUserRelationship";
+    public static final String ADD_GOLF_GAME = "AddGolfGame";
+    public static final String LIST_GOLF_GAME_COURSE ="ListGolfGameCourse" ;
+    public static final String LIST_GOLF_GAME_PLAYER = "ListGolfGamePlayer";
+    public static final String LIST_GOLF_GAME = "ListGolfGame";
 
     // Codigo recibidos
     public static final String OK = "Ok";
+    public static final String KO = "Ko";
 
 
 }

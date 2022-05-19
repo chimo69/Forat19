@@ -309,6 +309,16 @@ public class Utils extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Cambia el formato entero americano a texto español
+     * @param date fecha a formatear
+     * @return fecha formateada
+     */
+    public static String changeDateFormat (int date) {
+        String dateGame = String.valueOf(date);
+        return dateGame.substring(6,8)+"/" +dateGame.substring(4,6) + "/" + dateGame.substring(0,4);
+    }
+
 
 }
 

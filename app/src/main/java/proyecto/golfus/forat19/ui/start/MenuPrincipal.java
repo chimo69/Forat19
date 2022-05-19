@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -51,11 +52,13 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     private View view;
     private int userType;
     private String activeUser;
+    private MenuItem createGame;
 
     private boolean openSession;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    createGame = menu.findItem(R.id.createGame);
 
         // comprobamos el tipo de usuario para diferenciar opciones de menu
         // 0 - Admin
@@ -71,6 +74,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 navigationView.getMenu().setGroupVisible(R.id.adminOption, false);
                 break;
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -80,7 +84,16 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (Global.activePlayer!=null){
+                    Log.d(Global.TAG, "Jugador seleccionado: " + Global.activePlayer.getUser().getUsername());
+                    navigationView.getMenu().findItem(R.id.createGame).setVisible(true);
+                }else {
+                    Log.d(Global.TAG, "Jugador sin seleccionar");
+                    navigationView.getMenu().findItem(R.id.createGame).setVisible(false);
+                }
                 drawerLayout.openDrawer(GravityCompat.START);
+
+
                 Utils.hideKeyboard(this);
                 return true;
         }
@@ -89,13 +102,13 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         if (esTablet(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
         setToolBar();
 
@@ -121,9 +134,6 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 case R.id.createGame:
                     drawerLayout.closeDrawer(GravityCompat.START);
                     loadFragment(new AddGame());
-                    break;
-                case R.id.startGame:
-                    // TODO empezar un juego
                     break;
                 case R.id.searchGreen:
                 case R.id.manageGreens:

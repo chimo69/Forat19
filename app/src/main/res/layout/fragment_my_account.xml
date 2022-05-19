@@ -189,17 +189,52 @@
                         android:layout_weight="1.2"
                         android:orientation="vertical">
 
-                        <ImageButton
-                            android:id="@+id/seeFriends"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="5dp"
-                            android:layout_marginVertical="5dp"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_baseline_person_24" />
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cv_myAccount_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                app:cardBackgroundColor="@color/green"
+                                app:cardCornerRadius="100dp"
+                                app:cardElevation="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.120000005">
+
+                                <TextView
+                                    android:id="@+id/tv_MyAccount_number"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:text="3" />
+                            </androidx.cardview.widget.CardView>
+
+                            <ImageButton
+                                android:id="@+id/btn_showFriends"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="5dp"
+                                android:layout_marginVertical="5dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_baseline_person_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <ImageButton
-                            android:id="@+id/addFriends"
+                            android:id="@+id/btn_addFriends"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="5dp"

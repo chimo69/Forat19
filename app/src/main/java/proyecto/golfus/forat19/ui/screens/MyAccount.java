@@ -33,10 +33,12 @@ import java.util.Observer;
 
 import Forat19.Message;
 import Forat19.Players;
+import Forat19.User_Relationships;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterPlayerTypeList;
+import proyecto.golfus.forat19.ui.lists.FriendsList;
 import proyecto.golfus.forat19.ui.start.LoginScreen;
 import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.ui.add.AddFriend;
@@ -52,9 +54,9 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class MyAccount extends Fragment implements Observer {
 
-    private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo, infoPlayers;
-    private CardView cvInfoPlayer;
-    private ImageButton btnSeeFriends, btnAddFriends;
+    private TextView txtUserInfo, txtNameInfo, txtPhoneInfo, txtMailInfo, txtAddressInfo, infoPlayers, numberRequest;
+    private CardView cvInfoPlayer, cvNumber;
+    private ImageButton btnShowFriends, btnAddFriends;
     private ImageView qrCode;
     private View view;
     private Button btnDelete, btnUpdate;
@@ -62,6 +64,7 @@ public class MyAccount extends Fragment implements Observer {
     private RecyclerView recyclerView;
     private AdapterPlayerTypeList adapterPlayersList;
     private ArrayList<Players> listPlayers = new ArrayList<>();
+    private ArrayList<User_Relationships> listRequest = new ArrayList<>();
 
     Message request;
     Users user;
@@ -96,15 +99,16 @@ public class MyAccount extends Fragment implements Observer {
         txtNameInfo = view.findViewById(R.id.txtNameInfo);
         btnDelete = view.findViewById(R.id.btn_delete);
         btnUpdate = view.findViewById(R.id.btn_update);
-        btnAddFriends = view.findViewById(R.id.addFriends);
-        btnSeeFriends = view.findViewById(R.id.seeFriends);
+        btnAddFriends = view.findViewById(R.id.btn_addFriends);
+        btnShowFriends = view.findViewById(R.id.btn_showFriends);
         recyclerView = view.findViewById(R.id.rw_myaccount_typePlayer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapterPlayersList = new AdapterPlayerTypeList(listPlayers, getContext());
         recyclerView.setAdapter(adapterPlayersList);
         loading = view.findViewById(R.id.loading_myAccount);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-
+        cvNumber = view.findViewById(R.id.cv_myAccount_number);
+        numberRequest = view.findViewById(R.id.tv_MyAccount_number);
 
         // Boton de borrado de cuenta
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -138,10 +142,20 @@ public class MyAccount extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new AddFriend();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+            }
+        });
+
+        // Boton de mostrar amigos
+        btnShowFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new FriendsList(listRequest);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
             }
         });
         getUser();
+        loadRequestFriends();
 
         return view;
     }
@@ -215,11 +229,27 @@ public class MyAccount extends Fragment implements Observer {
                                     });
                                 } else {
                                     infoPlayers.setText("No dispone de jugadores");
-                                    infoPlayers.setVisibility(View.VISIBLE);
+
                                 }
                             }
                         });
                     }
+                    break;
+
+                case Global.LIST_USER_RELATIONSHIP_O:
+                    listRequest = (ArrayList<User_Relationships>) request.getObject();
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (listRequest.size() > 0) {
+                                cvNumber.setVisibility(View.VISIBLE);
+                                numberRequest.setText(String.valueOf(listRequest.size()));
+                            } else {
+                                cvNumber.setVisibility(View.GONE);
+                            }
+                        }
+                    });
                     break;
             }
 
@@ -304,6 +334,19 @@ public class MyAccount extends Fragment implements Observer {
 
     private void getTypePlayers() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_PLAYER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * <b>Envia el mensaje para cargar las solicitudes de amistad pendientes</b><br>
+     * Mensaje = (token¬device, listUserRelationshipI, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void loadRequestFriends() {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_RELATIONSHIP_O, String.valueOf(Global.activeUser.getId_user()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

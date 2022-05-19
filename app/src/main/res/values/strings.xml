@@ -122,5 +122,12 @@
     <string name="player_already_in_the_match">This player is already in the match</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_gamer">New gamer</string>
+    <string name="choose_game_type">Choose game type</string>
+    <string name="add_with_qr_code">Add with QR Code</string>
+    <string name="Friendship_added">Friendship successfully added</string>
+    <string name="Are_you_sure_eliminate_friendship">Are you sure you want to eliminate friendship?</string>
+    <string name="friendship_request">Friendship request</string>
+    <string name="no_pending_applications">No pending request</string>
 
 </resources>

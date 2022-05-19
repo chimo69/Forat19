@@ -23,21 +23,26 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import Forat19.Golf_Course_Types;
 import Forat19.Golf_Courses;
+import Forat19.Golf_Game_Players;
 import Forat19.Golf_Game_Types;
+import Forat19.Golf_Games;
 import Forat19.Message;
+import Forat19.Players;
 import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
+import proyecto.golfus.forat19.adapterList.AdapterFriendshipList;
 import proyecto.golfus.forat19.adapterList.AdapterPlayersList;
-import proyecto.golfus.forat19.adapterList.AdapterNormalUsersList;
+import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -53,19 +58,21 @@ public class AddGame extends Fragment implements Observer {
     private static final String ARG_PARAM2 = "param2";
     private Button createGame;
     private ImageButton deleteCourse;
-    private TextView numberOfGamers, courseSelected;
-    private Spinner courseType, gameType;
+    private TextView txtNumberOfGamers, txtCourseSelected;
+    private Spinner gameType;
     private List<String> listCourseType = new ArrayList<String>();
     private List<String> listGameType = new ArrayList<String>();
-    private ArrayList<Users> listFriends;
+    private ArrayList<Golf_Game_Types> golfGameTypes;
+    private ArrayList<Players> listPlayerFriends, listPlayersSelected;
     private ArrayList<Golf_Courses> listCourses;
-    private ArrayList<Users> listPlayers = new ArrayList<Users>();
+    private List<Golf_Game_Players> golfGamePlayersSend = new ArrayList<>();
     private SearchView searchFriendsList, searchCoursesList;
     private RecyclerView rw_friends, rw_courses, rw_players;
-    private AdapterNormalUsersList adapterNormalUsersList;
+    private AdapterPlayersList adapterPlayerFriendsList, adapterPlayersSelectedList;
     private AdapterCoursesList adapterCoursesList;
-    private AdapterPlayersList adapterPlayersList;
     private CardView cv_courseSelected, cv_players, cv_playersTitle, cv_selectPlayer, cv_number;
+    private Golf_Courses courseSelected;
+    private Golf_Game_Types golfGameTypesSelected;
 
     private Message request;
 
@@ -91,7 +98,6 @@ public class AddGame extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_game, container, false);
-        courseType = view.findViewById(R.id.createGame_courseType);
         gameType = view.findViewById(R.id.createGame_gameType);
         rw_friends = view.findViewById(R.id.newGame_recyclerFriends);
         rw_courses = view.findViewById(R.id.newGame_recyclerCourse);
@@ -105,15 +111,28 @@ public class AddGame extends Fragment implements Observer {
         deleteCourse = view.findViewById(R.id.createGame_btnDeleteCourse);
         searchFriendsList = view.findViewById(R.id.newGame_searchFriend);
         searchCoursesList = view.findViewById(R.id.newGame_searchCourse);
-        numberOfGamers = view.findViewById(R.id.createGame_number);
-        courseSelected = view.findViewById(R.id.createGame_selectCourse);
+        txtNumberOfGamers = view.findViewById(R.id.createGame_number);
+        txtCourseSelected = view.findViewById(R.id.createGame_selectCourse);
+
+        listPlayersSelected = new ArrayList<>();
+
+        // Boton de seleccion de tipo de juego
+        gameType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                golfGameTypesSelected = golfGameTypes.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // Boton crear juego
         createGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listPlayers.size() > 1) {
-
+                if (listPlayersSelected.size() > 0) {
+                    sendNewGame();
                 } else {
                     Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
                 }
@@ -124,7 +143,7 @@ public class AddGame extends Fragment implements Observer {
         deleteCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                courseSelected(false);
+                isCourseSelected(false);
             }
         });
 
@@ -136,7 +155,7 @@ public class AddGame extends Fragment implements Observer {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapterNormalUsersList.filter(newText);
+                //adapterFriendshipList.filter(newText);
                 return false;
             }
         });
@@ -154,15 +173,15 @@ public class AddGame extends Fragment implements Observer {
             }
         });
 
-        numberOfGamers.setText(String.valueOf(listPlayers.size()));
+        txtNumberOfGamers.setText(String.valueOf(golfGamePlayersSend.size()));
 
         rw_friends.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rw_courses.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rw_players.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         new ItemTouchHelper(itemTouch).attachToRecyclerView(rw_players);
-        adapterPlayersList = new AdapterPlayersList(listPlayers);
 
-        rw_players.setAdapter(adapterPlayersList);
+        adapterPlayersSelectedList = new AdapterPlayersList(listPlayersSelected);
+        rw_players.setAdapter(adapterPlayersSelectedList);
 
         // Campo de busqueda de recorridos
         searchCoursesList.setOnSearchClickListener(new View.OnClickListener() {
@@ -172,40 +191,18 @@ public class AddGame extends Fragment implements Observer {
             }
         });
 
-        // Spinner de seleccion de tipo de recorrido
-        courseType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        // Spinner de seleccion de tipo de juego
-        gameType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         loadGameType();
-        loadCourseType();
-        loadFriends();
-        loadCourses();
-        loadMyAccount();
+        loadFriendsWithThisGamer();
+        loadCoursesRelated();
+
+        listPlayersSelected.add(Global.activePlayer);
+
+        adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
+        txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
 
         return view;
     }
+
 
     /**
      * Permanece a la espera de que el objeto observado varie
@@ -223,34 +220,15 @@ public class AddGame extends Fragment implements Observer {
             request = (Message) arg;
 
             switch (((Message) arg).getCommand()) {
-                case Global.LIST_GOLF_COURSES_TYPE:
-                    ArrayList<Golf_Course_Types> objectCourseTypes = (ArrayList<Golf_Course_Types>) request.getObject();
 
-                    Log.d(Global.TAG, "Tipos de recorridos recibidos: " + objectCourseTypes.size());
-
-                    for (int i = 0; i < objectCourseTypes.size(); i++) {
-                        listCourseType.add(objectCourseTypes.get(i).getGolf_course_type());
-                        Log.d(Global.TAG, "Tipo recorrido: " + objectCourseTypes.get(i).getGolf_course_type());
-                    }
-                    Log.d(Global.TAG, "-------------------------------------------------");
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listCourseType);
-                            courseType.setAdapter(adapter);
-
-                        }
-                    });
-                    break;
                 case Global.LIST_GOLF_GAME_TYPE:
-                    ArrayList<Golf_Game_Types> objectGameTypes = (ArrayList<Golf_Game_Types>) request.getObject();
 
-                    Log.d(Global.TAG, "Tipos de juego recibidos: " + objectGameTypes.size());
+                    golfGameTypes = (ArrayList<Golf_Game_Types>) request.getObject();
+                    Log.d(Global.TAG, "Tipos de juego recibidos: " + golfGameTypes.size());
 
-                    for (int i = 0; i < objectGameTypes.size(); i++) {
-                        listGameType.add(objectGameTypes.get(i).getGolf_game_type());
-                        Log.d(Global.TAG, "Tipo de juego: " + objectGameTypes.get(i).getGolf_game_type());
+                    for (int i = 0; i < golfGameTypes.size(); i++) {
+                        listGameType.add(golfGameTypes.get(i).getGolf_game_type());
+                        Log.d(Global.TAG, "Tipo de juego: " + golfGameTypes.get(i).getGolf_game_type());
                     }
                     Log.d(Global.TAG, "-------------------------------------------------");
 
@@ -263,30 +241,34 @@ public class AddGame extends Fragment implements Observer {
                         }
                     });
                     break;
-                case Global.LIST_ACTIVE_USERS:
+                case Global.LIST_GOLF_GAME_PLAYER:
 
                     request = (Message) arg;
-                    listFriends = (ArrayList<Users>) request.getObject();
+                    listPlayerFriends = (ArrayList<Players>) request.getObject();
 
+                    Log.d(Global.TAG, "Jugadores recibidos: " + listPlayerFriends.size());
+                    for (Players p : listPlayerFriends) {
+                        Log.d(Global.TAG, "Jugador recibido: " + p.getUser().getUsername());
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapterNormalUsersList = new AdapterNormalUsersList(listFriends, getContext());
-                            rw_friends.setAdapter(adapterNormalUsersList);
-                            adapterNormalUsersList.setOnClickListener(new View.OnClickListener() {
+                            adapterPlayerFriendsList = new AdapterPlayersList(listPlayerFriends);
+                            rw_friends.setAdapter(adapterPlayerFriendsList);
+                            adapterPlayerFriendsList.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    if (listPlayers.size() < Global.MAX_GAMERS) {
+                                    if (listPlayerFriends.size() < Global.MAX_GAMERS) {
                                         boolean idFound = false;
-                                        for (Users u : listPlayers) {
-                                            if (listFriends.get(rw_friends.getChildAdapterPosition(v)).getId_user() == u.getId_user()) {
+                                        for (Players p : listPlayersSelected) {
+                                            if (listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)).getId_player() == p.getId_player()) {
                                                 idFound = true;
                                             }
                                         }
                                         if (!idFound) {
-                                            listPlayers.add(listFriends.get(rw_friends.getChildAdapterPosition(v)));
-                                            adapterPlayersList.notifyItemInserted(listPlayers.size() + 1);
-                                            numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                                            listPlayersSelected.add(listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)));
+                                            adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
+                                            txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
                                         } else {
                                             Utils.showSnack(getView(), getString(R.string.player_already_in_the_match), Snackbar.LENGTH_LONG);
                                         }
@@ -300,12 +282,11 @@ public class AddGame extends Fragment implements Observer {
 
                     break;
 
-                case Global.LIST_GOLF_COURSES:
+                case Global.LIST_GOLF_GAME_COURSE:
                     request = (Message) arg;
                     listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
                     Log.d(Global.TAG, "Recorridos recibidos: " + listCourses.size());
-
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -317,9 +298,11 @@ public class AddGame extends Fragment implements Observer {
                                 public void onClick(View v) {
                                     showSelectPlayer();
                                     Log.d(Global.TAG, String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v))));
-                                    courseSelected.setText(String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v)).getGolf_course()));
+                                    txtCourseSelected.setText(String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v)).getGolf_course()));
                                     rw_courses.setVisibility(View.GONE);
-                                    courseSelected(true);
+                                    isCourseSelected(true);
+                                    courseSelected = listCourses.get(rw_courses.getChildAdapterPosition(v));
+
 
                                 }
                             });
@@ -327,14 +310,15 @@ public class AddGame extends Fragment implements Observer {
                     });
                     break;
 
-                case Global.GET_USER:
-                    request = (Message) arg;
-                    listPlayers.add((Users) request.getObject());
+                case Global.ADD_GOLF_GAME:
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapterPlayersList.notifyItemInserted(listPlayers.size() + 1);
-                            numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                            Utils.showSnack(getView(), "Juego creado con éxito", Snackbar.LENGTH_LONG);
+                            Fragment fragment = new Principal();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
                         }
                     });
                     break;
@@ -343,26 +327,13 @@ public class AddGame extends Fragment implements Observer {
     }
 
     /**
-     * <b>Envia el mensaje para cargar los tipos de recorrido</b><br>
-     * Mensaje = (token¬device, listGolfCourseType, id usuario, null)
-     *
-     * @author Antonio Rodríguez Sirgado
-     */
-    public void loadCourseType() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_COURSES_TYPE, Utils.getActiveId(getActivity()), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
-
-    /**
      * <b>Envia el mensaje para cargar los tipos de juego</b><br>
-     * Mensaje = (token¬device, listGolfGameType, id usuario, null)
+     * Mensaje = (token¬device, listGolfGameType, null, null)
      *
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGameType() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_TYPE, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_TYPE, null, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -374,8 +345,9 @@ public class AddGame extends Fragment implements Observer {
      *
      * @author Antonio Rodríguez Sirgado
      */
-    public void loadFriends() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_ACTIVE_USERS, Utils.getActiveId(getActivity()), null);
+    public void loadFriendsWithThisGamer() {
+        String idPlayer = String.valueOf(Global.activePlayer.getId_player());
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_PLAYER, idPlayer, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -383,28 +355,42 @@ public class AddGame extends Fragment implements Observer {
 
     /**
      * <b>Envia el mensaje para cargar los recorridos</b><br>
-     * Mensaje = (token¬device, listGolfCourse, id usuario, null)
+     * Mensaje = (token¬device, listGolfCourse, null, null)
      *
      * @author Antonio Rodríguez Sirgado
      */
-    public void loadCourses() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_COURSES, null, null);
+    public void loadCoursesRelated() {
+        String idPlayerType = String.valueOf(Global.activePlayer.getPlayer_type().getId_player_type());
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_COURSE, idPlayerType, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
 
-    /**
-     * <b>Envia el mensaje para cargar datos del usuario actual</b><br>
-     * Mensaje = (token¬device, getUser, id usuario, null)
-     *
-     * @author Antonio Rodríguez Sirgado
-     */
-    public void loadMyAccount() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
+
+    private void sendNewGame() {
+
+        createListGolfGamers();
+
+        DateTimeFormatter dtfHour = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String hourGame = dtfHour.format(LocalDateTime.now());
+        int dateGame = Integer.parseInt(dtfDate.format(LocalDateTime.now()));
+
+        Log.d(Global.TAG, hourGame + " - " + dateGame);
+
+        Golf_Games newGame = new Golf_Games(0, courseSelected, golfGameTypesSelected, null, dateGame, hourGame, 0, Global.CREATE, golfGamePlayersSend);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.ADD_GOLF_GAME, Integer.toString(Global.activePlayer.getId_player()), newGame);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
+    }
+
+    private void createListGolfGamers() {
+        for (Players p : listPlayersSelected) {
+            Golf_Game_Players ggp = new Golf_Game_Players(0, p, 0, 0);
+            golfGamePlayersSend.add(ggp);
+        }
     }
 
     ItemTouchHelper.SimpleCallback itemTouch = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -416,11 +402,11 @@ public class AddGame extends Fragment implements Observer {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             if (viewHolder.getAbsoluteAdapterPosition() != 0) {
-                listPlayers.remove(viewHolder.getAdapterPosition());
-                adapterPlayersList.notifyDataSetChanged();
-                numberOfGamers.setText(String.valueOf(listPlayers.size()));
+                listPlayersSelected.remove(viewHolder.getAdapterPosition());
+                adapterPlayersSelectedList.notifyDataSetChanged();
+                txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
             } else {
-                adapterPlayersList.notifyDataSetChanged();
+                adapterPlayersSelectedList.notifyDataSetChanged();
                 Utils.showSnack(getView(), getString(R.string.host_player_cannot_be_removed), Snackbar.LENGTH_LONG);
             }
         }
@@ -428,17 +414,18 @@ public class AddGame extends Fragment implements Observer {
 
     /**
      * Segun si ha sido o no seleccionado el recorrido muestra u oculta otros paneles
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param isSelected true si el recorrido ha sido seleccionado
+     * @author Antonio Rodríguez Sirgado
      */
-    public void courseSelected(boolean isSelected) {
+    public void isCourseSelected(boolean isSelected) {
         if (isSelected) {
             deleteCourse.setVisibility(View.VISIBLE);
             cv_courseSelected.setCardBackgroundColor(getResources().getColor(R.color.green));
             searchCoursesList.setVisibility(View.GONE);
             rw_courses.setVisibility(View.GONE);
         } else {
-            courseSelected.setText("Select course");
+            txtCourseSelected.setText("Select course");
             deleteCourse.setVisibility(View.GONE);
             cv_courseSelected.setCardBackgroundColor(getResources().getColor(R.color.grey));
             searchCoursesList.setVisibility(View.VISIBLE);
@@ -448,6 +435,7 @@ public class AddGame extends Fragment implements Observer {
 
     /**
      * Muestra los campos de los jugadores
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void showSelectPlayer() {

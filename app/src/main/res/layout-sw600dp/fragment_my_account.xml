@@ -58,13 +58,13 @@
                         android:orientation="vertical">
 
                         <ImageButton
-                            android:id="@+id/seeFriends"
+                            android:id="@+id/btn_showFriends"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_baseline_person_24" />
 
                         <ImageButton
-                            android:id="@+id/addFriends"
+                            android:id="@+id/btn_addFriends"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             app:srcCompat="@drawable/ic_add_user" />

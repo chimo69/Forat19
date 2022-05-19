@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import Forat19.Players;
 import Forat19.Users;
 import proyecto.golfus.forat19.R;
 
@@ -19,10 +20,10 @@ import proyecto.golfus.forat19.R;
  * @Author Antonio Rodríguez Sirgado
  */
 public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.ViewHolderList> implements View.OnClickListener {
-    ArrayList<Users> listUsers;
+    ArrayList<Players> listUsers;
     private View.OnClickListener listener;
 
-    public AdapterPlayersList(ArrayList<Users> listPlayers){
+    public AdapterPlayersList(ArrayList<Players> listPlayers){
         this.listUsers = listPlayers;
 
     }
@@ -51,6 +52,10 @@ public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.
         return listUsers.size();
     }
 
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.listener = onClickListener;
+    }
+
     public class ViewHolderList extends RecyclerView.ViewHolder {
 
         TextView username;
@@ -62,9 +67,9 @@ public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.
             name = itemView.findViewById(R.id.name);
         }
 
-        public void fillList(Users users) {
-            username.setText(users.getUsername());
-            name.setText(users.getName());
+        public void fillList(Players player) {
+            username.setText(player.getUser().getUsername());
+            name.setText(player.getUser().getName());
         }
 
     }

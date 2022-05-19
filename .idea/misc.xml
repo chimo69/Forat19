@@ -29,12 +29,13 @@
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_base.xml" value="0.19375" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_course.xml" value="0.22697368421052633" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_empty_hole.xml" value="0.3009833262077811" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_friends_list.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_greens_list.xml" value="0.1658828559213339" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_hole.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_installation.xml" value="0.3180846515604959" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_installation_list.xml" value="0.1" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_menu.xml" value="0.22472677595628415" />
-        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_my_account.xml" value="0.3180846515604959" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_my_account.xml" value="0.5254237288135594" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_player.xml" value="0.20051303976058144" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_principal.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/fragment_update_course.xml" value="0.3180846515604959" />
@@ -44,6 +45,7 @@
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/header_navigation_drawer.xml" value="0.25" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_admin_user_list.xml" value="0.24027362120564344" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_course_list.xml" value="0.3180846515604959" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_game_list.xml" value="0.5" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_green_list.xml" value="0.3180846515604959" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_installation_list.xml" value="0.1952054794520548" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_list.xml" value="0.25" />

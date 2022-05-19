@@ -113,4 +113,12 @@
     <string name="select_course">Selecciona recorrido</string>
     <string name="select_player">Selecciona jugador</string>
     <string name="players">Jugadores</string>
+    <string name="new_gamer">Nuevo jugador</string>
+    <string name="choose_game_type">Escoge tipo de juego</string>
+    <string name="add_with_qr_code">Agregar con código QR</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="Friendship_added">Amistad agregada con éxito</string>
+    <string name="Are_you_sure_eliminate_friendship">¿Estás seguro de que quieres borrar esta amistad?</string>
+    <string name="friendship_request">Solicitudes de amistad</string>
+    <string name="no_pending_applications">Sin solicitudes pendientes</string>
 </resources>
