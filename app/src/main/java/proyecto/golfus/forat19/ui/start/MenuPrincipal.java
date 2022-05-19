@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -92,10 +93,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                     navigationView.getMenu().findItem(R.id.createGame).setVisible(false);
                 }
                 drawerLayout.openDrawer(GravityCompat.START);
-
-
                 Utils.hideKeyboard(this);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -165,8 +165,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
 
     }
 

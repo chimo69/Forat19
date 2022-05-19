@@ -121,4 +121,12 @@
     <string name="Are_you_sure_eliminate_friendship">Estàs segur de que vols borrar aquesta amistad?</string>
     <string name="friendship_request">Sol·licituts d\'amistat</string>
     <string name="no_pending_applications">Sense sol·licituts pendents</string>
+    <string name="game_succesfully_eliminated">Joc eliminat amb éxit</string>
+    <string name="Game_could_not_be_deleted">El joc no va poder ser eliminat</string>
+    <string name="are_you_sure_eliminate_game">Segur que vols eliminar el joc?</string>
+    <string name="no_games_to_show">No hi ha partits que mostrar</string>
+    <string name="current_game">Partit actiu</string>
+    <string name="pending_games">Partits pendents</string>
+    <string name="all">Tots</string>
+    <string name="select_player_type">Tria tipus de jugador</string>
 </resources>

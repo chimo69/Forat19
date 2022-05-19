@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/item_cvTypePlayer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginRight="10dp"
         app:cardBackgroundColor="@color/green"
         app:cardCornerRadius="10dp">

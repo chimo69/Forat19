@@ -54,8 +54,7 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class AddGame extends Fragment implements Observer {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Golf_Games game;
     private Button createGame;
     private ImageButton deleteCourse;
     private TextView txtNumberOfGamers, txtCourseSelected;
@@ -73,24 +72,23 @@ public class AddGame extends Fragment implements Observer {
     private CardView cv_courseSelected, cv_players, cv_playersTitle, cv_selectPlayer, cv_number;
     private Golf_Courses courseSelected;
     private Golf_Game_Types golfGameTypesSelected;
+    private Boolean update;
 
     private Message request;
 
     public AddGame() {
     }
 
-    public static AddGame newInstance() {
-        AddGame fragment = new AddGame();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            game = (Golf_Games) getArguments().getSerializable("game");
+            update= true;
+        } else {
+            update=false;
         }
+
     }
 
     @Override
@@ -124,7 +122,8 @@ public class AddGame extends Fragment implements Observer {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         // Boton crear juego
@@ -192,8 +191,18 @@ public class AddGame extends Fragment implements Observer {
         });
 
         loadGameType();
-        loadFriendsWithThisGamer();
-        loadCoursesRelated();
+
+        if (update){
+            txtCourseSelected.setText(game.getGolf_course().getGolf_course());
+            rw_courses.setVisibility(View.GONE);
+            courseSelected = game.getGolf_course();
+            isCourseSelected(true);
+            deleteCourse.setVisibility(View.INVISIBLE);
+        } else {
+            loadFriendsWithThisGamer();
+            loadCoursesRelated();
+        }
+
 
         listPlayersSelected.add(Global.activePlayer);
 
@@ -237,6 +246,11 @@ public class AddGame extends Fragment implements Observer {
                         public void run() {
                             ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listGameType);
                             gameType.setAdapter(adapter);
+
+                            if (update) {
+                                gameType.setSelection(listGameType.indexOf(game.getGolf_game_type().getGolf_game_type()));
+                                gameType.setEnabled(false);
+                            }
 
                         }
                     });
@@ -446,4 +460,5 @@ public class AddGame extends Fragment implements Observer {
         cv_selectPlayer.setVisibility(View.VISIBLE);
         searchFriendsList.setVisibility(View.VISIBLE);
     }
+
 }

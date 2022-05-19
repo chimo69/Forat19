@@ -79,6 +79,7 @@ public class Global {
     public static final String ADD_GOLF_GAME = "AddGolfGame";
     public static final String LIST_GOLF_GAME_COURSE ="ListGolfGameCourse" ;
     public static final String LIST_GOLF_GAME_PLAYER = "ListGolfGamePlayer";
+    public static final String DELETE_GOLF_GAME = "DeleteGolfGame";
     public static final String LIST_GOLF_GAME = "ListGolfGame";
 
     // Codigo recibidos
