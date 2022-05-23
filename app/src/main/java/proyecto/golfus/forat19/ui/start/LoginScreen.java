@@ -130,7 +130,7 @@ public class LoginScreen extends AppCompatActivity implements Observer{
 
         // Comprobamos si hemos recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply){
-            Utils.showSnack(view, R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+            Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             LoginScreen.loading.post(() -> LoginScreen.loading.setVisibility(View.GONE));
 
         }else if (arg instanceof Message){

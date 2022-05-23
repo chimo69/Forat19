@@ -169,49 +169,50 @@ public class MyAccount extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // comprueba si ha recibido un objeto Reply que será un error de conexión
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-        } else if (arg instanceof Message) {
-            request = (Message) arg;
-            String command = request.getCommand();
-            //user = (Users) request.getObject();
+                } else if (arg instanceof Message) {
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
 
-            switch (command) {
-                case Global.GET_USER:
-                    if (request.getParameters().equals(Global.OK)) {
-
-                        Log.d(Global.TAG, "USUARIO: " + ((Users) request.getObject()).getUsername());
-                        Log.d(Global.TAG, "NOMBRE: " + ((Users) request.getObject()).getName());
-                        Log.d(Global.TAG, "MAIL: " + ((Users) request.getObject()).getEmail());
-                        Log.d(Global.TAG, "-------------------------------------------------");
-                        changeText();
-                        getTypePlayers();
-                    }
-                    break;
-
-                case Global.DELETE_USER:
-                    if (request.getParameters().equals(Global.OK)) {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Utils.showToast(getActivity(), R.string.Account_deleted, Toast.LENGTH_LONG);
+                    switch (command) {
+                        case Global.GET_USER:
+                            if (parameter.equals(Global.OK)) {
+                                user = (Users) request.getObject();
+                                Log.d(Global.TAG, "USUARIO: " + ((Users) request.getObject()).getUsername());
+                                Log.d(Global.TAG, "NOMBRE: " + ((Users) request.getObject()).getName());
+                                Log.d(Global.TAG, "MAIL: " + ((Users) request.getObject()).getEmail());
+                                Log.d(Global.TAG, "-------------------------------------------------");
+                                changeText();
+                                getTypePlayers();
                             }
-                        });
-                        Intent intent = new Intent(getActivity(), LoginScreen.class);
-                        startActivity(intent);
-                    } else {
-                        Utils.showSnack(getView(), R.string.Not_possible_to_delete_account, Snackbar.LENGTH_LONG);
-                    }
-                case Global.LIST_USER_PLAYER:
-                    if (request.getParameters().equals(Global.OK)) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            break;
+
+                        case Global.DELETE_USER:
+                            if (parameter.equals(Global.OK)) {
+
+
+                                Utils.showToast(getActivity(), R.string.Account_deleted, Toast.LENGTH_LONG);
+
+                                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                startActivity(intent);
+                            } else {
+                                Utils.showSnack(getView(), R.string.Not_possible_to_delete_account, Snackbar.LENGTH_LONG);
+                            }
+                        case Global.LIST_USER_PLAYER:
+                            if (parameter.equals(Global.OK)) {
+
                                 listPlayers = (ArrayList<Players>) request.getObject();
                                 if (listPlayers.size() > 0) {
                                     adapterPlayersList = new AdapterPlayerTypeList(listPlayers, getContext());
@@ -224,37 +225,32 @@ public class MyAccount extends Fragment implements Observer {
                                             Log.d(Global.TAG, "Jugador seleccionado: " + listPlayers.get(recyclerView.getChildAdapterPosition(v)).getPlayer_type().getPlayer_type());
                                             Fragment fragment = new Player(listPlayers.get(recyclerView.getChildAdapterPosition(v)));
                                             cvInfoPlayer.setVisibility(View.VISIBLE);
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_infoPlayer, fragment).commit();
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_infoPlayer, fragment).addToBackStack(null).commit();
                                         }
                                     });
                                 } else {
                                     infoPlayers.setText("No dispone de jugadores");
-
                                 }
+
                             }
-                        });
-                    }
-                    break;
+                            break;
 
-                case Global.LIST_USER_RELATIONSHIP_O:
-                    listRequest = (ArrayList<User_Relationships>) request.getObject();
+                        case Global.LIST_USER_RELATIONSHIP_O:
+                            listRequest = (ArrayList<User_Relationships>) request.getObject();
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+
                             if (listRequest.size() > 0) {
                                 cvNumber.setVisibility(View.VISIBLE);
                                 numberRequest.setText(String.valueOf(listRequest.size()));
                             } else {
                                 cvNumber.setVisibility(View.GONE);
                             }
-                        }
-                    });
-                    break;
+
+                            break;
+                    }
+                }
             }
-
-        }
-
+        });
     }
 
     /**
@@ -268,11 +264,11 @@ public class MyAccount extends Fragment implements Observer {
             @Override
             public void run() {
 
-                String userName = ((Users) request.getObject()).getUsername();
-                String phone = ((Users) request.getObject()).getPhone();
-                String email = ((Users) request.getObject()).getEmail();
-                String name = ((Users) request.getObject()).getName();
-                String address = (((Users) request.getObject()).getAddress());
+                String userName = user.getUsername();
+                String phone = user.getPhone();
+                String email = user.getEmail();
+                String name = user.getName();
+                String address = user.getAddress();
                 if (email == null) {
                     email = "-";
                 }
@@ -325,7 +321,6 @@ public class MyAccount extends Fragment implements Observer {
      */
     private void deleteUser() {
         //Utils.sendRequest(getActivity(), Global.DELETE_USER, null, user);
-        user = (Users) request.getObject();
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.DELETE_USER, null, user);
         RequestServer request = new RequestServer();
         request.request(message);

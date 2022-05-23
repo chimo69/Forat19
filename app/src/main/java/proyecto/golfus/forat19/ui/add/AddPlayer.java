@@ -88,25 +88,24 @@ public class AddPlayer extends Fragment implements Observer {
         });
         loadPlayerTypes();
 
+        //Comobox de tipos de jugador
         playerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                playerTypeSelected =  objectPlayerTypes.get(position).getId_player_type();
+                playerTypeSelected = objectPlayerTypes.get(position).getId_player_type();
                 playerTypesSelected = objectPlayerTypes.get(position);
-                Log.d(Global.TAG,"Tipo jugador seleccionado: "+playerTypeSelected+" - "+ objectPlayerTypes.get(position).getPlayer_type());
+                Log.d(Global.TAG, "Tipo jugador seleccionado: " + playerTypeSelected + " - " + objectPlayerTypes.get(position).getPlayer_type());
                 loadDataPlayer();
                 listPlayerData.clear();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
         return view;
 
     }
-
 
 
     /**
@@ -118,56 +117,62 @@ public class AddPlayer extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-        } else {
-
-            request = (Message) arg;
-
-            if (request.getCommand().equals(Global.LIST_PLAYER_TYPE)) {
-
-                objectPlayerTypes =  (ArrayList<Player_Types>)request.getObject();
-
-                Log.d(Global.TAG, "Tipos de juegadores recibidos: " + objectPlayerTypes.size());
-
-                for (int i = 0; i < objectPlayerTypes.size(); i++) {
-                    listPlayerTypes.add(objectPlayerTypes.get(i).getPlayer_type());
-                    Log.d(Global.TAG, "Tipo jugador: " + objectPlayerTypes.get(i).getPlayer_type());
-                }
-                Log.d(Global.TAG,"-------------------------------------------------");
-               getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listPlayerTypes);
-                        playerType.setAdapter(adapter);
-
-                    }
-                });
-            } else if (request.getCommand().equals(Global.LIST_PLAYER_DATA)){
-
-                playerData = (ArrayList<Player_Data>) request.getObject();
-
-                for (Player_Data p: (ArrayList<Player_Data>)request.getObject()){
-                    listPlayerData.add (p.getPlayer_data());
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapterDataList = new AdapterDataList(listPlayerData);
-                        recyclerView.setAdapter(adapterDataList);
-                    }
-                });
-            } else if (request.getCommand().equals(Global.ADD_PLAYER)){
-                Fragment fragment = new Principal();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-            }
+        if (getActivity() == null) {
+            return;
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                } else {
+                    request = (Message) arg;
+                    String command = ((Message) arg).getCommand();
+                    String parameter = ((Message) arg).getParameters();
+
+                    switch (command) {
+                        case Global.LIST_PLAYER_TYPE:
+                            if (parameter.equals(Global.OK)) {
+                                objectPlayerTypes = (ArrayList<Player_Types>) request.getObject();
+
+                                Log.d(Global.TAG, "Tipos de juegadores recibidos: " + objectPlayerTypes.size());
+
+                                for (int i = 0; i < objectPlayerTypes.size(); i++) {
+                                    listPlayerTypes.add(objectPlayerTypes.get(i).getPlayer_type());
+                                    Log.d(Global.TAG, "Tipo jugador: " + objectPlayerTypes.get(i).getPlayer_type());
+                                }
+                                Log.d(Global.TAG, "-------------------------------------------------");
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listPlayerTypes);
+                                playerType.setAdapter(adapter);
+                            }
+                            break;
+                        case Global.LIST_PLAYER_DATA:
+                            if (parameter.equals(Global.OK)) {
+                                playerData = (ArrayList<Player_Data>) request.getObject();
+
+                                for (Player_Data p : (ArrayList<Player_Data>) request.getObject()) {
+                                    listPlayerData.add(p.getPlayer_data());
+                                }
+                                adapterDataList = new AdapterDataList(listPlayerData);
+                                recyclerView.setAdapter(adapterDataList);
+                            }
+                            break;
+                        case Global.ADD_PLAYER:
+                            Fragment fragment = new Principal();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                            break;
+                    }
+                }
+            }
+        });
+
     }
 
     /**
      * <b>Lanza mensaje para la carga de tipos de jugador</b><br>
      * Mensaje = (token¬device, ListPlayerType, null, null)
+     *
      * @author Antonio Rodríguez Sirgado
      */
     public void loadPlayerTypes() {
@@ -180,9 +185,10 @@ public class AddPlayer extends Fragment implements Observer {
     /**
      * <b>Lanza mensaje para la carga de informacion a rellenar por tipo de jugador</b><br>
      * Mensaje = (token¬device, ListPlayerData, tipo de jugador seleccionado, null)
+     *
      * @author Antonio Rodríguez Sirgado
      */
-    public void loadDataPlayer(){
+    public void loadDataPlayer() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_PLAYER_DATA, Integer.toString(playerTypeSelected), null);
         RequestServer request = new RequestServer();
         request.request(message);
@@ -192,18 +198,19 @@ public class AddPlayer extends Fragment implements Observer {
     /**
      * <b>Rellena el DataPlayer con todos los PlayerInformation y envia el mensaje al servidor</b><br>
      * Mensaje = (token¬device, AddPlayer, null, new Player)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void sendDataPlayers() {
         String[] dataEntries = adapterDataList.getDataEntries();
         List<Player_Information> listData = new ArrayList<>();
 
-        for (int i =0; i <playerData.size();i++){
+        for (int i = 0; i < playerData.size(); i++) {
             Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), playerData.get(i), dataEntries[i]);
             listData.add(playerInformation);
         }
 
-        Players newPlayer = new Players(0, playerTypesSelected, Global.activeUser,null, listData);
+        Players newPlayer = new Players(0, playerTypesSelected, Global.activeUser, null, listData);
 
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.ADD_PLAYER, null, newPlayer);
         RequestServer request = new RequestServer();

@@ -6,26 +6,15 @@ package proyecto.golfus.forat19.utils;
  */
 public class Reply {
     Boolean timeOut;
-    int typeError;
+    int error;
 
     public int getTypeError() {
-        return typeError;
+        return error;
     }
 
-    public void setTypeError(int typeError) {
-        this.typeError = typeError;
-    }
-
-    public Boolean getTimeOut() {
-        return timeOut;
-    }
-
-    public void setTimeOut(Boolean timeOut) {
+    public Reply(Boolean timeOut, int error) {
         this.timeOut = timeOut;
+        this.error = error;
     }
 
-    public Reply(Boolean timeOut, int typeError) {
-        this.timeOut = timeOut;
-        this.typeError = typeError;
-    }
 }

@@ -17,7 +17,7 @@ import Forat19.Users;
 import proyecto.golfus.forat19.*;
 
 /**
- * Adaptador encargado de rellenar el RecyclerView de usuarios *
+ * Adaptador encargado de rellenar el RecyclerView de usuarios
  *
  * @author Antonio Rodriguez Sirgado
  */

@@ -245,10 +245,7 @@ public class AddUser extends AppCompatActivity implements Observer {
                 Intent intent = new Intent(AddUser.this, LoginScreen.class);
                 startActivity(intent);
 
-
             }
         }
-
     }
-
 }

@@ -165,18 +165,40 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
     }
 
     /**
-     * <b>Carga info del tipo de recorrido</b><br>
-     * Mensaje = (token¬device, getGolfCourseType, id tipoRecorrido, null)
+     * Permanece a la espera de que las variables cambien
      *
-     * @param id recorrido a mostrar
-     * @author Antonio Rodríguez Sirgado
+     * @param o   la clase observada
+     * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
-    private void loadCourseType(int id) {
-        //Utils.sendRequest(getActivity(), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+    @Override
+    public void update(Observable o, Object arg) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+                } else if (arg instanceof Message) {
+
+                    request = (Message) arg;
+                    String parameter = ((Message) arg).getParameters();
+                    String command = ((Message) arg).getCommand();
+                    if (command.equals(Global.OK)){
+                        if (parameter.equals(Global.OK)) {
+                            courseType = ((Golf_Course_Types) request.getObject()).getGolf_course_type();
+                            showInfo();
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -220,36 +242,6 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment).commit();
     }
 
-    /**
-     * Permanece a la espera de que las variables cambien
-     *
-     * @param o   la clase observada
-     * @param arg objeto observado
-     * @author Antonio Rodriguez Sirgado
-     */
-    @Override
-    public void update(Observable o, Object arg) {
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
-        } else if (arg instanceof Message) {
-
-            request = (Message) arg;
-            String command = request.getCommand();
-
-            if (command.equals(Global.GET_GOLF_COURSE_TYPE)) {
-                courseType = ((Golf_Course_Types) request.getObject()).getGolf_course_type();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showInfo();
-                    }
-                });
-            }
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -338,5 +330,20 @@ public class Course extends Fragment implements View.OnClickListener, Observer {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.holeContainer, fragment, "updateCourse").commit();
                 break;
         }
+    }
+
+    /**
+     * <b>Carga info del tipo de recorrido</b><br>
+     * Mensaje = (token¬device, getGolfCourseType, id tipoRecorrido, null)
+     *
+     * @param id recorrido a mostrar
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void loadCourseType(int id) {
+        //Utils.sendRequest(getActivity(), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.GET_GOLF_COURSE_TYPE, Integer.toString(id), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 }

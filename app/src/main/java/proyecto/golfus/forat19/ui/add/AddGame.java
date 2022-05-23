@@ -1,5 +1,7 @@
 package proyecto.golfus.forat19.ui.add;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,10 +18,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,11 +40,9 @@ import Forat19.Golf_Game_Types;
 import Forat19.Golf_Games;
 import Forat19.Message;
 import Forat19.Players;
-import Forat19.Users;
 import proyecto.golfus.forat19.Global;
 import proyecto.golfus.forat19.R;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
-import proyecto.golfus.forat19.adapterList.AdapterFriendshipList;
 import proyecto.golfus.forat19.adapterList.AdapterPlayersList;
 import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
@@ -55,9 +57,9 @@ import proyecto.golfus.forat19.utils.Utils;
 public class AddGame extends Fragment implements Observer {
 
     private Golf_Games game;
-    private Button createGame;
+    private Button createGame, changeDate, changeHour;
     private ImageButton deleteCourse;
-    private TextView txtNumberOfGamers, txtCourseSelected;
+    private TextView txtNumberOfGamers, txtCourseSelected, txtTitle, txtHour, txtDate;
     private Spinner gameType;
     private List<String> listCourseType = new ArrayList<String>();
     private List<String> listGameType = new ArrayList<String>();
@@ -73,6 +75,7 @@ public class AddGame extends Fragment implements Observer {
     private Golf_Courses courseSelected;
     private Golf_Game_Types golfGameTypesSelected;
     private Boolean update;
+    private int dayGame, monthGame, yearGame, hourGame, minutesGame;
 
     private Message request;
 
@@ -84,9 +87,9 @@ public class AddGame extends Fragment implements Observer {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             game = (Golf_Games) getArguments().getSerializable("game");
-            update= true;
+            update = true;
         } else {
-            update=false;
+            update = false;
         }
 
     }
@@ -107,12 +110,55 @@ public class AddGame extends Fragment implements Observer {
         cv_number = view.findViewById(R.id.createGame_cvNumber);
         createGame = view.findViewById(R.id.createGame_btnCreateGame);
         deleteCourse = view.findViewById(R.id.createGame_btnDeleteCourse);
+        changeDate = view.findViewById(R.id.btn_addGame_changeData);
+        changeHour = view.findViewById(R.id.btn_addGame_ChangeHour);
         searchFriendsList = view.findViewById(R.id.newGame_searchFriend);
         searchCoursesList = view.findViewById(R.id.newGame_searchCourse);
         txtNumberOfGamers = view.findViewById(R.id.createGame_number);
         txtCourseSelected = view.findViewById(R.id.createGame_selectCourse);
+        txtTitle = view.findViewById(R.id.txt_addGame_title);
+        txtHour = view.findViewById(R.id.txt_addGame_hour);
+        txtDate = view.findViewById(R.id.txt_addGame_date);
 
         listPlayersSelected = new ArrayList<>();
+
+        // Boton cambio de fecha
+        changeDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dayGame = Utils.dateToInt(game.getGame_date(), "d");
+                monthGame = Utils.dateToInt(game.getGame_date(), "m");
+                yearGame = Utils.dateToInt(game.getGame_date(), "y");
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        txtDate.setText(dayOfMonth + "/" + month + "/" + year);
+                    }
+                }, yearGame, monthGame, dayGame);
+
+                datePickerDialog.show();
+            }
+        });
+
+        // Boton cambio de hora
+        changeHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                hourGame = Utils.timeToInt(game.getGame_hour(), "h");
+                minutesGame = Utils.timeToInt(game.getGame_hour(), "m");
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.DialogTheme, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtHour.setText(hourOfDay + ":" + minute);
+                    }
+                }, hourGame, minutesGame, true);
+                timePickerDialog.show();
+            }
+        });
 
         // Boton de seleccion de tipo de juego
         gameType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -131,7 +177,11 @@ public class AddGame extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
                 if (listPlayersSelected.size() > 0) {
-                    sendNewGame();
+                    if (update) {
+                        sendUpdateGame();
+                    } else {
+                        sendNewGame();
+                    }
                 } else {
                     Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
                 }
@@ -159,6 +209,7 @@ public class AddGame extends Fragment implements Observer {
             }
         });
 
+        // Campo de busqueda de recorridos
         searchCoursesList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -168,6 +219,20 @@ public class AddGame extends Fragment implements Observer {
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapterCoursesList.filter(newText);
+                return false;
+            }
+        });
+
+        // Campo de busqueda de jugadores
+        searchFriendsList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterPlayerFriendsList.filter(newText);
                 return false;
             }
         });
@@ -182,29 +247,34 @@ public class AddGame extends Fragment implements Observer {
         adapterPlayersSelectedList = new AdapterPlayersList(listPlayersSelected);
         rw_players.setAdapter(adapterPlayersSelectedList);
 
-        // Campo de busqueda de recorridos
-        searchCoursesList.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         loadGameType();
+        loadFriendsWithThisGamer();
 
-        if (update){
+        if (update) {
+            createGame.setText(R.string.update_game);
             txtCourseSelected.setText(game.getGolf_course().getGolf_course());
             rw_courses.setVisibility(View.GONE);
             courseSelected = game.getGolf_course();
             isCourseSelected(true);
             deleteCourse.setVisibility(View.INVISIBLE);
+            txtTitle.setText(R.string.update_game);
+            golfGameTypesSelected = game.getGolf_game_type();
+            for (Golf_Game_Players g : game.getGolf_game_players()) {
+                listPlayersSelected.add(g.getPlayer());
+            }
+            txtDate.setText(Utils.changeDateFormat(game.getGame_date()));
+            txtHour.setText(game.getGame_hour());
+
+            showSelectPlayer();
         } else {
-            loadFriendsWithThisGamer();
+            txtHour.setVisibility(View.GONE);
+            txtDate.setVisibility(View.GONE);
+            changeHour.setVisibility(View.GONE);
+            changeDate.setVisibility(View.GONE);
             loadCoursesRelated();
+            listPlayersSelected.add(Global.activePlayer);
         }
 
-
-        listPlayersSelected.add(Global.activePlayer);
 
         adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
         txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
@@ -222,122 +292,122 @@ public class AddGame extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-        } else {
 
-            request = (Message) arg;
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                } else {
+                    request = (Message) arg;
+                    String command = ((Message) arg).getCommand();
+                    String parameter = ((Message) arg).getParameters();
 
-            switch (((Message) arg).getCommand()) {
+                    switch (command) {
 
-                case Global.LIST_GOLF_GAME_TYPE:
+                        case Global.LIST_GOLF_GAME_TYPE:
 
-                    golfGameTypes = (ArrayList<Golf_Game_Types>) request.getObject();
-                    Log.d(Global.TAG, "Tipos de juego recibidos: " + golfGameTypes.size());
+                            if (parameter.equals(Global.OK)) {
+                                golfGameTypes = (ArrayList<Golf_Game_Types>) request.getObject();
+                                Log.d(Global.TAG, "Tipos de juego recibidos: " + golfGameTypes.size());
 
-                    for (int i = 0; i < golfGameTypes.size(); i++) {
-                        listGameType.add(golfGameTypes.get(i).getGolf_game_type());
-                        Log.d(Global.TAG, "Tipo de juego: " + golfGameTypes.get(i).getGolf_game_type());
-                    }
-                    Log.d(Global.TAG, "-------------------------------------------------");
+                                for (int i = 0; i < golfGameTypes.size(); i++) {
+                                    listGameType.add(golfGameTypes.get(i).getGolf_game_type());
+                                    Log.d(Global.TAG, "Tipo de juego: " + golfGameTypes.get(i).getGolf_game_type());
+                                }
+                                Log.d(Global.TAG, "-------------------------------------------------");
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listGameType);
-                            gameType.setAdapter(adapter);
+                                ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listGameType);
+                                gameType.setAdapter(adapter);
 
-                            if (update) {
-                                gameType.setSelection(listGameType.indexOf(game.getGolf_game_type().getGolf_game_type()));
-                                gameType.setEnabled(false);
+                                if (update) {
+                                    gameType.setSelection(listGameType.indexOf(game.getGolf_game_type().getGolf_game_type()));
+                                    gameType.setEnabled(false);
+                                }
                             }
 
-                        }
-                    });
-                    break;
-                case Global.LIST_GOLF_GAME_PLAYER:
+                            break;
+                        case Global.LIST_GOLF_GAME_PLAYER:
 
-                    request = (Message) arg;
-                    listPlayerFriends = (ArrayList<Players>) request.getObject();
+                            if (parameter.equals(Global.OK)) {
+                                listPlayerFriends = (ArrayList<Players>) request.getObject();
 
-                    Log.d(Global.TAG, "Jugadores recibidos: " + listPlayerFriends.size());
-                    for (Players p : listPlayerFriends) {
-                        Log.d(Global.TAG, "Jugador recibido: " + p.getUser().getUsername());
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapterPlayerFriendsList = new AdapterPlayersList(listPlayerFriends);
-                            rw_friends.setAdapter(adapterPlayerFriendsList);
-                            adapterPlayerFriendsList.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (listPlayerFriends.size() < Global.MAX_GAMERS) {
-                                        boolean idFound = false;
-                                        for (Players p : listPlayersSelected) {
-                                            if (listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)).getId_player() == p.getId_player()) {
-                                                idFound = true;
+                                Log.d(Global.TAG, "Jugadores recibidos: " + listPlayerFriends.size());
+                                for (Players p : listPlayerFriends) {
+                                    Log.d(Global.TAG, "Jugador recibido: " + p.getUser().getUsername());
+                                }
+
+                                adapterPlayerFriendsList = new AdapterPlayersList(listPlayerFriends);
+                                rw_friends.setAdapter(adapterPlayerFriendsList);
+                                adapterPlayerFriendsList.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (listPlayerFriends.size() < Global.MAX_GAMERS) {
+                                            boolean idFound = false;
+                                            for (Players p : listPlayersSelected) {
+                                                if (listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)).getId_player() == p.getId_player()) {
+                                                    idFound = true;
+                                                }
                                             }
-                                        }
-                                        if (!idFound) {
-                                            listPlayersSelected.add(listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)));
-                                            adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
-                                            txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
+                                            if (!idFound) {
+                                                listPlayersSelected.add(listPlayerFriends.get(rw_friends.getChildAdapterPosition(v)));
+                                                adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
+                                                txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
+                                            } else {
+                                                Utils.showSnack(getView(), getString(R.string.player_already_in_the_match), Snackbar.LENGTH_LONG);
+                                            }
                                         } else {
-                                            Utils.showSnack(getView(), getString(R.string.player_already_in_the_match), Snackbar.LENGTH_LONG);
+                                            Utils.showSnack(getView(), getString(R.string.match_is_complete), Snackbar.LENGTH_LONG);
                                         }
-                                    } else {
-                                        Utils.showSnack(getView(), getString(R.string.match_is_complete), Snackbar.LENGTH_LONG);
                                     }
-                                }
-                            });
-                        }
-                    });
+                                });
+                            }
 
-                    break;
+                            break;
 
-                case Global.LIST_GOLF_GAME_COURSE:
-                    request = (Message) arg;
-                    listCourses = (ArrayList<Golf_Courses>) request.getObject();
+                        case Global.LIST_GOLF_GAME_COURSE:
 
-                    Log.d(Global.TAG, "Recorridos recibidos: " + listCourses.size());
+                            if (parameter.equals(Global.OK)) {
+                                listCourses = (ArrayList<Golf_Courses>) request.getObject();
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapterCoursesList = new AdapterCoursesList(listCourses, getContext());
-                            rw_courses.setAdapter(adapterCoursesList);
-                            adapterCoursesList.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    showSelectPlayer();
-                                    Log.d(Global.TAG, String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v))));
-                                    txtCourseSelected.setText(String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v)).getGolf_course()));
-                                    rw_courses.setVisibility(View.GONE);
-                                    isCourseSelected(true);
-                                    courseSelected = listCourses.get(rw_courses.getChildAdapterPosition(v));
+                                Log.d(Global.TAG, "Recorridos recibidos: " + listCourses.size());
 
-
-                                }
-                            });
-                        }
-                    });
-                    break;
-
-                case Global.ADD_GOLF_GAME:
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utils.showSnack(getView(), "Juego creado con éxito", Snackbar.LENGTH_LONG);
-                            Fragment fragment = new Principal();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
-                        }
-                    });
-                    break;
+                                adapterCoursesList = new AdapterCoursesList(listCourses, getContext());
+                                rw_courses.setAdapter(adapterCoursesList);
+                                adapterCoursesList.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        showSelectPlayer();
+                                        Log.d(Global.TAG, String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v))));
+                                        txtCourseSelected.setText(String.valueOf(listCourses.get(rw_courses.getChildAdapterPosition(v)).getGolf_course()));
+                                        rw_courses.setVisibility(View.GONE);
+                                        isCourseSelected(true);
+                                        courseSelected = listCourses.get(rw_courses.getChildAdapterPosition(v));
+                                    }
+                                });
+                            }
+                            break;
+                        case Global.ADD_GOLF_GAME:
+                            if (parameter.equals(Global.OK)) {
+                                Utils.showSnack(getView(), "Juego creado con éxito", Snackbar.LENGTH_LONG);
+                                Fragment fragment = new Principal();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                            }
+                            break;
+                        case Global.UPDATE_GOLF_GAME:
+                            if (parameter.equals(Global.OK)) {
+                                Utils.showSnack(getView(), "Juego actualizado con éxito", Snackbar.LENGTH_LONG);
+                                Fragment fragment = new Principal();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                            }
+                            break;
+                    }
+                }
             }
-        }
+        });
     }
 
     /**
@@ -382,6 +452,12 @@ public class AddGame extends Fragment implements Observer {
     }
 
 
+    /**
+     * <b>Envia el mensaje para guardar el nuevo partido</b><br>
+     * Mensaje = (token¬device, addGolfGame, id Player, new game)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
     private void sendNewGame() {
 
         createListGolfGamers();
@@ -400,6 +476,22 @@ public class AddGame extends Fragment implements Observer {
         request.addObserver(this);
     }
 
+    private void sendUpdateGame() {
+        createListGolfGamers();
+
+        String hourGame = txtHour.getText().toString();
+        int dateGame = Utils.changeDateFormat(txtDate.getText().toString());
+
+        Golf_Games updatedGame = new Golf_Games(game.getId_golf_game(), courseSelected, golfGameTypesSelected, null, dateGame, hourGame, 0, Global.CREATE, golfGamePlayersSend);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_GOLF_GAME, Integer.toString(Global.activePlayer.getId_player()), updatedGame);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * Crea un objeto Golf_Game_players con todos los jugadores para crear una partida
+     */
     private void createListGolfGamers() {
         for (Players p : listPlayersSelected) {
             Golf_Game_Players ggp = new Golf_Game_Players(0, p, 0, 0);

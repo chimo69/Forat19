@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment que muestra al Admin los datos del usuario para poder gestionarlo
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class UpdateUserAdmin extends Fragment implements Observer {
@@ -63,7 +65,7 @@ public class UpdateUserAdmin extends Fragment implements Observer {
     private CheckBox checkActiveUser, checkAdminUser;
     private Users user;
     private Message request;
-    private Boolean passwordChanged=false;
+    private Boolean passwordChanged = false;
     private Spinner combobox;
     private static ProgressBar loading;
     private ArrayList<String> user_types;
@@ -111,14 +113,14 @@ public class UpdateUserAdmin extends Fragment implements Observer {
         phone = view.findViewById(R.id.user_call);
         mail = view.findViewById(R.id.user_mail);
 
-        title=view.findViewById(R.id.AccountAdminTitle);
-        logo=view.findViewById(R.id.AccountAdminLogo);
+        title = view.findViewById(R.id.AccountAdminTitle);
+        logo = view.findViewById(R.id.AccountAdminLogo);
         update = view.findViewById(R.id.AccountAdminBtnUpdate);
         layoutPassword = view.findViewById(R.id.LayoutAccountAdminPassword);
         layoutRePassword = view.findViewById(R.id.LayoutAccountAdminRePassword);
         password = view.findViewById(R.id.accountAdminPassword);
         rePassword = view.findViewById(R.id.accountAdminRePassword);
-        loading= view.findViewById(R.id.accountAdminLoading);
+        loading = view.findViewById(R.id.accountAdminLoading);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
         txtId.setText(String.format("%06d", user.getId_user()));
@@ -132,16 +134,15 @@ public class UpdateUserAdmin extends Fragment implements Observer {
 
         loadTypeUsers();
 
-
         combobox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(Global.TAG,"Item seleccionado: "+parent.getItemAtPosition(position));
-                Log.d(Global.TAG,"-------------------------------------------------");
+                Log.d(Global.TAG, "Item seleccionado: " + parent.getItemAtPosition(position));
+                Log.d(Global.TAG, "-------------------------------------------------");
                 TypeUserSelected = position;
-                if (position==0){
+                if (position == 0) {
                     logo.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     logo.setVisibility(View.INVISIBLE);
                 }
             }
@@ -156,10 +157,10 @@ public class UpdateUserAdmin extends Fragment implements Observer {
 
         checkActiveUser.setChecked(true);
 
-        if (user.getId_user_type()!= Global.TYPE_ADMIN_USER){
+        if (user.getId_user_type() != Global.TYPE_ADMIN_USER) {
             logo.setVisibility(View.INVISIBLE);
         }
-        if (user.getActive().equals("N")){
+        if (user.getActive().equals("N")) {
             title.setBackgroundColor(getResources().getColor(R.color.error));
             checkActiveUser.setChecked(false);
         }
@@ -168,14 +169,13 @@ public class UpdateUserAdmin extends Fragment implements Observer {
         checkActiveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkActiveUser.isChecked()){
+                if (checkActiveUser.isChecked()) {
                     title.setBackgroundColor(getResources().getColor(R.color.green));
-                }else{
+                } else {
                     title.setBackgroundColor(getResources().getColor(R.color.error));
                 }
             }
         });
-
 
 
         // Boton actualizar
@@ -191,14 +191,14 @@ public class UpdateUserAdmin extends Fragment implements Observer {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int permissionCheck = ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CALL_PHONE);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},123);
-                }else{
-                Intent i = new Intent(Intent.ACTION_CALL);
-                i.setData(Uri.parse("tel:"+user.getPhone()));
+                int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 123);
+                } else {
+                    Intent i = new Intent(Intent.ACTION_CALL);
+                    i.setData(Uri.parse("tel:" + user.getPhone()));
 
-                startActivity(i);
+                    startActivity(i);
 
                 }
             }
@@ -215,8 +215,8 @@ public class UpdateUserAdmin extends Fragment implements Observer {
 
                 try {
                     startActivity(i);
-                }catch (android.content.ActivityNotFoundException ex){
-                    Utils.showToast(getActivity(),getString(R.string.mail_manager_error), Toast.LENGTH_SHORT);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Utils.showToast(getActivity(), getString(R.string.mail_manager_error), Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -225,64 +225,67 @@ public class UpdateUserAdmin extends Fragment implements Observer {
 
     /**
      * Permanece a la espera de que el objeto observado varie
-     * @author Antonio Rodriguez Sirgado
-     * @param o clase observada
+     *
+     * @param o   clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-        } else {
 
-            request = (Message) arg;
-
-            if (request.getCommand().equals(Global.LIST_USER_TYPES)){
-
-                object_user_types = (ArrayList<User_Types>) request.getObject();
-
-                for (int i = 0; i< object_user_types.size(); i++){
-                  user_types.add(object_user_types.get(i).getUser_type());
-                  Log.d(Global.TAG,"Tipo jugador: "+ object_user_types.get(i).getUser_type());
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, user_types);
-                        combobox.setAdapter(adapter);
-                        combobox.setSelection(user.getId_user_type());
-
-                    }
-                });
-
-            }
-            else if (request.getCommand().equals(Global.UPDATE_USER)){
-                user = (Users) request.getObject();
-
-                if (request.getParameters().equals("Error:1")){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            layoutPassword.setError(getResources().getString(R.string.error_password));
-                        }
-                    });
-                } else if (request.getParameters().equals(Global.OK)) {
-                    Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
-                }
-            }
-
+        if (getActivity() == null) {
+            return;
         }
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                } else {
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
+
+                    switch (command) {
+                        case Global.LIST_USER_TYPES:
+                            if (parameter.equals(Global.OK)) {
+                                object_user_types = (ArrayList<User_Types>) request.getObject();
+
+                                for (int i = 0; i < object_user_types.size(); i++) {
+                                    user_types.add(object_user_types.get(i).getUser_type());
+                                    Log.d(Global.TAG, "Tipo jugador: " + object_user_types.get(i).getUser_type());
+                                }
+                                ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, user_types);
+                                combobox.setAdapter(adapter);
+                                combobox.setSelection(user.getId_user_type());
+                            }
+                            break;
+                        case Global.UPDATE_USER:
+                            user = (Users) request.getObject();
+
+                            if (parameter.equals("Error:1")) {
+                                layoutPassword.setError(getResources().getString(R.string.error_password));
+                            } else if (parameter.equals(Global.OK)) {
+                                Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
+
         UpdateUserAdmin.loading.post(() -> UpdateUserAdmin.loading.setVisibility(View.INVISIBLE));
     }
 
     /**
      * Comprueba que los 2 password coincidan y que se haya escrito algo
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void checkPassword() {
-        if (password.getText().toString().equals("") && rePassword.getText().toString().equals("")){
-            passwordChanged= false;
+        if (password.getText().toString().equals("") && rePassword.getText().toString().equals("")) {
+            passwordChanged = false;
             checkDataUser();
         } else {
 
@@ -293,7 +296,7 @@ public class UpdateUserAdmin extends Fragment implements Observer {
                 layoutRePassword.setError("*");
 
             } else {
-                passwordChanged=true;
+                passwordChanged = true;
                 checkDataUser();
                 Utils.hideKeyboard(getActivity());
 
@@ -305,11 +308,12 @@ public class UpdateUserAdmin extends Fragment implements Observer {
     /**
      * <b>Comprueba en el servidor que los datos modificados sean correctos</b><br>
      * Mensaje = (token¬device, updateUser, id usuario, usuario)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void checkDataUser() {
         String pass;
-        if (passwordChanged){
+        if (passwordChanged) {
             pass = password.getText().toString();
         } else {
             pass = user.getPassword();
@@ -317,14 +321,14 @@ public class UpdateUserAdmin extends Fragment implements Observer {
 
         UpdateUserAdmin.loading.post(() -> UpdateUserAdmin.loading.setVisibility(View.VISIBLE));
 
-        String activeUser="N";
+        String activeUser = "N";
 
-        if (checkActiveUser.isChecked()){
-            activeUser="Y";
+        if (checkActiveUser.isChecked()) {
+            activeUser = "Y";
         }
         Users toCheckUser = new Users(user.getId_user(), user.getUsername(), user.getName(), pass, TypeUserSelected, activeUser, user.getEmail(), user.getPhone(), user.getAddress());
         //Utils.sendRequest(getActivity(),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_USER, Utils.getActiveId(getActivity()), toCheckUser);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -333,11 +337,12 @@ public class UpdateUserAdmin extends Fragment implements Observer {
     /**
      * <b>Manda mensaje para cargar listado de tipos de usuario</b><br>
      * Mensaje = (token¬device, ListUserTypes, id usuario, null)
+     *
      * @author Antonio Rodriguez Sirgado
      */
-    private void loadTypeUsers(){
+    private void loadTypeUsers() {
         //Utils.sendRequest(getActivity(),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_TYPES, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

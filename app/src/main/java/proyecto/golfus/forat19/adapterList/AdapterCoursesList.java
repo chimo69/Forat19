@@ -104,6 +104,10 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         }
     }
 
+    /**
+     * Crea un listado con la busqueda realizada
+     * @param txtSearch texto que debe incluir la busqueda
+     */
     public void filter(String txtSearch) {
         int sizeText = txtSearch.length();
         if (sizeText == 0) {
@@ -112,7 +116,7 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
         } else {
             listCourses.clear();
             for (Golf_Courses l : listSearch) {
-                if (l.getGolf_course().toLowerCase().contains(txtSearch.toLowerCase()) || l.getGolf_course().toLowerCase().contains(txtSearch.toLowerCase())) {
+                if (l.getGolf_course().toLowerCase().contains(txtSearch.toLowerCase())) {
                     listCourses.add(l);
                 }
             }

@@ -46,7 +46,6 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     private AdapterInstallationsList adapterList;
     private Installations selectedInstallation;
 
-
     public InstallationsList() {
     }
 
@@ -79,31 +78,70 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
 
     }
 
-    /**
-     * <b>Pide al servidor informacion de las instalaciones</b>
-     * Mensaje = (token¬device, listInstallation, null, null)
-     * @author Antonio Rodríguez Sirgado
-     */
-    public void loadInstallations() {
-        //Utils.sendRequest(getActivity(),Global.LIST_INSTALLATIONS,null,null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_INSTALLATIONS,null,null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
 
     /**
-     * <b>Pide al servidor informacion de los recorridos</b><br>
-     * Mensaje = (token¬device, listGolfCourse, id instalacion, null)
-     * @author Antonio Rodríguez Sirgado
+     * Permanece a la espera de que las variables cambien
+     *
+     * @param o   la clase observada
+     * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
-    public void loadGolfCourse(int installationId) {
-        //Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
-        loading.setVisibility(View.VISIBLE);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
+    @Override
+    public void update(Observable o, Object arg) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // comprueba si ha recibido un objeto Reply que será un error de conexión
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+                } else if (arg instanceof Message) {
+
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
+
+                    if (command.equals(Global.LIST_INSTALLATIONS)) {
+
+                        if (parameter.equals(Global.OK)) {
+                            // Rellenamos el Arraylist con el objeto recibido
+                            listInstallations = (ArrayList<Installations>) request.getObject();
+                            adapterList = new AdapterInstallationsList(listInstallations, getContext());
+                            recyclerView.setAdapter(adapterList);
+                            adapterList.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Log.d(Global.TAG, "Instalación seleccionada: " + listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
+                                    Log.d(Global.TAG, "-------------------------------------------------");
+                                    selectedInstallation = listInstallations.get(recyclerView.getChildAdapterPosition(view));
+                                    loadGolfCourse(listInstallations.get(recyclerView.getChildAdapterPosition(view)).getId_installation());
+
+                                }
+                            });
+                        }
+
+                    } else if (command.equals(Global.LIST_GOLF_COURSES)) {
+
+                        if (parameter.equals(Global.OK)) {
+                            Fragment fragment = new Installation();
+                            Bundle args = new Bundle();
+
+                            args.putSerializable("installation", selectedInstallation);
+                            args.putSerializable("course", request);
+
+                            fragment.setArguments(args);
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                        }
+                    }
+                }
+                InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
+            }
+        });
     }
 
     @Override
@@ -124,61 +162,31 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     }
 
     /**
-     * Permanece a la espera de que las variables cambien
+     * <b>Pide al servidor informacion de las instalaciones</b>
+     * Mensaje = (token¬device, listInstallation, null, null)
      *
-     * @param o   la clase observada
-     * @param arg objeto observado
-     * @author Antonio Rodriguez Sirgado
+     * @author Antonio Rodríguez Sirgado
      */
-    @Override
-    public void update(Observable o, Object arg) {
-        // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+    public void loadInstallations() {
+        //Utils.sendRequest(getActivity(),Global.LIST_INSTALLATIONS,null,null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_INSTALLATIONS, null, null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
 
-        } else if (arg instanceof Message) {
-
-            request = (Message) arg;
-            String command = request.getCommand();
-
-            if (command.equals(Global.LIST_INSTALLATIONS)) {
-
-                // Rellenamos el Arraylist con el objeto recibido
-                listInstallations = (ArrayList<Installations>) request.getObject();
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapterList = new AdapterInstallationsList(listInstallations, getContext());
-                        recyclerView.setAdapter(adapterList);
-                        adapterList.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.d(Global.TAG, "Instalación seleccionada: " + listInstallations.get(recyclerView.getChildAdapterPosition(view)).getInstallation());
-                                Log.d(Global.TAG,"-------------------------------------------------");
-                                selectedInstallation = listInstallations.get(recyclerView.getChildAdapterPosition(view));
-                                loadGolfCourse(listInstallations.get(recyclerView.getChildAdapterPosition(view)).getId_installation());
-
-                            }
-                        });
-                    }
-                });
-            } else if (command.equals(Global.LIST_GOLF_COURSES)) {
-
-                Fragment fragment = new Installation();
-                Bundle args = new Bundle();
-
-                args.putSerializable("installation", selectedInstallation);
-                args.putSerializable("course", request);
-
-                fragment.setArguments(args);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-
-            }
-
-        }
-        InstallationsList.loading.post(() -> InstallationsList.loading.setVisibility(View.INVISIBLE));
+    /**
+     * <b>Pide al servidor informacion de los recorridos</b><br>
+     * Mensaje = (token¬device, listGolfCourse, id instalacion, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    public void loadGolfCourse(int installationId) {
+        //Utils.sendRequest(getActivity(),Global.LIST_GOLF_COURSES,Integer.toString(installationId),null);
+        loading.setVisibility(View.VISIBLE);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_COURSES, Integer.toString(installationId), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 }

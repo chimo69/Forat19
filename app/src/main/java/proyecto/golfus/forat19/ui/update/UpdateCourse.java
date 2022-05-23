@@ -89,9 +89,14 @@ public class UpdateCourse extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
+
+        if (getActivity() == null) {
+            return;
+        }
+
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+            Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
@@ -99,8 +104,9 @@ public class UpdateCourse extends Fragment implements Observer {
 
             request = (Message) arg;
             String command = request.getCommand();
+            String parameter = request.getParameters();
 
-            if (command.equals(Global.UPDATE_GOLF_COURSE)) {
+            if (command.equals(Global.UPDATE_GOLF_COURSE) && parameter.equals(Global.OK)) {
 
                 Fragment fragment = new Course();
                 Bundle args = new Bundle();

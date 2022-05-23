@@ -52,14 +52,6 @@ public class Player extends Fragment implements Observer {
         this.players = players;
     }
 
-    /*public static Player newInstance(String param1, String param2) {
-        Player fragment = new Player(listPlayers.get(recyclerView.getChildAdapterPosition(v)));
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,12 +90,12 @@ public class Player extends Fragment implements Observer {
         String[] dataEntries = adapterDataList.getDataEntries();
         List<Player_Information> listData = new ArrayList<>();
 
-        for (int i =0; i <listPlayerData.size();i++){
+        for (int i = 0; i < listPlayerData.size(); i++) {
             Player_Information playerInformation = new Player_Information(Integer.parseInt(Utils.getActiveId(getActivity())), player.getPlayer_information().get(i).getPlayer_data(), dataEntries[i]);
             listData.add(playerInformation);
         }
 
-        Players playerUpdated = new Players(player.getId_player(), player.getPlayer_type(), Global.activeUser,player.getActive(), listData);
+        Players playerUpdated = new Players(player.getId_player(), player.getPlayer_type(), Global.activeUser, player.getActive(), listData);
 
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_PLAYER, null, playerUpdated);
         RequestServer request = new RequestServer();
@@ -132,46 +124,48 @@ public class Player extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-        } else {
-            request = (Message) arg;
-
-            if (request.getCommand().equals(Global.GET_PLAYER)) {
-                player = (Players) request.getObject();
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        playerInformationList = (ArrayList<Player_Information>) player.getPlayer_information();
-                        String information [] = new String[playerInformationList.size()];
-
-                        for (int i=0;i<playerInformationList.size();i++){
-                            information[i] = playerInformationList.get(i).getValue();
-                            listPlayerData.add(playerInformationList.get(i).getPlayer_data().getPlayer_data());
-                            Log.d(Global.TAG,"Info: " + information[i] );
-                        }
-
-                        adapterDataList = new AdapterDataList(listPlayerData);
-                        adapterDataList.setDataEntries(information);
-
-                        recyclerView.setAdapter(adapterDataList);
-
-                    }
-                });
-            } else if (request.getCommand().equals(Global.UPDATE_PLAYER)){
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Utils.showSnack(getView(), "Player succesfully upgraded", Snackbar.LENGTH_LONG);
-                        Fragment fragment = new MyAccount();
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
-                    }
-                });
-            }
+        if (getActivity() == null) {
+            return;
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                } else {
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
+
+                    switch (command) {
+                        case Global.GET_PLAYER:
+                            if (parameter.equals(Global.OK)){
+                                player = (Players) request.getObject();
+                                playerInformationList = (ArrayList<Player_Information>) player.getPlayer_information();
+                                String information[] = new String[playerInformationList.size()];
+
+                                for (int i = 0; i < playerInformationList.size(); i++) {
+                                    information[i] = playerInformationList.get(i).getValue();
+                                    listPlayerData.add(playerInformationList.get(i).getPlayer_data().getPlayer_data());
+                                    Log.d(Global.TAG, "Info: " + information[i]);
+                                }
+
+                                adapterDataList = new AdapterDataList(listPlayerData);
+                                adapterDataList.setDataEntries(information);
+
+                                recyclerView.setAdapter(adapterDataList);
+                            }
+                            break;
+                        case Global.UPDATE_PLAYER:
+                            if (parameter.equals(Global.OK)){
+                                Utils.showSnack(getView(), "Player succesfully upgraded", Snackbar.LENGTH_LONG);
+                                Fragment fragment = new MyAccount();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                                break;
+                            }
+                    }
+                }
+            }
+        });
     }
 }

@@ -319,6 +319,71 @@ public class Utils extends AppCompatActivity {
         return dateGame.substring(6,8)+"/" +dateGame.substring(4,6) + "/" + dateGame.substring(0,4);
     }
 
+    /**
+     * Cambia el formato entero americano a texto español
+     * @param date fecha a formatear
+     * @return fecha formateada
+     */
+    public static int changeDateFormat (String date) {
+        String day = date.substring(0,2);
+        String month = date.substring(3,5);
+        String year = date.substring(6,10);
+
+        Log.d(Global.TAG, date);
+        Log.d(Global.TAG, day);
+        Log.d(Global.TAG, month);
+        Log.d(Global.TAG, year);
+
+        String dateInt = year+month+day;
+        return Integer.parseInt(dateInt);
+    }
+
+
+
+    /**
+     * Convierte en Int la fecha pasada por argumento
+     * @param date fecha en formato string
+     * @param t parte de la fecha a coger (d=day;m=month,y=year)
+     * @return fecha convertida a int
+     * @author Antonio Rodríguez Sirgado
+     */
+    public static int dateToInt (int date, String t){
+        String dateInt = String.valueOf(date);
+        switch (t){
+            case "d":
+                String day = dateInt.substring(6,8);
+                return Integer.parseInt(day);
+            case "m":
+                String month = dateInt.substring(4,6);
+                return Integer.parseInt(month);
+            case "y":
+                String year = dateInt.substring(0,4);
+                return Integer.parseInt(year);
+        }
+        return 0;
+    }
+    /**
+     * Convierte en Int la hora pasada por argumento
+     * @param time hora en formato string
+     * @param t parte de la hora a coger (h=hour, m=minute)
+     * @return hora convertida a int
+     * @author Antonio Rodríguez Sirgado
+     */
+    public static int timeToInt (String time, String t){
+
+        switch (t){
+            case "h":
+                String hour = time.substring(0,2);
+                return Integer.parseInt(hour);
+            case "m":
+                String minute = time.substring(3,5);
+                return Integer.parseInt(minute);
+        }
+        return 0;
+    }
+
+
+
 
 }
 

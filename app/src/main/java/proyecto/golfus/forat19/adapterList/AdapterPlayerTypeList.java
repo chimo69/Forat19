@@ -18,6 +18,7 @@ import Forat19.Players;
 import proyecto.golfus.forat19.*;
 
 /**
+ * Adaptador encargado de rellenar el RecyclerView de tipos de jugadores
  * @Author Antonio Rodríguez Sirgado
  */
 public class AdapterPlayerTypeList extends RecyclerView.Adapter<AdapterPlayerTypeList.ViewHolderList> implements View.OnClickListener {

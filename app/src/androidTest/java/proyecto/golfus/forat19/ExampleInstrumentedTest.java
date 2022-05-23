@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import proyecto.golfus.forat19.utils.Utils;
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -22,5 +24,12 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("proyecto.golfus.forat19", appContext.getPackageName());
+    }
+
+    @Test
+    public void loginUser(){
+        // Type text and then press the button.
+        //assertEquals(20220521, Utils.changeDateFormat("21/05/2022"));
+
     }
 }

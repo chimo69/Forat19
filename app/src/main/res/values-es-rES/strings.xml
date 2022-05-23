@@ -129,4 +129,16 @@
     <string name="all">Todos</string>
     <string name="current_game">Partido activo</string>
     <string name="pending_games">Partidos pendientes</string>
+    <string name="Friendship_could_not_be_added">No se pudo agregar amistad</string>
+    <string name="send_friendship_request_to">"Enviar solicitud de amistad a: "</string>
+    <string name="friendship_successfully_eliminated">Amistad eliminada con éxito</string>
+    <string name="Friendship_successfully_updated">Amistad actualizada con éxito</string>
+    <string name="accept_friend_request">¿Quieres aceptar la solicitud de amistad?</string>
+    <string name="delete">ELIMINAR</string>
+    <string name="update">ACTUALIZAR</string>
+    <string name="date">Fecha</string>
+    <string name="hour">Hora</string>
+    <string name="update_game">Actualizar partido</string>
+    <string name="change_data">Cambiar fecha</string>
+    <string name="change_hour">Cambiar hora</string>
 </resources>

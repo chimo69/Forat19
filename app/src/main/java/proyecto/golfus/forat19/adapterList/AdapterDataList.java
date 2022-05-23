@@ -17,6 +17,7 @@ import Forat19.Player_Data;
 import proyecto.golfus.forat19.*;
 
 /**
+ * Adaptador encargado de rellenar el RecyclerView de tipos de datos
  * @Author Antonio Rodríguez Sirgado
  */
 public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHolderList> {

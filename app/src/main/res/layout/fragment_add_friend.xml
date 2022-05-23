@@ -25,7 +25,7 @@
             android:layout_height="30dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RecyclerNormalListUser"
+            android:id="@+id/rv_addFriend_possibleFriendship"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp" />

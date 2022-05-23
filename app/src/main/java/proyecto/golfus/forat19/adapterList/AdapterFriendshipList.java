@@ -17,6 +17,7 @@ import Forat19.User_Relationships;
 import proyecto.golfus.forat19.*;
 
 /**
+ * Adaptador encargado de rellenar el RecyclerView de amistades
  * @Author Antonio Rodríguez Sirgado
  */
 public class AdapterFriendshipList extends RecyclerView.Adapter<AdapterFriendshipList.ViewHolderList> implements View.OnClickListener {

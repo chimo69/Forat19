@@ -32,13 +32,12 @@ import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterNormalUsersList;
 import proyecto.golfus.forat19.ui.screens.MyAccount;
 import proyecto.golfus.forat19.ui.start.Principal;
-import proyecto.golfus.forat19.ui.update.UpdateUserAdmin;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * Pantalla para añadir amistades mediante listado o codigo QR
+ * Fragment para añadir amistades mediante listado o codigo QR
  *
  * @author Antonio Rodríguez Sirgado
  */
@@ -48,7 +47,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     private SearchView searchUserList;
     private AdapterNormalUsersList adapterList;
     private Message request;
-    private ArrayList<Users> listUsers;
+    private ArrayList<Users> listPossibleFriends;
     private Button btnCodeQR;
 
     public AddFriend() {
@@ -72,15 +71,13 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_friend, container, false);
-        recyclerView = view.findViewById(R.id.RecyclerNormalListUser);
+        recyclerView = view.findViewById(R.id.rv_addFriend_possibleFriendship);
         searchUserList = view.findViewById(R.id.searchNormalUserList);
         btnCodeQR = view.findViewById(R.id.btn_qrcode);
 
         searchUserList.setOnQueryTextListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        loadUsers(Global.LIST_ACTIVE_USERS);
-
+        loadPossibleFriend(Global.activeUser);
 
         // boton agregar amistad por QR
         btnCodeQR.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +87,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
                 IntentIntegrator.forSupportFragment(AddFriend.this)
                         .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
                         .setBeepEnabled(true)
-                        .setPrompt("hola que tal")
+                        .setOrientationLocked(false)
                         .initiateScan();
 
                 Log.d(Global.TAG, "Camara iniciada");
@@ -100,35 +97,45 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         return view;
     }
 
+    /**
+     * <b>Carga la lista de Usuarios que aun no son amigos tuyos del servidor</b><br><br>
+     * Mensaje = (token¬device,ListPossibleRelationship, id usuario, null)
+     *
+     * @param user usuario del que buscar posibles amistades
+     */
+    public void loadPossibleFriend(Users user) {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.LIST_POSSIBLE_RELATIONSHIP, Integer.toString(user.getId_user()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
 
     /**
-     * <b>Carga la lista de usuarios del servidor</b><br><br>
-     * LIST_ALL_USERS: muestra todos los usuarios<br>
-     * LIST_ACTIVE_USERS: muestra usuarios activos<br>
-     * LIST_INACTIVE_USERS: muestra usuarios inactivos<br>
-     * Mensaje = (token¬device,typeList, Id, null)
+     * <b>Envia mensaje para dar de alta una nueva amistad</b><br><br>
+     * Mensaje = (token¬device, AddUserRelationship, Checked/null, usuario amigo)
      *
-     * @param typeList tipo de lista a mostrar
+     * @param user      usuario del que te haces amigo
+     * @param isChecked si es true activará directamente la amistad sin tener que aceptarla
      */
-    public void loadUsers(String typeList) {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), typeList, Utils.getActiveId(getActivity()), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
-
-    public void loadFutureFriend(String user) {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, user, null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
-
     public void sendNewFriend(Users user, Boolean isChecked) {
         String checked = null;
-        if (isChecked) {checked=Global.CHECKED;}
+        if (isChecked) {
+            checked = Global.CHECKED;
+        }
         User_Relationships userRelationships = new User_Relationships(Global.activeUser, user, "Y");
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.ADD_USER_RELATIONSHIP, checked, userRelationships);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * <b>Carga el usuario obtenido por QR</b><br><br>
+     *
+     * @param user username del usuario QR
+     */
+    public void loadUser(String user) {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(requireContext()), Global.GET_USER, user, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -158,7 +165,7 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         super.onActivityResult(requestCode, resultCode, data);
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        loadFutureFriend(result.getContents());
+        loadUser(result.getContents());
         Log.d(Global.TAG, "Dato recibido en camara: " + result.getContents());
 
     }
@@ -173,64 +180,71 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     @Override
     public void update(Observable o, Object arg) {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-        } else if (arg instanceof Message) {
-            request = (Message) arg;
-            String command = request.getCommand();
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-            if (command.equals(Global.LIST_ACTIVE_USERS)) {
-                listUsers = (ArrayList<Users>) request.getObject();
+                } else if (arg instanceof Message) {
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapterList = new AdapterNormalUsersList(listUsers, getContext());
-                        recyclerView.setAdapter(adapterList);
-                        adapterList.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.d("INFO", "Usuario seleccionado: " + listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+                    switch (command) {
+                        case Global.LIST_POSSIBLE_RELATIONSHIP:
+                            if (parameter.equals(Global.OK)) {
+                                listPossibleFriends = (ArrayList<Users>) request.getObject();
+                                adapterList = new AdapterNormalUsersList(listPossibleFriends, getContext());
+                                recyclerView.setAdapter(adapterList);
+                                adapterList.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Log.d("INFO", "Usuario seleccionado: " + listPossibleFriends.get(recyclerView.getChildAdapterPosition(view)).getName());
 
-                                AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
-                                confirmation.setTitle(R.string.attention);
-                                confirmation.setMessage("Enviar solicitud de amistad a: "+ listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
-                                confirmation.setCancelable(true);
-                                confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
-                                    sendNewFriend(listUsers.get(recyclerView.getChildAdapterPosition(view)), false);
+                                        AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
+                                        confirmation.setTitle(R.string.attention);
+                                        confirmation.setMessage(getString(R.string.send_friendship_request_to) + listPossibleFriends.get(recyclerView.getChildAdapterPosition(view)).getName());
+                                        confirmation.setCancelable(true);
+                                        confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
+                                            sendNewFriend(listPossibleFriends.get(recyclerView.getChildAdapterPosition(view)), false);
+                                        });
+                                        confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
+                                        });
+                                        confirmation.show();
+                                    }
                                 });
-                                confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
-
-                                });
-
-                                confirmation.show();
-
-
                             }
-                        });
+                            break;
+                        case Global.ADD_USER_RELATIONSHIP:
+                            if (parameter.equals(Global.OK)) {
+                                if (((User_Relationships) request.getObject()).getConfirmed().equals("Y")) {
+                                    Utils.showSnack(getView(), getString(R.string.Friendship_added), Snackbar.LENGTH_LONG);
+                                } else {
+                                    Utils.showSnack(getView(), "Petición de amistad lanzada", Snackbar.LENGTH_LONG);
+                                }
+                                Fragment fragment = new MyAccount();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                            } else {
+                                Utils.showSnack(getView(), getString(R.string.Friendship_could_not_be_added), Snackbar.LENGTH_LONG);
+                                Fragment fragment = new MyAccount();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                            }
+                            break;
+                        case Global.GET_USER:
+                            if (parameter.equals(Global.OK)) {
+                                sendNewFriend((Users) request.getObject(), true);
+                            }
+                            break;
                     }
-                });
-            } else if (command.equals(Global.ADD_USER_RELATIONSHIP)) {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showSnack(getView(), getString(R.string.Friendship_added), Snackbar.LENGTH_LONG);
-                        Fragment fragment = new MyAccount();
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-                    }
-                });
-            } else if (command.equals(Global.GET_USER)) {
-                if (request.getParameters().equals(Global.OK)) {
-                    sendNewFriend((Users) request.getObject(), true);
                 }
             }
-
-
-            //UsersList.loading.post(() -> UsersList.loading.setVisibility(View.INVISIBLE));
-        }
+        });
     }
 }

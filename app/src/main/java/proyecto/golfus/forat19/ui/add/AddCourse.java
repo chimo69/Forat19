@@ -97,23 +97,6 @@ public class AddCourse extends Fragment implements Observer {
         }
     }
 
-   /* @Override
-    public void onPause() {
-        super.onPause();
-        AlertDialog.Builder confirmation = new AlertDialog.Builder(getActivity());
-        confirmation.setTitle(R.string.attention);
-        confirmation.setMessage("No se ha guardado el recorrido, ¿Seguro que quieres salir?");
-        confirmation.setCancelable(true);
-        confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
-            return;
-        });
-        confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
-        });
-
-        confirmation.show();
-
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -570,63 +553,62 @@ public class AddCourse extends Fragment implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-        } else if (arg instanceof Message) {
+                } else if (arg instanceof Message) {
 
-            request = (Message) arg;
-            String command = request.getCommand();
-            String parameter = request.getParameters();
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
 
-            if (command.equals(Global.LIST_GOLF_COURSES_TYPE)) {
+                    switch (command) {
+                        case Global.LIST_GOLF_COURSES_TYPE:
+                            ArrayList<String> course_types = new ArrayList<>();
+                            object_course_types = (ArrayList<Golf_Course_Types>) request.getObject();
 
-                ArrayList<String> course_types = new ArrayList<>();
-                object_course_types = (ArrayList<Golf_Course_Types>) request.getObject();
+                            for (int i = 0; i < object_course_types.size(); i++) {
+                                course_types.add(object_course_types.get(i).getGolf_course_type());
+                            }
+                            ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, course_types);
+                            combobox_type_course.setAdapter(adapter);
+                            break;
+                        case Global.ADD_GOLF_COURSE:
+                            if (parameter.equals(Global.OK)) {
 
-                for (int i = 0; i < object_course_types.size(); i++) {
-                    course_types.add(object_course_types.get(i).getGolf_course_type());
-                }
+                                Utils.showToast(getActivity(), getString(R.string.course_added_ok), Toast.LENGTH_SHORT);
+                                Fragment fragment = new Course();
+                                Bundle args = new Bundle();
+                                args.putSerializable("course", newGolfCourse);
+                                fragment.setArguments(args);
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, course_types);
-                        combobox_type_course.setAdapter(adapter);
+                            } else if (parameter.equals("Error:1")) {
+
+                                Log.d(Global.TAG, "Slope: " + ((Golf_Courses) request.getObject()).getSlope_value());
+                                Log.d(Global.TAG, "Name: " + ((Golf_Courses) request.getObject()).getGolf_course());
+                                Log.d(Global.TAG, "Valor campo: " + ((Golf_Courses) request.getObject()).getField_value());
+
+                                Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
+
+                                checkErrorsServer((Golf_Courses) request.getObject());
+
+                            } else {
+                                Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
+                            }
+                            break;
                     }
-                });
-            } else if (command.equals(Global.ADD_GOLF_COURSE)) {
 
-                if (parameter.equals(Global.OK)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utils.showToast(getActivity(), getString(R.string.course_added_ok), Toast.LENGTH_SHORT);
-                            Fragment fragment = new Course();
-                            Bundle args = new Bundle();
-                            args.putSerializable("course", newGolfCourse);
-                            fragment.setArguments(args);
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-                        }
-                    });
-                } else if (parameter.equals("Error:1")) {
-
-                    Log.d(Global.TAG, "Slope: " + ((Golf_Courses) request.getObject()).getSlope_value());
-                    Log.d(Global.TAG, "Name: " + ((Golf_Courses) request.getObject()).getGolf_course());
-                    Log.d(Global.TAG, "Valor campo: " + ((Golf_Courses) request.getObject()).getField_value());
-
-                    Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
-
-                    checkErrorsServer((Golf_Courses) request.getObject());
-
-                } else {
-                    Utils.showSnack(getView(), R.string.course_added_error, Snackbar.LENGTH_LONG);
                 }
             }
+        });
 
-        }
+
     }
 
     /**
@@ -654,6 +636,11 @@ public class AddCourse extends Fragment implements Observer {
         request.addObserver(this);
     }
 
+    /**
+     * Muestra u oculta el grupo de 8 o 19 hoyos
+     * @author Antonio Rodríguez Sirgado
+     * @param visible estado en que quieres que esté
+     */
     public void show18Holes(Boolean visible) {
         if (visible) {
             hole10.setVisibility(View.VISIBLE);
@@ -679,6 +666,10 @@ public class AddCourse extends Fragment implements Observer {
 
     }
 
+    /**
+     * Comprueba si estan introducidos todos los campos
+     * @return devuelve true si esta todo correcto
+     */
     private Boolean checkErrorsLocal() {
 
         for (TextView t : txtInfoCourse) {
@@ -708,6 +699,11 @@ public class AddCourse extends Fragment implements Observer {
         return true;
     }
 
+    /**
+     * Comprueba los datos en el servidor
+     * @param golf_courses recorrido a comprobar
+     * @author Antonio Rodríguez Sirgado
+     */
     private void checkErrorsServer(Golf_Courses golf_courses) {
 
         getActivity().runOnUiThread(new Runnable() {
@@ -747,6 +743,10 @@ public class AddCourse extends Fragment implements Observer {
         });
     }
 
+    /**
+     * Dependiendo de el tipo de recorrido activa o no los campos de Par
+     * @param enabled estado de los campos Par
+     */
     private void enablePar(Boolean enabled) {
         if (enabled) {
             for (int i = 0; i < numberHolesSelected; i++) {

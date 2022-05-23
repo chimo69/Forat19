@@ -1,5 +1,6 @@
 package proyecto.golfus.forat19.utils;
 
+import android.util.DebugUtils;
 import android.util.Log;
 
 import java.io.ObjectInputStream;
@@ -51,6 +52,7 @@ public class RequestServer extends Observable {
      * @author Antonio Rodríguez Sirgado
      */
     public void request(Message message) {
+
         if (message.getCommand() != null) {
             Thread thread = new Thread(() -> {
                 if (message.getCommand().equals(Global.LOGIN) || message.getCommand().equals(Global.VALIDATE_TOKEN)) {
@@ -71,22 +73,14 @@ public class RequestServer extends Observable {
      */
     public void initializeTransaction(Message message) {
         Log.d(Global.TAG, "La conexión esta: " + connectionOK);
-        if (connectionOK) {
-            try {
-                send(message);
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException | InvalidKeyException e) {
-                e.printStackTrace();
-            }
-        }
-        if (connectionOK) {
-            try {
-                retrieveData();
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
-                e.printStackTrace();
-            }
-        }
 
+        try {
+            send(message);
+            if (connectionOK) {retrieveData();}
 
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -155,7 +149,7 @@ public class RequestServer extends Observable {
      */
     public void send(Message o) throws
             NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException {
-            Log.d(Global.TAG, "Envio tipo objeto: "+o.getClass().getName());
+        Log.d(Global.TAG, "Envio tipo objeto: " + o.getClass().getName());
         try {
 
             initializeConnection(IP, PORT);
@@ -171,10 +165,6 @@ public class RequestServer extends Observable {
 
         } catch (IOException e) {
             Log.d(Global.TAG, "IOException en send: " + e.getMessage());
-            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
-            this.setChanged();
-            this.notifyObservers(reply);
-            this.clearChanged();
         }
     }
 
@@ -192,10 +182,7 @@ public class RequestServer extends Observable {
             Log.d(Global.TAG, "-------------------------------------------------");
         } catch (IOException e) {
             Log.d(Global.TAG, "IOException en closeConnection()");
-            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
-            this.setChanged();
-            this.notifyObservers(reply);
-            this.clearChanged();
+
         } finally {
 
         }
@@ -210,62 +197,56 @@ public class RequestServer extends Observable {
      */
     public void retrieveData() throws
             NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        try {
-            in = new ObjectInputStream(socket.getInputStream());
-            input = in.readObject();
 
-            if (input instanceof SealedObject) {
-                Message returnMessage = desencryptMessage((SealedObject) input);
+            try {
 
-                Log.d(Global.TAG, "Mensaje recibido encriptado:");
+                in = new ObjectInputStream(socket.getInputStream());
+
+                input = in.readObject();
+
+                if (input instanceof SealedObject) {
+                    Message returnMessage = desencryptMessage((SealedObject) input);
+
+                Log.d(Global.TAG, "Mensaje desencryptado:");
                 Log.d(Global.TAG, "Token: " + returnMessage.getToken());
                 Log.d(Global.TAG, "Parametros: " + returnMessage.getParameters());
                 Log.d(Global.TAG, "Comando: " + returnMessage.getCommand());
-                if (!returnMessage.getParameters().equals(Global.OK)){Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());}
+                if (!returnMessage.getParameters().equals(Global.OK)) {
+                    Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());
+                }
                 Log.d(Global.TAG, "-------------------------------------------------");
 
-                this.setChanged();
-                this.notifyObservers(returnMessage);
-                this.clearChanged();
-                closeConnection();
+                    this.setChanged();
+                    this.notifyObservers(returnMessage);
+                    this.clearChanged();
+                    closeConnection();
 
-            }
-            if (input instanceof Message) {
-                Message returnMessage = (Message) input;
 
-                Log.d(Global.TAG, "Mensaje recibido sin encriptar:");
+                } else if (input instanceof Message) {
+                    Message returnMessage = (Message) input;
+
+                Log.d(Global.TAG, "Objeto message recibido");
                 Log.d(Global.TAG, "Token: " + returnMessage.getToken());
                 Log.d(Global.TAG, "Parametros: " + returnMessage.getParameters());
                 Log.d(Global.TAG, "Comando: " + returnMessage.getCommand());
-                if (!returnMessage.getParameters().equals(Global.OK)){Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());}
+                if (!returnMessage.getParameters().equals(Global.OK)) {
+                    Log.d(Global.TAG, "Respuesta: " + returnMessage.getMessageText());
+                }
                 Log.d(Global.TAG, "-------------------------------------------------");
 
-                //this.setChanged();
-                //this.notifyObservers(returnMessage);
-                //this.clearChanged();
-                /*if (returnMessage.getCommand().equals(Global.KO)){
-                    newLogin();
-                }*/
+                }
                 closeConnection();
-
-            } else {
-                getKey();
+            } catch (IOException e) {
+                Log.d(Global.TAG, "IOException en retrieveData: " + e);
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                Log.d(Global.TAG, "Excepcion Clase no encontrada: " + e);
+            } finally {
                 closeConnection();
             }
-        } catch (IOException e) {
-            Log.d(Global.TAG, "IOException en retrieveData: " + e);
-            Reply reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
-            this.setChanged();
-            this.notifyObservers(reply);
-            this.clearChanged();
-        } catch (ClassNotFoundException e) {
-            Log.d(Global.TAG, "Excepcion Clase no encontrada: " + e);
-            reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
-            this.setChanged();
-            this.notifyObservers(reply);
-            this.clearChanged();
         }
-    }
+
+
 
     /**
      * Encripta el mensaje recibido con el algorito AES
@@ -280,11 +261,11 @@ public class RequestServer extends Observable {
      * @author Antonio Rodríguez Sirgado
      */
     private SealedObject encryptMessage(Message me) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IOException, IllegalBlockSizeException {
-        Log.d(Global.TAG,"Encriptando mensaje... "+ Global.serverKey.getEncoded());
+        Log.d(Global.TAG, "Encriptando mensaje... " + Global.serverKey.getEncoded());
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, Global.serverKey);
         SealedObject sealed = new SealedObject(me, cipher);
-        Log.d(Global.TAG,"Mensaje encriptado");
+        Log.d(Global.TAG, "Mensaje encriptado");
         Log.d(Global.TAG, "-------------------------------------------------");
         return sealed;
     }
@@ -303,17 +284,17 @@ public class RequestServer extends Observable {
      * @author Antonio Rodríguez Sirgado
      */
     private Message desencryptMessage(SealedObject so) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, IOException, ClassNotFoundException {
-        Log.d(Global.TAG,"Desencriptando mensaje...");
+        Log.d(Global.TAG, "Desencriptando mensaje...");
         SealedObject sealed = so;
         Cipher dcipher = Cipher.getInstance("AES");
         dcipher.init(Cipher.DECRYPT_MODE, Global.serverKey);
         try {
             input = sealed.getObject(dcipher);
-        } catch (BadPaddingException ex){
-            Log.d(Global.TAG,"Clave recibida erronea");
+        } catch (BadPaddingException ex) {
+            Log.d(Global.TAG, "Clave recibida erronea");
         }
         Message returnMessage = (Message) input;
-        Log.d(Global.TAG,"Mensaje desencriptado");
+        Log.d(Global.TAG, "Mensaje desencriptado");
         Log.d(Global.TAG, "-------------------------------------------------");
         return returnMessage;
     }

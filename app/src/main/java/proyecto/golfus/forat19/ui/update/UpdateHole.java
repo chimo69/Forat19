@@ -29,6 +29,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para la actualizacion de hoyos
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class UpdateHole extends Fragment implements Observer {
@@ -103,7 +104,7 @@ public class UpdateHole extends Fragment implements Observer {
         int idHole = hole.getId_golf_course_hole();
         int idCourse = hole.getId_golf_course();
         //Utils.sendRequest(getActivity(),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_GOLF_COURSE_HOLE, idCourse + "¬" + idHole, hole);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -111,15 +112,19 @@ public class UpdateHole extends Fragment implements Observer {
 
     /**
      * Permanece a la espera de que el objeto observado varie
-     * @author Antonio Rodriguez Sirgado
-     * @param o clase observada
+     *
+     * @param o   clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
+        if (getActivity() == null) {
+            return;
+        }
         // comprueba si ha recibido un objeto Reply que será un error de conexión
         if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
+            Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             Fragment fragment = new Principal();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
@@ -127,8 +132,9 @@ public class UpdateHole extends Fragment implements Observer {
 
             request = (Message) arg;
             String command = request.getCommand();
+            String parameter = request.getParameters();
 
-            if (command.equals(Global.UPDATE_GOLF_COURSE_HOLE)) {
+            if (command.equals(Global.UPDATE_GOLF_COURSE_HOLE) && parameter.equals(Global.OK)) {
                 Fragment fragment = new Course();
                 Bundle args = new Bundle();
                 args.putSerializable("course", course);

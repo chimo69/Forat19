@@ -18,13 +18,17 @@ public class Global {
     public static final String SHOW_CREATED_GAMES = "C";
     public static final String SHOW_STARTED_GAMES = "S";
     public static final String SHOW_ENDED_GAMES = "E";
-    public static Users activeUser=null;
-    public static Players activePlayer=null;
-    public static Key serverKey;
-    public static final int TIME_OUT_LIMIT=6000;
+    public static final String REJECT = "R";
+    public static final String ACCEPT = "A";
     public static final String TAG="F19";
     public static final String YES = "Y";
     public static final int MAX_GAMERS = 4;
+
+    public static final int TIME_OUT_LIMIT=6000;
+    public static Users activeUser=null;
+    public static Players activePlayer=null;
+    public static Key serverKey;
+    public static Boolean currentGame;
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
@@ -81,10 +85,14 @@ public class Global {
     public static final String LIST_GOLF_GAME_PLAYER = "ListGolfGamePlayer";
     public static final String DELETE_GOLF_GAME = "DeleteGolfGame";
     public static final String LIST_GOLF_GAME = "ListGolfGame";
+    public static final String LIST_POSSIBLE_RELATIONSHIP = "ListPossibleRelationship";
+    public static final String UPDATE_USER_RELATIONSHIP = "UpdateUserRelationship";
+    public static final String UPDATE_GOLF_GAME = "UpdateGolfGame";
+    public static final String GET_GOLF_GAME = "GetGolfGame";
+    public static final String START_GOLF_GAME = "StartGolfGame";
 
     // Codigo recibidos
     public static final String OK = "Ok";
-    public static final String KO = "Ko";
 
 
 }

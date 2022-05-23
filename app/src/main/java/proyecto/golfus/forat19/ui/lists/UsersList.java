@@ -35,6 +35,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Pantalla que muestra el listado de usuarios
+ *
  * @author Antonio Rodríguez Sirgado
  */
 public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener {
@@ -73,7 +74,7 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         loading = view.findViewById(R.id.userlist_loading);
         searchUserList = view.findViewById(R.id.searchUserList);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         btn_allUsers.setBackgroundColor(getResources().getColor(R.color.green));
 
         // boton Todos los usuarios
@@ -115,71 +116,59 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         return view;
     }
 
-    /**
-     * <b>Carga la lista de usuarios del servidor</b><br><br>
-     * LIST_ALL_USERS: muestra todos los usuarios<br>
-     * LIST_ACTIVE_USERS: muestra usuarios activos<br>
-     * LIST_INACTIVE_USERS: muestra usuarios inactivos<br>
-     * Mensaje = (token¬device,typeList, Id, null)
-     *
-     * @param typeList tipo de lista a mostrar
-     *
-     */
-    public void loadUsers(String typeList){
-        //Utils.sendRequest(getActivity(),typeList, Utils.getActiveId(getActivity()),null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),typeList, Utils.getActiveId(getActivity()),null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
 
     /**
      * Permanece a la espera de que las variables cambien
-     * @author Antonio Rodriguez Sirgado
-     * @param o la clase observada
+     *
+     * @param o   la clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
-
-        // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
-        } else if (arg instanceof Message) {
-            request = (Message) arg;
-            String command = request.getCommand();
-            listUsers = (ArrayList<Users>) request.getObject();
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapterList = new AdapterAdminUsersList(listUsers, getContext());
-                    recyclerView.setAdapter(adapterList);
-                    adapterList.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user()!=0){
-                                Log.d(Global.TAG,"Usuario seleccionado: "+listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
-
-                                Fragment fragment = new UpdateUserAdmin();
-                                Bundle args = new Bundle();
-                                args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
-
-                                fragment.setArguments(args);
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-                            }
-
-                        }
-                    });
-                }
-            });
-
-            UsersList.loading.post(() -> UsersList.loading.setVisibility(View.INVISIBLE));
+        if (getActivity() == null) {
+            return;
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // comprueba si ha recibido un objeto Reply que será un error de conexión
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+                } else if (arg instanceof Message) {
+                    request = (Message) arg;
+                    String parameter = ((Message) arg).getParameters();
+
+                    if (parameter.equals(Global.OK)) {
+                        listUsers = (ArrayList<Users>) request.getObject();
+
+                        adapterList = new AdapterAdminUsersList(listUsers, getContext());
+                        recyclerView.setAdapter(adapterList);
+                        adapterList.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if (listUsers.get(recyclerView.getChildAdapterPosition(view)).getId_user() != 0) {
+                                    Log.d(Global.TAG, "Usuario seleccionado: " + listUsers.get(recyclerView.getChildAdapterPosition(view)).getName());
+
+                                    Fragment fragment = new UpdateUserAdmin();
+                                    Bundle args = new Bundle();
+                                    args.putSerializable("user", listUsers.get(recyclerView.getChildAdapterPosition(view)));
+
+                                    fragment.setArguments(args);
+                                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
+                                }
+                            }
+                        });
+                    }
+                    UsersList.loading.post(() -> UsersList.loading.setVisibility(View.INVISIBLE));
+                }
+            }
+        });
+
     }
 
     @Override
@@ -195,14 +184,31 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
 
     /**
      * Cambia el color de fondo del boton recibido y pone los demas a gris
-     * @author Antonio Rodríguez Sirgado
+     *
      * @param button boton recibido
+     * @author Antonio Rodríguez Sirgado
      */
-    public void changeButtonColor(Button button){
+    public void changeButtonColor(Button button) {
         btn_allUsers.setBackgroundColor(getResources().getColor(R.color.grey));
         btn_activeUsers.setBackgroundColor(getResources().getColor(R.color.grey));
         btn_inactiveUsers.setBackgroundColor(getResources().getColor(R.color.grey));
-
         button.setBackgroundColor(getResources().getColor(R.color.green));
+    }
+
+    /**
+     * <b>Carga la lista de usuarios del servidor</b><br><br>
+     * LIST_ALL_USERS: muestra todos los usuarios<br>
+     * LIST_ACTIVE_USERS: muestra usuarios activos<br>
+     * LIST_INACTIVE_USERS: muestra usuarios inactivos<br>
+     * Mensaje = (token¬device,typeList, Id, null)
+     *
+     * @param typeList tipo de lista a mostrar
+     */
+    public void loadUsers(String typeList) {
+        //Utils.sendRequest(getActivity(),typeList, Utils.getActiveId(getActivity()),null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), typeList, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 }

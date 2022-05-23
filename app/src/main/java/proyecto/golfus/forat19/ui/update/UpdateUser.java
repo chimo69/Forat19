@@ -33,6 +33,7 @@ import proyecto.golfus.forat19.utils.Utils;
 
 /**
  * Fragment para la actualización de datos de usuario
+ *
  * @author Antonio Rodriguez Sirgado
  */
 public class UpdateUser extends Fragment implements Observer {
@@ -99,39 +100,46 @@ public class UpdateUser extends Fragment implements Observer {
 
     /**
      * Permanece a la espera de que el objeto observado varie
-     * @author Antonio Rodriguez Sirgado
-     * @param o clase observada
+     *
+     * @param o   clase observada
      * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
      */
     @Override
     public void update(Observable o, Object arg) {
 
+        if (getActivity() == null) {
+            return;
+        }
         // comprueba si ha recibido un objeto Reply que será un error de conexión
-        if (arg instanceof Reply) {
-            Utils.showSnack(getView(), R.string.it_was_impossible_to_make_connection, Snackbar.LENGTH_LONG);
-            // Volvemos a fragment inicial
-            Fragment fragment = new Principal();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-        } else {
-            btnUpdate.setEnabled(true);
-            request = (Message) arg;
-            String command = request.getCommand();
-            user = (Users) request.getObject();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof Reply) {
+                    Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
+                    // Volvemos a fragment inicial
+                    Fragment fragment = new Principal();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                } else {
+                    btnUpdate.setEnabled(true);
+                    request = (Message) arg;
+                    String command = request.getCommand();
+                    String parameter = request.getParameters();
+                    user = (Users) request.getObject();
 
-            switch (command) {
-                case Global.GET_USER:
-                    changeText();
-                    break;
+                    switch (command) {
+                        case Global.GET_USER:
+                            if (parameter.equals(Global.OK)) {
+                                changeText();
+                            }
+                            break;
 
-                case Global.UPDATE_USER:
+                        case Global.UPDATE_USER:
 
-                    if (request.getParameters().equals("Error:1")) {
+                            if (parameter.equals("Error:1")) {
+                                UpdateUser.updateLoading.post(() -> UpdateUser.updateLoading.setVisibility(View.INVISIBLE));
+                                Users newUser = (Users) request.getObject();
 
-                        UpdateUser.updateLoading.post(() -> UpdateUser.updateLoading.setVisibility(View.INVISIBLE));
-                        Users newUser = (Users) request.getObject();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
 
                                 tilName.setError(null);
                                 tilPassword.setError(null);
@@ -145,7 +153,7 @@ public class UpdateUser extends Fragment implements Observer {
                                 List<Integer> errorMessage = new ArrayList<Integer>();
 
 
-                                    // campo nombre
+                                // campo nombre
 
                                 if (newUser.getName().equals("*")) {
                                     textInputLayoutsError.add(tilName);
@@ -187,43 +195,39 @@ public class UpdateUser extends Fragment implements Observer {
                                     }
                                     textViewList.get(0).requestFocus();
                                 }
-                            }
 
-                        });
-
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
                                 btnUpdate.setEnabled(true);
+
+                            } else if (parameter.equals(Global.OK)) {
+                                int activeID = ((Users) request.getObject()).getId_user();
+                                String user = ((Users) request.getObject()).getUsername();
+                                int typeUser = ((Users) request.getObject()).getId_user_type();
+
+                                Utils.setActiveId(getActivity(), activeID);
+                                Utils.setActiveTypeUser(getActivity(), typeUser);
+                                Utils.setActiveUser(getActivity(), user);
+
+                                Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
+
+                                // Volvemos a fragment inicial
+                                Fragment fragment = new MyAccount();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+                                Log.d(Global.TAG, request.getMessageText());
+                            } else {
+                                Log.d(Global.TAG, request.getMessageText());
                             }
-                        });
-                    } else if (request.getParameters().equals(Global.OK)) {
-                        int activeID = ((Users) request.getObject()).getId_user();
-                        String user = ((Users) request.getObject()).getUsername();
-                        int typeUser = ((Users) request.getObject()).getId_user_type();
-
-                        Utils.setActiveId(getActivity(),activeID);
-                        Utils.setActiveTypeUser(getActivity(),typeUser);
-                        Utils.setActiveUser(getActivity(),user);
-
-                        Utils.showSnack(getView(), R.string.Data_properly_updated, Snackbar.LENGTH_LONG);
-
-                        // Volvemos a fragment inicial
-                        Fragment fragment = new MyAccount();
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
-                        Log.d(Global.TAG, request.getMessageText());
-                    } else {
-                        Log.d(Global.TAG, request.getMessageText());
                     }
+                }
             }
-        }
+        });
+
     }
 
     /**
      * <b>Comprueba en el servidor que los datos modificados sean correctos</b><br>
      * Mensaje = (token¬device, updateUser, id, usuario)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void checkDataUser() {
@@ -241,7 +245,7 @@ public class UpdateUser extends Fragment implements Observer {
 
         Users toCheckUser = new Users(Integer.parseInt(activeID), username, name, password, typeUser, active, email, phone, address);
         //Utils.sendRequest(getActivity(),Global.UPDATE_USER, activeID, toCheckUser);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.UPDATE_USER, activeID, toCheckUser);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_USER, activeID, toCheckUser);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -249,6 +253,7 @@ public class UpdateUser extends Fragment implements Observer {
 
     /**
      * Comprueba que los 2 password coincidan
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void checkPassword() {
@@ -265,11 +270,12 @@ public class UpdateUser extends Fragment implements Observer {
     /**
      * <b>Obtiene los datos del usuario solicitado</b><br>
      * Mensaje= (token¬device, getUser, id, null)
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void getUser() {
         //Utils.sendRequest(getActivity(),Global.GET_USER, Utils.getActiveId(getActivity()), null);
-        Message message = new Message(Utils.getActiveToken(getActivity())+"¬"+Utils.getDevice(getActivity()),Global.GET_USER, Utils.getActiveId(getActivity()), null);
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.GET_USER, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
@@ -277,6 +283,7 @@ public class UpdateUser extends Fragment implements Observer {
 
     /**
      * Modifica los campos de texto con los datos del usuario recibido
+     *
      * @author Antonio Rodriguez Sirgado
      */
     public void changeText() {

@@ -137,5 +137,17 @@
     <string name="current_game">Current game</string>
     <string name="pending_games">Pending games</string>
     <string name="select_player_type">Select player type</string>
+    <string name="friendship_successfully_eliminated">Friendship successfully eliminated</string>
+    <string name="Friendship_could_not_be_added">Friendship could not be added</string>
+    <string name="send_friendship_request_to">Send friendship request to</string>
+    <string name="Friendship_successfully_updated">Friendship successfully updated</string>
+    <string name="accept_friend_request">Do you want to accept the friend request?</string>
+    <string name="delete">DELETE</string>
+    <string name="update">UPDATE</string>
+    <string name="date">Date</string>
+    <string name="hour">Hour</string>
+    <string name="update_game">Update game</string>
+    <string name="change_data">Change data</string>
+    <string name="change_hour">Change hour</string>
 
 </resources>

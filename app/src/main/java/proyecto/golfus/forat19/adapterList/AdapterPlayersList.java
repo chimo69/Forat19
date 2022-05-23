@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import Forat19.Golf_Courses;
 import Forat19.Players;
-import Forat19.Users;
 import proyecto.golfus.forat19.R;
 
 /**
@@ -20,11 +20,14 @@ import proyecto.golfus.forat19.R;
  * @Author Antonio Rodríguez Sirgado
  */
 public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.ViewHolderList> implements View.OnClickListener {
-    ArrayList<Players> listUsers;
+    ArrayList<Players> listPlayers;
+    ArrayList<Players> listSearch;
     private View.OnClickListener listener;
 
     public AdapterPlayersList(ArrayList<Players> listPlayers){
-        this.listUsers = listPlayers;
+        this.listPlayers = listPlayers;
+        listSearch = new ArrayList<>();
+        listSearch.addAll(listPlayers);
 
     }
     @Override
@@ -44,12 +47,12 @@ public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.
 
     @Override
     public void onBindViewHolder(@NonNull AdapterPlayersList.ViewHolderList holder, int position) {
-        holder.fillList(listUsers.get(position));
+        holder.fillList(listPlayers.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return listUsers.size();
+        return listPlayers.size();
     }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
@@ -72,5 +75,24 @@ public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.
             name.setText(player.getUser().getName());
         }
 
+    }
+    /**
+     * Crea un listado con la busqueda realizada
+     * @param txtSearch texto que debe incluir la busqueda
+     */
+    public void filter(String txtSearch) {
+        int sizeText = txtSearch.length();
+        if (sizeText == 0) {
+            listPlayers.clear();
+            listPlayers.addAll(listSearch);
+        } else {
+            listPlayers.clear();
+            for (Players p : listSearch) {
+                if (p.getUser().getUsername().toLowerCase().contains(txtSearch.toLowerCase()) || p.getUser().getName().toLowerCase().contains(txtSearch.toLowerCase())) {
+                    listPlayers.add(p);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }
