@@ -134,7 +134,20 @@ public class AddGame extends Fragment implements Observer {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        txtDate.setText(dayOfMonth + "/" + month + "/" + year);
+                            String monthTxt, dayOfMonthTxt;
+                            month++;
+                            if (month<10){
+                                monthTxt = "0" + month;
+                            }else{
+                                monthTxt = String.valueOf(month);
+                            }
+                            if (dayOfMonth<10){
+                                dayOfMonthTxt = "0" + dayOfMonth;
+                            }else{
+                                dayOfMonthTxt = String.valueOf(dayOfMonth);
+                            }
+
+                            txtDate.setText(dayOfMonthTxt + "/" + monthTxt + "/" + year);
                     }
                 }, yearGame, monthGame, dayGame);
 

@@ -50,7 +50,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:background="@color/grey_light"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -100,78 +102,84 @@
                         tools:text="Time" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp">
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp">
 
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView51"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
                         android:text="Game type"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/txt_game_gameType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:textColor="@color/black"
-                        tools:text="Game type" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView58"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
                         android:text="Tipo de recorrido"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/txt_game_courseType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:textColor="@color/black"
-                        tools:text="Golf" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView53"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
                         android:text="@string/number_of_holes"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_game_gameType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        tools:text="Game type" />
+
+                    <TextView
+                        android:id="@+id/txt_game_courseType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        tools:text="Golf" />
 
                     <TextView
                         android:id="@+id/txt_game_numberHoles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:textColor="@color/black"
                         tools:text="9" />
-                </TableRow>
 
-            </TableLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/lv_game_listPlayers"
@@ -186,6 +194,7 @@
                 android:layout_height="100dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_start" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

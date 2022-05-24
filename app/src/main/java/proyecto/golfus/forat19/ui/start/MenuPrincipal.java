@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -18,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -38,6 +38,8 @@ import proyecto.golfus.forat19.ui.lists.UsersList;
 import proyecto.golfus.forat19.ui.screens.MyAccount;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.Utils;
+
+import proyecto.golfus.forat19.R.id;
 
 /**
  * Pantalla de menú principal
@@ -59,7 +61,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    createGame = menu.findItem(R.id.createGame);
+        createGame = menu.findItem(R.id.createGame);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
 
         // comprobamos el tipo de usuario para diferenciar opciones de menu
         // 0 - Admin
@@ -83,20 +87,26 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        Log.d(Global.TAG, "Item pulsado: " + item.getItemId());
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (Global.activePlayer!=null){
+                if (Global.activePlayer != null) {
                     Log.d(Global.TAG, "Jugador seleccionado: " + Global.activePlayer.getUser().getUsername());
                     navigationView.getMenu().findItem(R.id.createGame).setVisible(true);
-                }else {
+                } else {
                     Log.d(Global.TAG, "Jugador sin seleccionar");
                     navigationView.getMenu().findItem(R.id.createGame).setVisible(false);
                 }
                 drawerLayout.openDrawer(GravityCompat.START);
                 Utils.hideKeyboard(this);
+
                 return true;
 
+            case id.toolbar_home:
+                loadFragment(new Principal());
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,6 +183,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
     /**
      * muestra mensaje emergente de consulta
+     *
      * @author Antonio Rodriguez Sirgado
      */
     private void closeSession() {
@@ -196,7 +207,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        Log.d ("INFO","BackStacks: "+count);
+        Log.d("INFO", "BackStacks: " + count);
 
         if (count == 0) {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -220,7 +231,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      * @author Antonio Rodriguez Sirgado
      */
     private void logoutUser() {
-        Utils.sendRequest(this,Global.LOGOUT, null, null);
+        Utils.sendRequest(this, Global.LOGOUT, null, null);
     }
 
     /**
@@ -255,9 +266,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 case Global.LOGOUT:
                     if (request.getParameters().equals(Global.OK)) {
 
-                        Utils.setActiveUser(this,null);
-                        Utils.setActiveToken(this,null);
-                        Utils.setActiveTypeUser(this,Global.TYPE_NORMAL_USER);
+                        Utils.setActiveUser(this, null);
+                        Utils.setActiveToken(this, null);
+                        Utils.setActiveTypeUser(this, Global.TYPE_NORMAL_USER);
 
                         Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                         startActivity(intent);
