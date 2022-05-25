@@ -42,8 +42,8 @@ import proyecto.golfus.forat19.utils.Utils;
  */
 public class AddPlayer extends Fragment implements Observer {
 
-    private Button createPlayer;
-    private Spinner playerType;
+    private Button btn_createPlayer;
+    private Spinner sp_playerType;
     private Message request;
     private List<String> listPlayerTypes = new ArrayList<String>();
     private int playerTypeSelected;
@@ -76,11 +76,11 @@ public class AddPlayer extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_player, container, false);
-        playerType = view.findViewById(R.id.createPlayer_GameType);
-        recyclerView = view.findViewById(R.id.recyclerListDataPlayer);
+        sp_playerType = view.findViewById(R.id.sp_addPlayer_selectGameType);
+        recyclerView = view.findViewById(R.id.rv_addPlayer_data);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        createPlayer = view.findViewById(R.id.btn_createPlayer);
-        createPlayer.setOnClickListener(new View.OnClickListener() {
+        btn_createPlayer = view.findViewById(R.id.btn_addPlayer_addPlayer);
+        btn_createPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendDataPlayers();
@@ -89,7 +89,7 @@ public class AddPlayer extends Fragment implements Observer {
         loadPlayerTypes();
 
         //Comobox de tipos de jugador
-        playerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sp_playerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 playerTypeSelected = objectPlayerTypes.get(position).getId_player_type();
@@ -144,7 +144,7 @@ public class AddPlayer extends Fragment implements Observer {
                                 Log.d(Global.TAG, "-------------------------------------------------");
 
                                 ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, listPlayerTypes);
-                                playerType.setAdapter(adapter);
+                                sp_playerType.setAdapter(adapter);
                             }
                             break;
                         case Global.LIST_PLAYER_DATA:

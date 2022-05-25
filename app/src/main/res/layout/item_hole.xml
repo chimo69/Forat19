@@ -6,23 +6,18 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/item_cvTypePlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        app:cardBackgroundColor="@color/green"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="8dp">
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="3dp"
+        app:cardBackgroundColor="@color/green">
 
         <TextView
-            android:id="@+id/type_player"
+            android:id="@+id/txt_itemHole_numberHole"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="34sp"
             android:textStyle="bold"
-            tools:text="Tipo jugador" />
+            tools:text="1" />
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

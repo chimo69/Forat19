@@ -45,12 +45,12 @@ public class AddCourse extends Fragment implements Observer {
 
     private Message request;
 
-    private ArrayList<TextView> txtInfoCourse = new ArrayList<>();
-    private ArrayList<TextView> txtHole = new ArrayList<>();
+    private ArrayList<TextView> txt_infoCourse = new ArrayList<>();
+    private ArrayList<TextView> txt_hole = new ArrayList<>();
     private Installations installation;
     private Golf_Courses newGolfCourse;
-    private TextView title;
-    private Spinner combobox_type_course, combobox_holeNumber;
+    private TextView txt_title;
+    private Spinner sp_typeCourse, sp_holeNumber;
     private EditText name, slope, field_value, about;
     private EditText h1_par, h1_handicap, h1_length, h1_about;
     private EditText h2_par, h2_handicap, h2_length, h2_about;
@@ -75,7 +75,6 @@ public class AddCourse extends Fragment implements Observer {
 
     ArrayList<Golf_Course_Types> object_course_types;
     String[] numberHolesOptions = {"9", "18"};
-
 
     private FloatingActionButton addHoles;
     private int typeSelected, numberHolesSelected = 18;
@@ -103,184 +102,184 @@ public class AddCourse extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_course, container, false);
 
-        title = view.findViewById(R.id.addCourseTitle);
-        name = view.findViewById(R.id.addCourse_name);
-        slope = view.findViewById(R.id.addCourse_Slope);
-        field_value = view.findViewById(R.id.addCourse_FieldValue);
+        txt_title = view.findViewById(R.id.txt_addCourse_title);
+        name = view.findViewById(R.id.et_addCourse_courseName);
+        slope = view.findViewById(R.id.et_addCourse_Slope);
+        field_value = view.findViewById(R.id.et_addCourse_fieldValue);
 
-        about = view.findViewById(R.id.addCourse_about);
-        addHoles = view.findViewById(R.id.btn_addHoles);
-        combobox_type_course = view.findViewById(R.id.addCourse_type);
-        combobox_holeNumber = view.findViewById(R.id.addHoleNumber);
+        about = view.findViewById(R.id.et_addCourse_about);
+        addHoles = view.findViewById(R.id.fb_addCourse_addHoles);
+        sp_typeCourse = view.findViewById(R.id.sp_addCourse_typeCourse);
+        sp_holeNumber = view.findViewById(R.id.sp_addCourse_numberHoles);
 
         // Añadimos los textViews a un ArrayList
-        txtInfoCourse.add(name);
-        txtInfoCourse.add(slope);
-        txtInfoCourse.add(field_value);
+        txt_infoCourse.add(name);
+        txt_infoCourse.add(slope);
+        txt_infoCourse.add(field_value);
 
-        combobox_holeNumber.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, numberHolesOptions));
+        sp_holeNumber.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, numberHolesOptions));
 
         //hole 1
         h1_par = view.findViewById(R.id.hole1_par);
         h1_handicap = view.findViewById(R.id.hole1_handicap);
         h1_length = view.findViewById(R.id.hole1_length);
         h1_about = view.findViewById(R.id.hole1_about);
-        txtHole.add(h1_par);
-        txtHole.add(h1_handicap);
-        txtHole.add(h1_length);
+        txt_hole.add(h1_par);
+        txt_hole.add(h1_handicap);
+        txt_hole.add(h1_length);
 
         //hole 2
         h2_par = view.findViewById(R.id.hole2_par);
         h2_handicap = view.findViewById(R.id.hole2_handicap);
         h2_length = view.findViewById(R.id.hole2_length);
         h2_about = view.findViewById(R.id.hole2_about);
-        txtHole.add(h2_par);
-        txtHole.add(h2_handicap);
-        txtHole.add(h2_length);
+        txt_hole.add(h2_par);
+        txt_hole.add(h2_handicap);
+        txt_hole.add(h2_length);
 
         //hole 3
         h3_par = view.findViewById(R.id.hole3_par);
         h3_handicap = view.findViewById(R.id.hole3_handicap);
         h3_length = view.findViewById(R.id.hole3_length);
         h3_about = view.findViewById(R.id.hole3_about);
-        txtHole.add(h3_par);
-        txtHole.add(h3_handicap);
-        txtHole.add(h3_length);
+        txt_hole.add(h3_par);
+        txt_hole.add(h3_handicap);
+        txt_hole.add(h3_length);
 
         //hole 4
         h4_par = view.findViewById(R.id.hole4_par);
         h4_handicap = view.findViewById(R.id.hole4_handicap);
         h4_length = view.findViewById(R.id.hole4_length);
         h4_about = view.findViewById(R.id.hole4_about);
-        txtHole.add(h4_par);
-        txtHole.add(h4_handicap);
-        txtHole.add(h4_length);
+        txt_hole.add(h4_par);
+        txt_hole.add(h4_handicap);
+        txt_hole.add(h4_length);
 
         //hole 5
         h5_par = view.findViewById(R.id.hole5_par);
         h5_handicap = view.findViewById(R.id.hole5_handicap);
         h5_length = view.findViewById(R.id.hole5_length);
         h5_about = view.findViewById(R.id.hole5_about);
-        txtHole.add(h5_par);
-        txtHole.add(h5_handicap);
-        txtHole.add(h5_length);
+        txt_hole.add(h5_par);
+        txt_hole.add(h5_handicap);
+        txt_hole.add(h5_length);
 
         //hole 6
         h6_par = view.findViewById(R.id.hole6_par);
         h6_handicap = view.findViewById(R.id.hole6_handicap);
         h6_length = view.findViewById(R.id.hole6_length);
         h6_about = view.findViewById(R.id.hole6_about);
-        txtHole.add(h6_par);
-        txtHole.add(h6_handicap);
-        txtHole.add(h6_length);
+        txt_hole.add(h6_par);
+        txt_hole.add(h6_handicap);
+        txt_hole.add(h6_length);
 
         //hole 7
         h7_par = view.findViewById(R.id.hole7_par);
         h7_handicap = view.findViewById(R.id.hole7_handicap);
         h7_length = view.findViewById(R.id.hole7_length);
         h7_about = view.findViewById(R.id.hole7_about);
-        txtHole.add(h7_par);
-        txtHole.add(h7_handicap);
-        txtHole.add(h7_length);
+        txt_hole.add(h7_par);
+        txt_hole.add(h7_handicap);
+        txt_hole.add(h7_length);
 
         //hole 8
         h8_par = view.findViewById(R.id.hole8_par);
         h8_handicap = view.findViewById(R.id.hole8_handicap);
         h8_length = view.findViewById(R.id.hole8_length);
         h8_about = view.findViewById(R.id.hole8_about);
-        txtHole.add(h8_par);
-        txtHole.add(h8_handicap);
-        txtHole.add(h8_length);
+        txt_hole.add(h8_par);
+        txt_hole.add(h8_handicap);
+        txt_hole.add(h8_length);
 
         //hole 9
         h9_par = view.findViewById(R.id.hole9_par);
         h9_handicap = view.findViewById(R.id.hole9_handicap);
         h9_length = view.findViewById(R.id.hole9_length);
         h9_about = view.findViewById(R.id.hole9_about);
-        txtHole.add(h9_par);
-        txtHole.add(h9_handicap);
-        txtHole.add(h9_length);
+        txt_hole.add(h9_par);
+        txt_hole.add(h9_handicap);
+        txt_hole.add(h9_length);
 
         //hole 10
         h10_par = view.findViewById(R.id.hole10_par);
         h10_handicap = view.findViewById(R.id.hole10_handicap);
         h10_length = view.findViewById(R.id.hole10_length);
         h10_about = view.findViewById(R.id.hole10_about);
-        txtHole.add(h10_par);
-        txtHole.add(h10_handicap);
-        txtHole.add(h10_length);
+        txt_hole.add(h10_par);
+        txt_hole.add(h10_handicap);
+        txt_hole.add(h10_length);
 
         //hole 11
         h11_par = view.findViewById(R.id.hole11_par);
         h11_handicap = view.findViewById(R.id.hole11_handicap);
         h11_length = view.findViewById(R.id.hole11_length);
         h11_about = view.findViewById(R.id.hole11_about);
-        txtHole.add(h11_par);
-        txtHole.add(h11_handicap);
-        txtHole.add(h11_length);
+        txt_hole.add(h11_par);
+        txt_hole.add(h11_handicap);
+        txt_hole.add(h11_length);
 
         //hole 12
         h12_par = view.findViewById(R.id.hole12_par);
         h12_handicap = view.findViewById(R.id.hole12_handicap);
         h12_length = view.findViewById(R.id.hole12_length);
         h12_about = view.findViewById(R.id.hole12_about);
-        txtHole.add(h12_par);
-        txtHole.add(h12_handicap);
-        txtHole.add(h12_length);
+        txt_hole.add(h12_par);
+        txt_hole.add(h12_handicap);
+        txt_hole.add(h12_length);
 
         //hole 13
         h13_par = view.findViewById(R.id.hole13_par);
         h13_handicap = view.findViewById(R.id.hole13_handicap);
         h13_length = view.findViewById(R.id.hole13_length);
         h13_about = view.findViewById(R.id.hole13_about);
-        txtHole.add(h13_par);
-        txtHole.add(h13_handicap);
-        txtHole.add(h13_length);
+        txt_hole.add(h13_par);
+        txt_hole.add(h13_handicap);
+        txt_hole.add(h13_length);
 
         //hole 14
         h14_par = view.findViewById(R.id.hole14_par);
         h14_handicap = view.findViewById(R.id.hole14_handicap);
         h14_length = view.findViewById(R.id.hole14_length);
         h14_about = view.findViewById(R.id.hole14_about);
-        txtHole.add(h14_par);
-        txtHole.add(h14_handicap);
-        txtHole.add(h14_length);
+        txt_hole.add(h14_par);
+        txt_hole.add(h14_handicap);
+        txt_hole.add(h14_length);
 
         //hole 15
         h15_par = view.findViewById(R.id.hole15_par);
         h15_handicap = view.findViewById(R.id.hole15_handicap);
         h15_length = view.findViewById(R.id.hole15_length);
         h15_about = view.findViewById(R.id.hole15_about);
-        txtHole.add(h15_par);
-        txtHole.add(h15_handicap);
-        txtHole.add(h15_length);
+        txt_hole.add(h15_par);
+        txt_hole.add(h15_handicap);
+        txt_hole.add(h15_length);
 
         //hole 16
         h16_par = view.findViewById(R.id.hole16_par);
         h16_handicap = view.findViewById(R.id.hole16_handicap);
         h16_length = view.findViewById(R.id.hole16_length);
         h16_about = view.findViewById(R.id.hole16_about);
-        txtHole.add(h16_par);
-        txtHole.add(h16_handicap);
-        txtHole.add(h16_length);
+        txt_hole.add(h16_par);
+        txt_hole.add(h16_handicap);
+        txt_hole.add(h16_length);
 
         //hole 17
         h17_par = view.findViewById(R.id.hole17_par);
         h17_handicap = view.findViewById(R.id.hole17_handicap);
         h17_length = view.findViewById(R.id.hole17_length);
         h17_about = view.findViewById(R.id.hole17_about);
-        txtHole.add(h17_par);
-        txtHole.add(h17_handicap);
-        txtHole.add(h17_length);
+        txt_hole.add(h17_par);
+        txt_hole.add(h17_handicap);
+        txt_hole.add(h17_length);
 
         //hole 18
         h18_par = view.findViewById(R.id.hole18_par);
         h18_handicap = view.findViewById(R.id.hole18_handicap);
         h18_length = view.findViewById(R.id.hole18_length);
         h18_about = view.findViewById(R.id.hole18_about);
-        txtHole.add(h18_par);
-        txtHole.add(h18_handicap);
-        txtHole.add(h18_length);
+        txt_hole.add(h18_par);
+        txt_hole.add(h18_handicap);
+        txt_hole.add(h18_length);
 
         hole10 = view.findViewById(R.id.hole10);
         hole11 = view.findViewById(R.id.hole11);
@@ -292,14 +291,14 @@ public class AddCourse extends Fragment implements Observer {
         hole17 = view.findViewById(R.id.hole17);
         hole18 = view.findViewById(R.id.hole18);
 
-        title.setText(installation.getInstallation());
+        txt_title.setText(installation.getInstallation());
 
         name.requestFocus();
 
         loadCourseTypes();
 
         // combobox tipo de recorrido
-        combobox_type_course.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sp_typeCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeSelected = object_course_types.get(position).getId_golf_course_type();
@@ -319,10 +318,10 @@ public class AddCourse extends Fragment implements Observer {
         });
 
         // combobox cantidad de hoyos
-        combobox_holeNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sp_holeNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                numberHolesSelected = Integer.parseInt((String) combobox_holeNumber.getSelectedItem());
+                numberHolesSelected = Integer.parseInt((String) sp_holeNumber.getSelectedItem());
                 if (numberHolesSelected == 18) {
                     show18Holes(true);
                 } else {
@@ -576,7 +575,7 @@ public class AddCourse extends Fragment implements Observer {
                                 course_types.add(object_course_types.get(i).getGolf_course_type());
                             }
                             ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, course_types);
-                            combobox_type_course.setAdapter(adapter);
+                            sp_typeCourse.setAdapter(adapter);
                             break;
                         case Global.ADD_GOLF_COURSE:
                             if (parameter.equals(Global.OK)) {
@@ -672,7 +671,7 @@ public class AddCourse extends Fragment implements Observer {
      */
     private Boolean checkErrorsLocal() {
 
-        for (TextView t : txtInfoCourse) {
+        for (TextView t : txt_infoCourse) {
             if (t.getText().toString().isEmpty()) {
                 t.requestFocus();
                 showError(t, getString(R.string.missing_field_to_be_filled_in));
@@ -681,17 +680,17 @@ public class AddCourse extends Fragment implements Observer {
         }
 
         for (int i = 0; i < numberHolesSelected; i++) {
-            if (txtHole.get(i * 3).getText().toString().isEmpty()) {
-                txtHole.get(i * 3).requestFocus();
-                showError(txtHole.get(i * 3), getString(R.string.missing_field_to_be_filled_in));
+            if (txt_hole.get(i * 3).getText().toString().isEmpty()) {
+                txt_hole.get(i * 3).requestFocus();
+                showError(txt_hole.get(i * 3), getString(R.string.missing_field_to_be_filled_in));
                 return false;
-            } else if (txtHole.get((i * 3) + 1).getText().toString().isEmpty()) {
-                txtHole.get((i * 3) + 1).requestFocus();
-                showError(txtHole.get((i * 3) + 1), getString(R.string.missing_field_to_be_filled_in));
+            } else if (txt_hole.get((i * 3) + 1).getText().toString().isEmpty()) {
+                txt_hole.get((i * 3) + 1).requestFocus();
+                showError(txt_hole.get((i * 3) + 1), getString(R.string.missing_field_to_be_filled_in));
                 return false;
-            } else if (txtHole.get((i * 3) + 2).getText().toString().isEmpty()) {
-                txtHole.get((i * 3) + 2).requestFocus();
-                showError(txtHole.get((i * 3) + 2), getString(R.string.missing_field_to_be_filled_in));
+            } else if (txt_hole.get((i * 3) + 2).getText().toString().isEmpty()) {
+                txt_hole.get((i * 3) + 2).requestFocus();
+                showError(txt_hole.get((i * 3) + 2), getString(R.string.missing_field_to_be_filled_in));
                 return false;
             }
         }
@@ -729,12 +728,12 @@ public class AddCourse extends Fragment implements Observer {
                 for (int i = 0; i < numberHolesSelected; i++) {
                     if (hole.get(i).getPar() == -1) {
                         Log.d(Global.TAG, "Error en el Par / hoyo: " + (i + 1));
-                        showError(txtHole.get((i * 3)), "El par debe ser 3,4 o 5");
+                        showError(txt_hole.get((i * 3)), "El par debe ser 3,4 o 5");
                         i = numberHolesSelected;
                     } else if (hole.get(i).getHandicap() == -1) {
                         Log.d(Global.TAG, "Error en el Handicap / hoyo: " + (i + 1));
-                        showError(txtHole.get((i * 3) + 1), "El handicap debe ser como máximo " + numberHolesSelected);
-                        txtHole.get((i * 3) + 1).setError("El handicap debe ser como máximo " + numberHolesSelected);
+                        showError(txt_hole.get((i * 3) + 1), "El handicap debe ser como máximo " + numberHolesSelected);
+                        txt_hole.get((i * 3) + 1).setError("El handicap debe ser como máximo " + numberHolesSelected);
                         i = numberHolesSelected;
                     }
                 }
@@ -750,13 +749,13 @@ public class AddCourse extends Fragment implements Observer {
     private void enablePar(Boolean enabled) {
         if (enabled) {
             for (int i = 0; i < numberHolesSelected; i++) {
-                txtHole.get(i * 3).setText("");
-                txtHole.get(i * 3).setEnabled(true);
+                txt_hole.get(i * 3).setText("");
+                txt_hole.get(i * 3).setEnabled(true);
             }
         } else {
             for (int i = 0; i < numberHolesSelected; i++) {
-                txtHole.get(i * 3).setText("3");
-                txtHole.get(i * 3).setEnabled(false);
+                txt_hole.get(i * 3).setText("3");
+                txt_hole.get(i * 3).setEnabled(false);
             }
 
         }

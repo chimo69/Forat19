@@ -9,7 +9,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_addHoles"
+        android:id="@+id/fb_addCourse_addHoles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/courseTitle"
+                android:id="@+id/cv_addCourse_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -49,7 +49,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/addCourseTitle"
+                        android:id="@+id/txt_addCourse_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -73,7 +73,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/courseInfo"
+                android:id="@+id/cv_addGame_courseInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -82,7 +82,7 @@
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/courseTitle">
+                app:layout_constraintTop_toBottomOf="@id/cv_addCourse_title">
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                             android:textColor="@color/green" />
 
                         <EditText
-                            android:id="@+id/addCourse_name"
+                            android:id="@+id/et_addCourse_courseName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -130,7 +130,7 @@
                             android:textColor="@color/green" />
 
                         <EditText
-                            android:id="@+id/addCourse_Slope"
+                            android:id="@+id/et_addCourse_Slope"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -155,7 +155,7 @@
                             android:textColor="@color/green" />
 
                         <EditText
-                            android:id="@+id/addCourse_FieldValue"
+                            android:id="@+id/et_addCourse_fieldValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -180,7 +180,7 @@
                             android:textColor="@color/green" />
 
                         <Spinner
-                            android:id="@+id/addCourse_type"
+                            android:id="@+id/sp_addCourse_typeCourse"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -204,7 +204,7 @@
                             android:textColor="@color/green" />
 
                         <Spinner
-                            android:id="@+id/addHoleNumber"
+                            android:id="@+id/sp_addCourse_numberHoles"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -229,7 +229,7 @@
                             android:textColor="@color/green" />
 
                         <EditText
-                            android:id="@+id/addCourse_about"
+                            android:id="@+id/et_addCourse_about"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -253,7 +253,7 @@
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/courseInfo">
+                app:layout_constraintTop_toBottomOf="@+id/cv_addGame_courseInfo">
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -14,13 +14,13 @@
         android:weightSum="2">
 
         <Button
-            android:id="@+id/btn_qrcode"
+            android:id="@+id/btn_addFriend_qrcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_with_qr_code" />
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchNormalUserList"
+            android:id="@+id/sv_addFriend_listFriends"
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 

@@ -48,15 +48,10 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
     private AdapterNormalUsersList adapterList;
     private Message request;
     private ArrayList<Users> listPossibleFriends;
-    private Button btnCodeQR;
+    private Button btn_CodeQR;
 
     public AddFriend() {
         // Required empty public constructor
-    }
-
-    public static AddFriend newInstance(String param1, String param2) {
-        AddFriend fragment = new AddFriend();
-        return fragment;
     }
 
     @Override
@@ -72,15 +67,14 @@ public class AddFriend extends Fragment implements Observer, SearchView.OnQueryT
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_friend, container, false);
         recyclerView = view.findViewById(R.id.rv_addFriend_possibleFriendship);
-        searchUserList = view.findViewById(R.id.searchNormalUserList);
-        btnCodeQR = view.findViewById(R.id.btn_qrcode);
-
+        searchUserList = view.findViewById(R.id.sv_addFriend_listFriends);
+        btn_CodeQR = view.findViewById(R.id.btn_addFriend_qrcode);
         searchUserList.setOnQueryTextListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         loadPossibleFriend(Global.activeUser);
 
         // boton agregar amistad por QR
-        btnCodeQR.setOnClickListener(new View.OnClickListener() {
+        btn_CodeQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

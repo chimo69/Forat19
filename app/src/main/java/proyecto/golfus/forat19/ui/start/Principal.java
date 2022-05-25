@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import proyecto.golfus.forat19.adapterList.AdapterGameList;
 import proyecto.golfus.forat19.adapterList.AdapterPlayerTypeList;
 import proyecto.golfus.forat19.ui.add.AddGame;
 import proyecto.golfus.forat19.ui.screens.Game;
+import proyecto.golfus.forat19.ui.screens.Results;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
@@ -48,7 +50,7 @@ import proyecto.golfus.forat19.utils.Utils;
  *
  * @author Antonio Rodriguez Sirgado
  */
-public class Principal extends Fragment implements Observer {
+public class Principal extends Fragment implements Observer, View.OnClickListener {
 
     private ProgressBar loading;
     private RecyclerView rv_playerList, rv_createdGamesList;
@@ -57,10 +59,11 @@ public class Principal extends Fragment implements Observer {
     private ArrayList<Players> listPlayers = new ArrayList<>();
     private Message request;
     private TextView txtInfoPlayers, playerSelected, txtInfoCreatedGames, txtCurrentGame;
-    private CardView deleteCurrentPlayer, cvPlayerSelected, cvCurrentGame, cvCreatedGames, cvPlayers;
+    private CardView cvPlayerSelected, cvCurrentGame, cvCreatedGames, cvPlayers;
     private ArrayList<Golf_Games> listGolfGamesCreated = new ArrayList<>();
     private ArrayList<Golf_Games> currentGame = new ArrayList<>();
     private Button selectAll;
+    private ImageButton ib_stop, ib_pause, ib_delete, ib_info;
     private int created, current;
 
     public Principal() {
@@ -94,6 +97,10 @@ public class Principal extends Fragment implements Observer {
         txtInfoPlayers = view.findViewById(R.id.txt_principal_players);
         txtInfoCreatedGames = view.findViewById(R.id.txt_principal_createdGames);
         txtCurrentGame = view.findViewById(R.id.txt_principal_currentGame);
+        ib_delete = view.findViewById(R.id.ib_principal_delete);
+        ib_pause = view.findViewById(R.id.ib_principal_pause);
+        ib_stop = view.findViewById(R.id.ib_principal_stop);
+        ib_info = view.findViewById(R.id.ib_principal_info);
 
         playerSelected = view.findViewById(R.id.txt_principal_PlayerSelected);
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
@@ -101,13 +108,11 @@ public class Principal extends Fragment implements Observer {
         selectAll = view.findViewById(R.id.btn_principal_selectAll);
         cvPlayerSelected = view.findViewById(R.id.cv_principal_playerSelected);
 
-        selectAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Global.activePlayer = null;
-                cvPlayerSelected.setVisibility(View.INVISIBLE);
-            }
-        });
+        ib_delete.setOnClickListener(this);
+        ib_info.setOnClickListener(this);
+        ib_stop.setOnClickListener(this);
+        cvCurrentGame.setOnClickListener(this);
+        selectAll.setOnClickListener(this);
 
         if (Global.activePlayer != null) {
             playerSelected.setText(Global.activePlayer.getPlayer_type().getPlayer_type());
@@ -123,6 +128,24 @@ public class Principal extends Fragment implements Observer {
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ib_principal_delete:
+                deleteGame(currentGame.get(0));
+                break;
+            case R.id.btn_principal_selectAll:
+                Global.activePlayer = null;
+                cvPlayerSelected.setVisibility(View.INVISIBLE);
+            case R.id.ib_principal_info:
+                Fragment fragment = new Results(currentGame.get(0));
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                break;
+            case R.id.ib_principal_stop:
+                stopGame(currentGame.get(0));
+                break;
+        }
+    }
     /**
      * Permanece a la espera de que las variables cambien
      *
@@ -132,7 +155,6 @@ public class Principal extends Fragment implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        // comprueba si ha recibido un objeto Reply que será un error de conexión
 
         if (getActivity() == null) {
             return;
@@ -140,6 +162,7 @@ public class Principal extends Fragment implements Observer {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // comprueba si ha recibido un objeto Reply que será un error de conexión
                 if (arg instanceof Reply) {
                     Utils.showSnack(getView(), ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
                     Fragment fragment = new Principal();
@@ -172,8 +195,9 @@ public class Principal extends Fragment implements Observer {
                                             playerSelected.setText(listPlayers.get(rv_playerList.getChildAdapterPosition(v)).getPlayer_type().getPlayer_type());
                                             cvPlayerSelected.setVisibility(View.VISIBLE);
 
-                                            listGolfGames(Global.SHOW_CREATED_GAMES);
                                             listGolfGames(Global.SHOW_STARTED_GAMES);
+                                            listGolfGames(Global.SHOW_CREATED_GAMES);
+                                            listGolfGames(Global.SHOW_ENDED_GAMES);
 
                                             created = 0;
                                             current = 0;
@@ -238,8 +262,9 @@ public class Principal extends Fragment implements Observer {
                             }
 
                             if (current > 0) {
-                                // TODO
+                                cvCurrentGame.setVisibility(View.VISIBLE);
                             } else {
+                                cvCurrentGame.setVisibility(View.GONE);
                                 Global.currentGame=false;
                             }
 
@@ -256,47 +281,26 @@ public class Principal extends Fragment implements Observer {
                         case Global.DELETE_GOLF_GAME:
                             if (parameter.equals(Global.OK)) {
                                 Utils.showSnack(getView(), getString(R.string.game_succesfully_eliminated), Snackbar.LENGTH_LONG);
+                            } else if (parameter.equals(Global.ERROR3)) {
+                            Utils.showSnack(getView(), getString(R.string.the_game_needs_to_be_finished_first), Snackbar.LENGTH_LONG);
                             } else {
                                 Utils.showSnack(getView(), getString(R.string.Game_could_not_be_deleted), Snackbar.LENGTH_LONG);
                             }
                             loading.setVisibility(View.GONE);
                             break;
+                        case Global.END_GOLF_GAME:
+                            if (parameter.equals(Global.OK)) {
+                                Utils.showSnack(getView(), getString(R.string.game_succesfully_ended), Snackbar.LENGTH_LONG);
+                            } else {
+                                Utils.showSnack(getView(), getString(R.string.game_could_not_be_ended), Snackbar.LENGTH_LONG);
+                            }
+                            loading.setVisibility(View.GONE);
                     }
-
                 }
             }
         });
-
     }
 
-    /**
-     * <b>Envia el mensaje para cargar los jugadores del usuario</b><br>
-     * Mensaje = (token¬device, listUserPlayer, id user, null)
-     *
-     * @author Antonio Rodríguez Sirgado
-     */
-    private void getPlayers() {
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_PLAYER, Utils.getActiveId(getActivity()), null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
-
-    /**
-     * <b>Envia el mensaje para cargar las partidas</b><br>
-     * Mensaje = (token¬device, listGolfGame, C/S/E, null)
-     *
-     * @param typeList tipo de listado (C=Created, S=Started, E=Ended)
-     * @author Antonio Rodríguez Sirgado
-     */
-    private void listGolfGames(String typeList) {
-        Log.d(Global.TAG, "Enviando peticion tipo: " + typeList);
-        String txt = Global.activePlayer.getId_player() + "¬" + typeList;
-        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME, txt, null);
-        RequestServer request = new RequestServer();
-        request.request(message);
-        request.addObserver(this);
-    }
 
     // Si desplaza un juego a la derecha
     ItemTouchHelper.SimpleCallback swipedRight = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -378,6 +382,50 @@ public class Principal extends Fragment implements Observer {
      */
     private void deleteGame(Golf_Games golf_games) {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.DELETE_GOLF_GAME, Integer.toString(golf_games.getId_golf_game()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+
+        listGolfGames(Global.SHOW_STARTED_GAMES);
+    }
+
+    /**
+     * <b>Envia el mensaje para parar el partido seleccionado</b><br>
+     * Mensaje = (token¬device, EndGolfGame, id golf game, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void stopGame(Golf_Games golf_games) {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.END_GOLF_GAME, Integer.toString(golf_games.getId_golf_game()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * <b>Envia el mensaje para cargar los jugadores del usuario</b><br>
+     * Mensaje = (token¬device, listUserPlayer, id user, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void getPlayers() {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_PLAYER, Utils.getActiveId(getActivity()), null);
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
+    }
+
+    /**
+     * <b>Envia el mensaje para cargar las partidas</b><br>
+     * Mensaje = (token¬device, listGolfGame, C/S/E, null)
+     *
+     * @param typeList tipo de listado (C=Created, S=Started, E=Ended)
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void listGolfGames(String typeList) {
+        Log.d(Global.TAG, "Enviando peticion tipo: " + typeList);
+        String txt = Global.activePlayer.getId_player() + "¬" + typeList;
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME, txt, null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);

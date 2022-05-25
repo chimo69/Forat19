@@ -141,4 +141,9 @@
     <string name="update_game">Actualitzar partida</string>
     <string name="change_data">Canviar data</string>
     <string name="change_hour">Canviar hora</string>
+    <string name="game_succesfully_ended">Joc finalitzat amb éxit</string>
+    <string name="game_could_not_be_ended">El joc no es va poder finalitzar</string>
+    <string name="course_type">Tipus de recorregut</string>
+    <string name="selected_player">Jugador seleccionat</string>
+    <string name="the_game_needs_to_be_finished_first">El joc ha de ser finalitzar primer</string>
 </resources>

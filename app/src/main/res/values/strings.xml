@@ -149,5 +149,10 @@
     <string name="update_game">Update game</string>
     <string name="change_data">Change data</string>
     <string name="change_hour">Change hour</string>
+    <string name="course_type">Course type</string>
+    <string name="game_succesfully_ended">Game succesfully ended</string>
+    <string name="game_could_not_be_ended">Game could not be ended</string>
+    <string name="selected_player">Selected player</string>
+    <string name="the_game_needs_to_be_finished_first">The game needs to be finished first</string>
 
 </resources>

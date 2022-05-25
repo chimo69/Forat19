@@ -30,14 +30,14 @@
                     android:text="@string/select_game_type" />
 
                 <Spinner
-                    android:id="@+id/createGame_gameType"
+                    android:id="@+id/sp_addGame_gameType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/newGame_title"
+                android:id="@+id/cv_addGame_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -77,7 +77,7 @@
                     android:gravity="center" />
 
                 <Button
-                    android:id="@+id/btn_addGame_ChangeHour"
+                    android:id="@+id/btn_addGame_changeHour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,7 +92,7 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/createGame_cvCourse"
+                android:id="@+id/cv_addGame_selectCourse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -100,7 +100,7 @@
                 app:cardCornerRadius="10dp">
 
                 <TextView
-                    android:id="@+id/createGame_selectCourse"
+                    android:id="@+id/txt_addGame_selectCourse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -108,7 +108,7 @@
                     android:text="@string/select_course" />
 
                 <ImageButton
-                    android:id="@+id/createGame_btnDeleteCourse"
+                    android:id="@+id/ib_addGame_deleteCourseSelected"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_gravity="right|center_horizontal"
@@ -124,7 +124,7 @@
                 android:layout_marginHorizontal="10dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/newGame_recyclerCourse"
+                android:id="@+id/rv_addGame_courses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp">
@@ -171,7 +171,7 @@
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/createGame_cvPlayerTitle"
+                    android:id="@+id/cv_addGame_playerTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -192,7 +192,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/createGame_cvNumber"
+                    android:id="@+id/cv_addGame_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -202,7 +202,7 @@
                     app:cardCornerRadius="10dp">
 
                     <TextView
-                        android:id="@+id/createGame_number"
+                        android:id="@+id/txt_addGame_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -215,7 +215,7 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/creatGame_cvPlayers"
+                android:id="@+id/cv_addGame_players"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -224,7 +224,7 @@
                 app:cardCornerRadius="10dp">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/newGame_RecyclerPlayers"
+                    android:id="@+id/rv_addGame_players"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -232,7 +232,7 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/createGame_btnCreateGame"
+                android:id="@+id/btn_addGame_createGame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"

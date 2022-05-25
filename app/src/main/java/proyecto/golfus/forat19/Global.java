@@ -1,7 +1,10 @@
 package proyecto.golfus.forat19;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 
+import Forat19.Golf_Game_Results;
 import Forat19.Players;
 import Forat19.Users;
 
@@ -29,6 +32,16 @@ public class Global {
     public static Players activePlayer=null;
     public static Key serverKey;
     public static Boolean currentGame;
+
+    private static List<Golf_Game_Results> golfGameResults;
+
+    public static List<Golf_Game_Results> getGolfGameResults() {
+        return golfGameResults;
+    }
+
+    public static void setGolfGameResults(List<Golf_Game_Results> golfGameResults) {
+        Global.golfGameResults = golfGameResults;
+    }
 
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_PASSWORD = "password";
@@ -90,9 +103,14 @@ public class Global {
     public static final String UPDATE_GOLF_GAME = "UpdateGolfGame";
     public static final String GET_GOLF_GAME = "GetGolfGame";
     public static final String START_GOLF_GAME = "StartGolfGame";
+    public static final String LIST_GOLF_GAME_RESULT = "ListGolfGameResult";
+    public static final String LIST_GOLF_GAME_HOLE_RESULT = "ListGolfGameHoleResult";
+    public static final String END_GOLF_GAME = "EndGolfGame";
 
     // Codigo recibidos
     public static final String OK = "Ok";
+    public static final String ERROR2 = "Error:2";
+    public static final String ERROR3 = "Error:3";
 
 
 }
