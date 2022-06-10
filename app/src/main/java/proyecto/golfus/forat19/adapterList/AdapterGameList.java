@@ -30,9 +30,9 @@ import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
 /**
- * Adaptador encargado de rellenar el RecyclerView de juegos
+ * Adaptador encargado de rellenar el RecyclerView de partidos
  *
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 
 public class AdapterGameList extends RecyclerView.Adapter<AdapterGameList.ViewHolderList> implements View.OnClickListener {
@@ -92,6 +92,12 @@ public class AdapterGameList extends RecyclerView.Adapter<AdapterGameList.ViewHo
 
         }
 
+        /**
+         * Rellena cada item del recyclerview con los datos recibidos
+         *
+         * @param golf_games partidas
+         * @author Antonio Rodríguez Sirgado
+         */
         public void fillList(Golf_Games golf_games) {
 
             String dateGame = Utils.changeDateFormat(golf_games.getGame_date());

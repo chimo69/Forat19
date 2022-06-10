@@ -6,83 +6,86 @@
     android:layout_height="match_parent"
     tools:context=".ui.lists.FriendsList" >
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_title_friendshipRequest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/green"
-        app:cardCornerRadius="10dp">
-
-        <TextView
-            android:id="@+id/textView57"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="@string/friendship_request"
-            android:textColor="@color/black" />
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tv_Friends_InfoRequest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cv_title_friendshipRequest"
-        android:gravity="center"
-        android:text="@string/no_pending_applications"
-        android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_friendshipRequest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_Friends_InfoRequest"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_title_friendshipList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rv_friendshipRequest"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:cardBackgroundColor="@color/green"
-        app:cardCornerRadius="10dp">
-
-        <TextView
-            android:id="@+id/textView56"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="Friendship list"
-            android:textColor="@color/black" />
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tv_Friends_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cv_title_friendshipList"
-        android:gravity="center"
-        android:text="No friendships to show"
-        android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_friendshipList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tv_Friends_list"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp" />
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_title_friendshipRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="@color/green"
+            app:cardCornerRadius="10dp">
+
+            <TextView
+                android:id="@+id/textView57"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="@string/friendship_request"
+                android:textColor="@color/black" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_Friends_InfoRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_pending_applications" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_friendshipRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_title_friendshipList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="@color/green"
+            app:cardCornerRadius="10dp">
+
+            <TextView
+                android:id="@+id/textView56"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="@string/friendship_list"
+                android:textColor="@color/black" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_Friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_friendships_to_show" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_friendshipList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
 </RelativeLayout>

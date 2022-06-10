@@ -74,7 +74,7 @@ public class Hole extends Fragment {
         handicap.setText(Integer.toString(holeHandicap));
         about.setText(holeAbout);
         length.setText(Integer.toString(holeLength));
-        numHole.setText(getString(R.string.Hole)+": "+Integer.toString(holeNumber));
+        numHole.setText(getString(R.string.Hole)+": "+ holeNumber);
 
         if (Utils.getActiveTypeUser(getActivity())!= Global.TYPE_ADMIN_USER){
             update.setVisibility(View.GONE);

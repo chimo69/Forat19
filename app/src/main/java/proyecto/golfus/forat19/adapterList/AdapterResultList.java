@@ -1,5 +1,7 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,7 @@ import proyecto.golfus.forat19.*;
 /**
  * Adaptador encargado de mostrar los resultados de los partidos
  *
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterResultList extends RecyclerView.Adapter<AdapterResultList.ViewHolderList> implements View.OnClickListener {
     private List<Golf_Game_Results> listResults;
@@ -34,6 +36,8 @@ public class AdapterResultList extends RecyclerView.Adapter<AdapterResultList.Vi
         this.listResults = listResults;
         listSearch = new ArrayList<>();
         listSearch.addAll(listResults);
+
+
     }
 
     @Override
@@ -73,15 +77,70 @@ public class AdapterResultList extends RecyclerView.Adapter<AdapterResultList.Vi
             note = itemView.findViewById(R.id.et_itemResult_note);
             hole = itemView.findViewById(R.id.txt_itemResult_numberHole);
             player = itemView.findViewById(R.id.txt_itemResult_player);
+
+            shot.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.length()>0){
+                        Global.getGolfGameResults().get(getAdapterPosition()).setValue(Integer.parseInt(s.toString()));
+                    } else if (s.length()==0){
+                        Global.getGolfGameResults().get(getAdapterPosition()).setValue(0);
+                    }
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            note.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.length()>=0){
+                        Global.getGolfGameResults().get(getAdapterPosition()).setNotes(s.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
         }
 
+        /**
+         * Rellena cada item del recyclerview con los datos recibidos
+         *
+         * @param golfGameResults resultados del partido
+         * @author Antonio Rodríguez Sirgado
+         */
         public void fillList(Golf_Game_Results golfGameResults) {
             hole.setText(String.valueOf(golfGameResults.getGolf_course_hole().getId_golf_course_hole()));
-            shot.setText(String.valueOf(golfGameResults.getValue()));
+            if (golfGameResults.getValue()==0){
+                shot.setText("");
+            } else {
+                shot.setText(String.valueOf(golfGameResults.getValue()));
+            }
             note.setText(golfGameResults.getNotes());
             player.setText(golfGameResults.getPlayer().getUser().getUsername());
-            shot.setEnabled(false);
-            note.setEnabled(false);
+
+            if (golfGameResults.getGolf_game().getStatus().equals(Global.END)){
+                shot.setEnabled(false);
+                note.setEnabled(false);
+            }
         }
     }
 
@@ -100,7 +159,7 @@ public class AdapterResultList extends RecyclerView.Adapter<AdapterResultList.Vi
         } else {
             listResults.clear();
             for (Golf_Game_Results ggr : listSearch) {
-                if (ggr.getPlayer().getUser().getUsername().toLowerCase().contains(player.toLowerCase())) {
+                if ((ggr.getPlayer().getUser().getUsername()).equalsIgnoreCase(player)) {
                     listResults.add(ggr);
                 }
             }
@@ -122,7 +181,7 @@ public class AdapterResultList extends RecyclerView.Adapter<AdapterResultList.Vi
         } else {
             listResults.clear();
             for (Golf_Game_Results ggr : listSearch) {
-                if (String.valueOf(ggr.getGolf_course_hole().getId_golf_course_hole()).contains(hole)) {
+                if (String.valueOf(ggr.getGolf_course_hole().getId_golf_course_hole()).equals(hole)) {
                     listResults.add(ggr);
                 }
             }

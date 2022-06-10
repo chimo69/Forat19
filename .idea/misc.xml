@@ -6,6 +6,7 @@
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/drawable-anydpi/ic_home.xml" value="0.387" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/drawable/button_rounded.xml" value="0.3495" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/drawable/button_rounded_border.xml" value="0.161" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/drawable/selector.xml" value="0.3555" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/drawable/toast_drwable.xml" value="0.3875" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout-land/activity_login_screen.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout-sw600dp/activity_login_screen.xml" value="0.22" />
@@ -58,14 +59,15 @@
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_normal_user_list.xml" value="0.24027362120564344" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_player_data.xml" value="0.3180846515604959" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_player_type.xml" value="0.3180846515604959" />
-        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_result.xml" value="0.67" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_result.xml" value="0.22963275643731532" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/item_user.xml" value="0.2672082086361693" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/login.xml" value="0.18333333333333332" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/micuenta.xml" value="0.24473684210526317" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/prueba.xml" value="0.18333333333333332" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/prueba2.xml" value="0.25" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/register.xml" value="0.19375" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/toast_drawable.xml" value="0.24473684210526317" />
-        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/toolbar.xml" value="0.18333333333333332" />
+        <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/layout/toolbar.xml" value="0.67" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/menu/menu.xml" value="0.18333333333333332" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/menu/nav_options.xml" value="0.33" />
         <entry key="..\:/Users/chimo/AndroidStudioProjects/Forat19/app/src/main/res/menu/nav_options_admin.xml" value="0.18333333333333332" />
@@ -78,6 +80,7 @@
     <option name="OUTPUT_DIRECTORY" value="D:/Javadoc" />
     <option name="OPTION_SCOPE" value="private" />
     <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="false" />
     <option name="OTHER_OPTIONS" value="-encoding utf8 -docencoding utf8 -charset utf8" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">

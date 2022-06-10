@@ -41,7 +41,7 @@ import Forat19.Golf_Games;
 import Forat19.Message;
 import Forat19.Players;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterCoursesList;
 import proyecto.golfus.forat19.adapterList.AdapterPlayersList;
 import proyecto.golfus.forat19.ui.start.Principal;
@@ -125,57 +125,7 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
         btn_changeDate.setOnClickListener(this);
         btn_changeHour.setOnClickListener(this);
         btn_createGame.setOnClickListener(this);
-
-        // Boton cambio de fecha
-        /*changeDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dayGame = Utils.dateToInt(game.getGame_date(), "d");
-                monthGame = Utils.dateToInt(game.getGame_date(), "m");
-                yearGame = Utils.dateToInt(game.getGame_date(), "y");
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            String monthTxt, dayOfMonthTxt;
-                            month++;
-                            if (month<10){
-                                monthTxt = "0" + month;
-                            }else{
-                                monthTxt = String.valueOf(month);
-                            }
-                            if (dayOfMonth<10){
-                                dayOfMonthTxt = "0" + dayOfMonth;
-                            }else{
-                                dayOfMonthTxt = String.valueOf(dayOfMonth);
-                            }
-
-                            txtDate.setText(dayOfMonthTxt + "/" + monthTxt + "/" + year);
-                    }
-                }, yearGame, monthGame, dayGame);
-
-                datePickerDialog.show();
-            }
-        });
-
-        // Boton cambio de hora
-        changeHour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                hourGame = Utils.timeToInt(game.getGame_hour(), "h");
-                minutesGame = Utils.timeToInt(game.getGame_hour(), "m");
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.DialogTheme, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtHour.setText(hourOfDay + ":" + minute);
-                    }
-                }, hourGame, minutesGame, true);
-                timePickerDialog.show();
-            }
-        });*/
+        ib_deleteCourse.setOnClickListener(this);
 
         // Boton de seleccion de tipo de juego
         sp_gameType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -186,45 +136,6 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        /*
-        // Boton crear juego
-        createGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listPlayersSelected.size() > 0) {
-                    if (update) {
-                        sendUpdateGame();
-                    } else {
-                        sendNewGame();
-                    }
-                } else {
-                    Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
-                }
-            }
-        });
-
-
-        // Boton eliminar recorrido actual
-        deleteCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isCourseSelected(false);
-            }
-        });*/
-
-        search_FriendsList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //adapterFriendshipList.filter(newText);
-                return false;
             }
         });
 
@@ -278,9 +189,11 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
             ib_deleteCourse.setVisibility(View.INVISIBLE);
             txtTitle.setText(R.string.update_game);
             golfGameTypesSelected = game.getGolf_game_type();
+
             for (Golf_Game_Players g : game.getGolf_game_players()) {
                 listPlayersSelected.add(g.getPlayer());
             }
+
             txtDate.setText(Utils.changeDateFormat(game.getGame_date()));
             txtHour.setText(game.getGame_hour());
 
@@ -294,7 +207,6 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
             listPlayersSelected.add(Global.activePlayer);
         }
 
-
         adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
         txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
 
@@ -305,9 +217,10 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_addGame_changeData:
-                dayGame = Utils.dateToInt(game.getGame_date(), "d");
-                monthGame = Utils.dateToInt(game.getGame_date(), "m");
-                yearGame = Utils.dateToInt(game.getGame_date(), "y");
+
+                dayGame = Utils.dateToInt(txtDate.getText().toString(), "d");
+                monthGame = Utils.dateToInt(txtDate.getText().toString(), "m");
+                yearGame = Utils.dateToInt(txtDate.getText().toString(), "y");
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -333,29 +246,49 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
 
                 break;
             case R.id.btn_addGame_changeHour:
-                hourGame = Utils.timeToInt(game.getGame_hour(), "h");
-                minutesGame = Utils.timeToInt(game.getGame_hour(), "m");
+
+                hourGame = Utils.timeToInt(txtHour.getText().toString(), "h");
+                minutesGame = Utils.timeToInt(txtHour.getText().toString(), "m");
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.DialogTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtHour.setText(hourOfDay + ":" + minute);
+                        String txtH, txtM;
+
+                        if (hourOfDay < 10) {
+                            txtH = "0" + hourOfDay;
+                        } else {
+                            txtH = String.valueOf(hourOfDay);
+                        }
+                        if (minute < 10) {
+                            txtM = "0" + minute;
+                        } else {
+                            txtM = String.valueOf(minute);
+                        }
+
+                        txtHour.setText(txtH + ":" + txtM);
                     }
                 }, hourGame, minutesGame, true);
                 timePickerDialog.show();
                 break;
             case R.id.btn_addGame_createGame:
-                if (listPlayersSelected.size() > 0) {
-                    if (update) {
-                        sendUpdateGame();
+                if (courseSelected != null) {
+                    if (listPlayersSelected.size() > 0) {
+
+                        if (update) {
+                            sendUpdateGame();
+                        } else {
+                            sendNewGame();
+                        }
                     } else {
-                        sendNewGame();
+                        Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
                     }
                 } else {
-                    Utils.showSnack(getView(), getString(R.string.not_enough_gamers), Snackbar.LENGTH_LONG);
+                    Utils.showSnack(getView(), getString(R.string.no_course_selected), Snackbar.LENGTH_LONG);
                 }
                 break;
             case R.id.ib_addGame_deleteCourseSelected:
+                courseSelected = null;
                 isCourseSelected(false);
                 break;
         }
@@ -414,8 +347,14 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
                                 listPlayerFriends = (ArrayList<Players>) request.getObject();
 
                                 Log.d(Global.TAG, "Jugadores recibidos: " + listPlayerFriends.size());
-                                for (Players p : listPlayerFriends) {
-                                    Log.d(Global.TAG, "Jugador recibido: " + p.getUser().getUsername());
+
+                                // Eliminamos del listado los jugadores que ya estan en el listado
+                                for (int i = 0; i < listPlayerFriends.size(); i++) {
+                                    for (int s = 0; s < listPlayersSelected.size(); s++) {
+                                        if (listPlayersSelected.get(s).getId_player() == listPlayerFriends.get(i).getId_player()) {
+                                            listPlayerFriends.remove(i);
+                                        }
+                                    }
                                 }
 
                                 adapterPlayerFriendsList = new AdapterPlayersList(listPlayerFriends);
@@ -423,7 +362,7 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
                                 adapterPlayerFriendsList.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if (listPlayerFriends.size() < Global.MAX_GAMERS) {
+                                        if (listPlayersSelected.size() < Global.MAX_GAMERS) {
                                             boolean idFound = false;
                                             for (Players p : listPlayersSelected) {
                                                 if (listPlayerFriends.get(rv_friends.getChildAdapterPosition(v)).getId_player() == p.getId_player()) {
@@ -432,8 +371,10 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
                                             }
                                             if (!idFound) {
                                                 listPlayersSelected.add(listPlayerFriends.get(rv_friends.getChildAdapterPosition(v)));
+                                                listPlayerFriends.remove(listPlayerFriends.get(rv_friends.getChildAdapterPosition(v)));
                                                 adapterPlayersSelectedList.notifyItemInserted(listPlayersSelected.size() + 1);
                                                 txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
+                                                adapterPlayerFriendsList.notifyDataSetChanged();
                                             } else {
                                                 Utils.showSnack(getView(), getString(R.string.player_already_in_the_match), Snackbar.LENGTH_LONG);
                                             }
@@ -586,8 +527,10 @@ public class AddGame extends Fragment implements Observer, View.OnClickListener 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             if (viewHolder.getAbsoluteAdapterPosition() != 0) {
+                listPlayerFriends.add(listPlayersSelected.get(viewHolder.getAdapterPosition()));
                 listPlayersSelected.remove(viewHolder.getAdapterPosition());
                 adapterPlayersSelectedList.notifyDataSetChanged();
+                adapterPlayerFriendsList.notifyDataSetChanged();
                 txtNumberOfGamers.setText(String.valueOf(listPlayersSelected.size()));
             } else {
                 adapterPlayersSelectedList.notifyDataSetChanged();

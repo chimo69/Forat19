@@ -22,7 +22,16 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/sv_addFriend_listFriends"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="30dp" >
+
+        </androidx.appcompat.widget.SearchView>
+
+        <TextView
+            android:id="@+id/textView47"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Pulsa sobre el usuario para solicitar amistad" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_addFriend_possibleFriendship"

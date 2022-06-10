@@ -18,7 +18,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de tipos de datos
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHolderList> {
 
@@ -81,6 +81,11 @@ public class AdapterDataList extends RecyclerView.Adapter<AdapterDataList.ViewHo
             });
         }
 
+        /**
+         * Rellena cada item del recyclerView con los datos recibidos
+         * @param playerData tipo de dato
+         * @param data dato
+         */
         public void fillList(String playerData, String data) {
             typeData.setText(playerData);
             entryData.setText(data);

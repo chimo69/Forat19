@@ -133,7 +133,7 @@ public class MyAccount extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new UpdateUser();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -195,7 +195,7 @@ public class MyAccount extends Fragment implements Observer {
                                 Log.d(Global.TAG, "MAIL: " + ((Users) request.getObject()).getEmail());
                                 Log.d(Global.TAG, "-------------------------------------------------");
                                 changeText();
-                                getTypePlayers();
+                                getUserPlayers();
                             }
                             break;
 
@@ -217,6 +217,7 @@ public class MyAccount extends Fragment implements Observer {
                                 if (listPlayers.size() > 0) {
                                     adapterPlayersList = new AdapterPlayerTypeList(listPlayers, getContext());
                                     recyclerView.setAdapter(adapterPlayersList);
+                                    infoPlayers.setVisibility(View.GONE);
 
                                     // Seleccion de jugadores
                                     adapterPlayersList.setOnClickListener(new View.OnClickListener() {
@@ -225,11 +226,12 @@ public class MyAccount extends Fragment implements Observer {
                                             Log.d(Global.TAG, "Jugador seleccionado: " + listPlayers.get(recyclerView.getChildAdapterPosition(v)).getPlayer_type().getPlayer_type());
                                             Fragment fragment = new Player(listPlayers.get(recyclerView.getChildAdapterPosition(v)));
                                             cvInfoPlayer.setVisibility(View.VISIBLE);
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_infoPlayer, fragment).addToBackStack(null).commit();
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_infoPlayer, fragment).commit();
                                         }
                                     });
                                 } else {
-                                    infoPlayers.setText("No dispone de jugadores");
+                                    infoPlayers.setText(R.string.no_gamer_created);
+                                    infoPlayers.setVisibility(View.VISIBLE);
                                 }
 
                             }
@@ -327,7 +329,13 @@ public class MyAccount extends Fragment implements Observer {
         request.addObserver(this);
     }
 
-    private void getTypePlayers() {
+    /**
+     * <b>Envia el mensaje para cargar los jugadores de un usuario</b><br>
+     * Mensaje = (token¬device, listUserPlayer, id usuario, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void getUserPlayers() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_USER_PLAYER, Utils.getActiveId(getActivity()), null);
         RequestServer request = new RequestServer();
         request.request(message);

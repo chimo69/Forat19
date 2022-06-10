@@ -123,7 +123,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_gamer">New gamer</string>
-    <string name="choose_game_type">Choose game type</string>
+    <string name="choose_player_type">Choose player type</string>
     <string name="add_with_qr_code">Add with QR Code</string>
     <string name="Friendship_added">Friendship successfully added</string>
     <string name="Are_you_sure_eliminate_friendship">Are you sure you want to eliminate friendship?</string>
@@ -132,7 +132,7 @@
     <string name="game_succesfully_eliminated">Game successfully eliminated</string>
     <string name="Game_could_not_be_deleted">The game could not be deleted</string>
     <string name="are_you_sure_eliminate_game">Are you sure you want to eliminate this game?</string>
-    <string name="no_games_to_show">No games to show</string>
+    <string name="no_pending_games_to_show">No pending games to show</string>
     <string name="all">All</string>
     <string name="current_game">Current game</string>
     <string name="pending_games">Pending games</string>
@@ -154,5 +154,22 @@
     <string name="game_could_not_be_ended">Game could not be ended</string>
     <string name="selected_player">Selected player</string>
     <string name="the_game_needs_to_be_finished_first">The game needs to be finished first</string>
+    <string name="select_hole">Select hole</string>
+    <string name="are_you_sure_end_game">Are you sure that you want end game?</string>
+    <string name="show_ended_games">Show ended games</string>
+    <string name="loading_games">Loading Games...</string>
+    <string name="ended_games">Ended games</string>
+    <string name="no_ended_games_to_show">No ended games to show</string>
+    <string name="friendship_list">Friendship list</string>
+    <string name="no_friendships_to_show">No friendships to show</string>
+    <string name="player_successfully_updated">Player successfully updated</string>
+    <string name="The_game_has_started">The game has started</string>
+    <string name="no_gamer_created">"You have not created any players yet "</string>
+    <string name="loading_game">Loading game...</string>
+    <string name="no_course_selected">No course selected</string>
+    <string name="You_already_have_that_type_of_player">You already have that type of player</string>
+    <string name="click_on_the_user_to_accept_the_friendship">Click on the user to accept the friendship</string>
+    <string name="swipe_to_the_right_to_remove_the_friendship">Swipe to the right to remove the friendship</string>
+    <string name="gamer_succesfully_added">Gamer succesfully added</string>
 
 </resources>

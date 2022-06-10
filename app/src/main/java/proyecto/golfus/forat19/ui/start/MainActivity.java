@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             Utils.showSnack(view, ((Reply) arg).getTypeError(), Snackbar.LENGTH_LONG);
             MainActivity.loading.post(() -> MainActivity.loading.setVisibility(View.INVISIBLE));
             MainActivity.btn_tryAgain.post(() -> MainActivity.btn_tryAgain.setVisibility(View.VISIBLE));
+
             btn_tryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

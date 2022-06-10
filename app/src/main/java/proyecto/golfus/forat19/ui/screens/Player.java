@@ -1,17 +1,15 @@
 package proyecto.golfus.forat19.ui.screens;
 
 import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -21,16 +19,18 @@ import java.util.Observable;
 import java.util.Observer;
 
 import Forat19.Message;
-import Forat19.Player_Data;
 import Forat19.Player_Information;
 import Forat19.Players;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterDataList;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
 import proyecto.golfus.forat19.utils.Utils;
 
+/**
+ * Fragment para mostrar información del jugador
+ */
 public class Player extends Fragment implements Observer {
 
 
@@ -43,9 +43,7 @@ public class Player extends Fragment implements Observer {
     private ArrayList<Player_Information> playerInformationList;
     private ArrayList<String> listPlayerData = new ArrayList<>();
 
-
     public Player() {
-
     }
 
     public Player(Players players) {
@@ -67,9 +65,8 @@ public class Player extends Fragment implements Observer {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         update = view.findViewById(R.id.btn_updatePlayer);
         recyclerView = view.findViewById(R.id.rv_players);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         update = view.findViewById(R.id.btn_updatePlayer);
-
-
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,8 +74,6 @@ public class Player extends Fragment implements Observer {
             }
         });
 
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         if (players != null) {
             Log.d(Global.TAG, "Tipo jugador recibido: " + players.getPlayer_type().getPlayer_type());
             loadPlayerInformation();
@@ -86,6 +81,11 @@ public class Player extends Fragment implements Observer {
         return view;
     }
 
+    /**
+     * <b>Envia informacion actualizada de jugador</b><br>
+     * Mensaje = (token¬device, UpdatePlayer, null, player actualizado)     *
+     * @author Antonio Rodríguez Sirgado
+     */
     private void updatePlayer() {
         String[] dataEntries = adapterDataList.getDataEntries();
         List<Player_Information> listData = new ArrayList<>();
@@ -158,7 +158,7 @@ public class Player extends Fragment implements Observer {
                             break;
                         case Global.UPDATE_PLAYER:
                             if (parameter.equals(Global.OK)){
-                                Utils.showSnack(getView(), "Player succesfully upgraded", Snackbar.LENGTH_LONG);
+                                Utils.showSnack(getView(), getString(R.string.player_successfully_updated), Snackbar.LENGTH_LONG);
                                 Fragment fragment = new MyAccount();
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                                 break;

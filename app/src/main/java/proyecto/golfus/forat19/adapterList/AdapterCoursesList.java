@@ -91,7 +91,7 @@ public class AdapterCoursesList extends RecyclerView.Adapter<AdapterCoursesList.
 
         /**
          * Rellena cada item del recyclerview con los datos recibidos de los recorridos
-         *
+         * @param golf_courses recorrido recibido
          * @author Antonio Rodríguez Sirgado
          */
         public void fillList(Golf_Courses golf_courses) {

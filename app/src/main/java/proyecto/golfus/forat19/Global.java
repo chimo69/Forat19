@@ -1,8 +1,10 @@
 package proyecto.golfus.forat19;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import Forat19.Golf_Game_Results;
 import Forat19.Players;
@@ -12,7 +14,7 @@ import Forat19.Users;
  * Conjunto de variables globales y preferencias
  * @author Antonio Rodríguez Sirgado
  */
-public class Global {
+public class Global extends Observable {
 
     public static final String CHECKED = "Checked";
     public static final String CREATE = "C";
@@ -31,7 +33,11 @@ public class Global {
     public static Users activeUser=null;
     public static Players activePlayer=null;
     public static Key serverKey;
-    public static Boolean currentGame;
+    public static Boolean currentGame=false;
+    public static Instant start;
+    public static long elapsedTime=0;
+    public static float distance;
+    public static boolean isTimePaused = false;
 
     private static List<Golf_Game_Results> golfGameResults;
 
@@ -62,6 +68,7 @@ public class Global {
     public static final String PREF_TYPE_USER="typeUser";
     public static final String PREF_ACTIVE_TOKEN="activeToken";
     public static final String PREF_ACTIVE_ID = "activeID";
+    public static final String PREF_SHOW_ENDED_STATUS = "showEnded" ;
 
     // Codigos para enviar
     public static final String LOGIN="Login";
@@ -106,6 +113,8 @@ public class Global {
     public static final String LIST_GOLF_GAME_RESULT = "ListGolfGameResult";
     public static final String LIST_GOLF_GAME_HOLE_RESULT = "ListGolfGameHoleResult";
     public static final String END_GOLF_GAME = "EndGolfGame";
+    public static final String UPDATE_GOLF_GAME_RESULTS = "UpdateGolfGameResult";
+    public static final String GET_INSTALLATION = "GetInstallation";
 
     // Codigo recibidos
     public static final String OK = "Ok";

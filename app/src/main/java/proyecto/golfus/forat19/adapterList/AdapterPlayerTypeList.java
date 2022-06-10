@@ -19,7 +19,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de tipos de jugadores
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterPlayerTypeList extends RecyclerView.Adapter<AdapterPlayerTypeList.ViewHolderList> implements View.OnClickListener {
 
@@ -74,6 +74,12 @@ public class AdapterPlayerTypeList extends RecyclerView.Adapter<AdapterPlayerTyp
             cv = itemView.findViewById(R.id.item_cvTypePlayer);
         }
 
+        /**
+         * Rellena cada item del recyclerview con los datos recibidos
+         *
+         * @param playerTypes tipo de jugador
+         * @author Antonio Rodríguez Sirgado
+         */
         public void fillList (Players playerTypes){
             typePlayer.setText(playerTypes.getPlayer_type().getPlayer_type());
         }

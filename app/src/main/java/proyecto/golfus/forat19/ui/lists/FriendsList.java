@@ -26,7 +26,7 @@ import Forat19.Message;
 import Forat19.User_Relationships;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterFriendshipList;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
@@ -41,11 +41,11 @@ public class FriendsList extends Fragment implements Observer {
 
     private ArrayList<User_Relationships> listFriends = new ArrayList<>();
     private ArrayList<User_Relationships> listRequest;
-    private RecyclerView rw_friends, rw_request;
+    private RecyclerView rv_friends, rv_request;
     private AdapterFriendshipList adapterFriendshipList;
     private AdapterFriendshipList adapterRequestList;
     private Message request;
-    private TextView listFriendsInfo, requestFriends;
+    private TextView txt_listFriendsInfo, txt_requestFriends;
 
     public FriendsList(ArrayList<User_Relationships> listRequest) {
         this.listRequest = listRequest;
@@ -66,23 +66,23 @@ public class FriendsList extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends_list, container, false);
-        listFriendsInfo = view.findViewById(R.id.tv_Friends_list);
-        requestFriends = view.findViewById(R.id.tv_Friends_InfoRequest);
-        rw_friends = view.findViewById(R.id.rv_friendshipList);
-        rw_friends.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rw_request = view.findViewById(R.id.rv_friendshipRequest);
-        rw_request.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        txt_listFriendsInfo = view.findViewById(R.id.tv_Friends_list);
+        txt_requestFriends = view.findViewById(R.id.tv_Friends_InfoRequest);
+        rv_friends = view.findViewById(R.id.rv_friendshipList);
+        rv_friends.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rv_request = view.findViewById(R.id.rv_friendshipRequest);
+        rv_request.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         adapterRequestList = new AdapterFriendshipList(listRequest, getContext(), 1);
-        rw_request.setAdapter(adapterRequestList);
+        rv_request.setAdapter(adapterRequestList);
 
-        new ItemTouchHelper(itemTouch).attachToRecyclerView(rw_friends);
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(rv_friends);
         loadFriends();
 
         Log.d(Global.TAG, "Numero de solicitudes de amistad recibidas: " + listRequest.size());
         if (listRequest.size() > 0) {
-            requestFriends.setVisibility(View.VISIBLE);
+            txt_requestFriends.setText(R.string.click_on_the_user_to_accept_the_friendship);
             adapterRequestList = new AdapterFriendshipList(listRequest, getContext(), 1);
-            rw_request.setAdapter(adapterRequestList);
+            rv_request.setAdapter(adapterRequestList);
             adapterRequestList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,29 +91,36 @@ public class FriendsList extends Fragment implements Observer {
                     confirmation.setMessage(R.string.accept_friend_request);
                     confirmation.setCancelable(true);
                     confirmation.setPositiveButton(R.string.yes, (dialog, which) -> {
-                        acceptRequest(listRequest.get(rw_request.getChildAdapterPosition(v)), Global.ACCEPT);
-                        listRequest.remove(listRequest.get(rw_request.getChildAdapterPosition(v)));
-                        adapterRequestList.notifyItemRemoved(rw_request.getChildAdapterPosition(v));
+                        acceptRequest(listRequest.get(rv_request.getChildAdapterPosition(v)), Global.ACCEPT);
+                        listRequest.remove(listRequest.get(rv_request.getChildAdapterPosition(v)));
+                        adapterRequestList.notifyItemRemoved(rv_request.getChildAdapterPosition(v));
                     });
                     confirmation.setNegativeButton(R.string.Cancel, (dialog, which) -> {
 
                     });
                     confirmation.setNegativeButton(R.string.no, ((dialog, which) -> {
-                        acceptRequest(listRequest.get(rw_request.getChildAdapterPosition(v)), Global.REJECT);
-                        listRequest.remove(listRequest.get(rw_request.getChildAdapterPosition(v)));
-                        adapterRequestList.notifyItemRemoved(rw_request.getChildAdapterPosition(v));
+                        acceptRequest(listRequest.get(rv_request.getChildAdapterPosition(v)), Global.REJECT);
+                        listRequest.remove(listRequest.get(rv_request.getChildAdapterPosition(v)));
+                        adapterRequestList.notifyItemRemoved(rv_request.getChildAdapterPosition(v));
                     }));
 
                     confirmation.show();
                 }
             });
         } else {
-            requestFriends.setVisibility(View.GONE);
+            txt_requestFriends.setText(R.string.no_pending_applications);
         }
         return view;
     }
 
 
+    /**
+     * Permanece a la espera de que las variables cambien
+     *
+     * @param o   la clase observada
+     * @param arg objeto observado
+     * @author Antonio Rodriguez Sirgado
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (getActivity() == null) {
@@ -134,9 +141,10 @@ public class FriendsList extends Fragment implements Observer {
                                 listFriends = (ArrayList<User_Relationships>) request.getObject();
                                 if (listFriends.size() > 0) {
                                     adapterFriendshipList = new AdapterFriendshipList(listFriends, getContext(), 0);
-                                    rw_friends.setAdapter(adapterFriendshipList);
+                                    rv_friends.setAdapter(adapterFriendshipList);
+                                    txt_listFriendsInfo.setText(R.string.swipe_to_the_right_to_remove_the_friendship);
                                 } else {
-                                    listFriendsInfo.setVisibility(View.VISIBLE);
+                                    txt_listFriendsInfo.setText(R.string.no_friendships_to_show);
                                 }
                             }
                             break;
@@ -148,6 +156,7 @@ public class FriendsList extends Fragment implements Observer {
                         case Global.UPDATE_USER_RELATIONSHIP:
                             if (parameter.equals(Global.OK)) {
                                 Utils.showSnack(getView(), getString(R.string.Friendship_successfully_updated), Snackbar.LENGTH_LONG);
+                                loadFriends();
                             }
                             break;
                     }
@@ -173,6 +182,7 @@ public class FriendsList extends Fragment implements Observer {
      * <b>Envia el mensaje para borrar la amistad</b><br>
      * Mensaje = (token¬device, DeleteUserRelationship, null, userRelationship)
      *
+     * @param userRelationships amistad para borrar
      * @author Antonio Rodríguez Sirgado
      */
     private void deleteFriend(User_Relationships userRelationships) {
@@ -187,8 +197,8 @@ public class FriendsList extends Fragment implements Observer {
      * <b>Envia mensaje al servidor para aceptar una petición de amistad</b><br>
      * Mensaje = ((token¬device, UpdateUserRelationship, accept or reject (A/R) , user relationShip)
      *
-     * @param userRelationships
-     * @param acceptOrReject
+     * @param userRelationships peticion de amistad
+     * @param acceptOrReject    aceptada o rechazada
      */
     private void acceptRequest(User_Relationships userRelationships, String acceptOrReject) {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_USER_RELATIONSHIP, acceptOrReject, userRelationships);

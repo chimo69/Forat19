@@ -12,12 +12,12 @@ import java.util.ArrayList;
 
 import Forat19.Golf_Courses;
 import Forat19.Players;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el recyclerView de jugadores de un juego
  *
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.ViewHolderList> implements View.OnClickListener {
     ArrayList<Players> listPlayers;
@@ -70,6 +70,12 @@ public class AdapterPlayersList extends RecyclerView.Adapter<AdapterPlayersList.
             name = itemView.findViewById(R.id.name);
         }
 
+        /**
+         * Rellena cada item del recyclerview con los datos recibidos
+         *
+         * @param player jugador
+         * @author Antonio Rodríguez Sirgado
+         */
         public void fillList(Players player) {
             username.setText(player.getUser().getUsername());
             name.setText(player.getUser().getName());

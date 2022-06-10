@@ -18,7 +18,7 @@ import proyecto.golfus.forat19.*;
 
 /**
  * Adaptador encargado de rellenar el RecyclerView de amistades
- * @Author Antonio Rodríguez Sirgado
+ * @author Antonio Rodríguez Sirgado
  */
 public class AdapterFriendshipList extends RecyclerView.Adapter<AdapterFriendshipList.ViewHolderList> implements View.OnClickListener {
 
@@ -75,6 +75,10 @@ public class AdapterFriendshipList extends RecyclerView.Adapter<AdapterFriendshi
             cv = itemView.findViewById(R.id.item_cv_normalUser);
         }
 
+        /**
+         * Rellena cada item del RecyclerView con los datos recibidos
+         * @param userRelationships amistad
+         */
         public void fillList (User_Relationships userRelationships){
             if (whichUser==0){
                 username.setText(userRelationships.getRelated_user().getUsername());

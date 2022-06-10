@@ -1,12 +1,13 @@
 package proyecto.golfus.forat19.adapterList;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -14,20 +15,19 @@ import java.util.List;
 import proyecto.golfus.forat19.*;
 
 /**
- * Adaptador para rellenar el recyclerView de Hoyos
- *
  * @author Antonio Rodríguez Sirgado
  */
-public class AdapterHoleList extends RecyclerView.Adapter<AdapterHoleList.ViewHolderList> implements View.OnClickListener {
-    List<String> listHoles;
+public class AdapterUserList extends RecyclerView.Adapter<AdapterUserList.ViewHolderList> implements View.OnClickListener {
+    List<String> listUser;
     private View.OnClickListener listener;
+    private static int lastPosition=-1;
 
     public void setOnClickListener(View.OnClickListener listener) {
         this.listener = listener;
     }
 
-    public AdapterHoleList(List<String> listHoles) {
-        this.listHoles = listHoles;
+    public AdapterUserList(List<String> listUser) {
+        this.listUser = listUser;
     }
 
     @Override
@@ -39,43 +39,39 @@ public class AdapterHoleList extends RecyclerView.Adapter<AdapterHoleList.ViewHo
 
     @NonNull
     @Override
-    public AdapterHoleList.ViewHolderList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hole, null, false);
+    public AdapterUserList.ViewHolderList onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, null, false);
         view.setOnClickListener(this);
         return new ViewHolderList(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterHoleList.ViewHolderList holder, int position) {
-        holder.fillList(listHoles.get(position));
+    public void onBindViewHolder(@NonNull AdapterUserList.ViewHolderList holder, int position) {
+        holder.fillList(listUser.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return listHoles.size();
+        return listUser.size();
     }
 
     public class ViewHolderList extends RecyclerView.ViewHolder {
-        TextView txtHole;
-        CardView cv;
+
+        TextView txtUser;
 
         public ViewHolderList(@NonNull View itemView) {
             super(itemView);
-            txtHole = itemView.findViewById(R.id.txt_itemHole_numberHole);
-            cv = itemView.findViewById(R.id.cv_itemHole_numHole);
+            txtUser = itemView.findViewById(R.id.txt_itemUser_user);
         }
 
         /**
          * Rellena cada item del recyclerview con los datos recibidos
          *
-         * @param hole hoyo
+         * @param user usuario
          * @author Antonio Rodríguez Sirgado
          */
-        public void fillList(String hole) {
-            txtHole.setText(hole);
+        public void fillList(String user) {
+            txtUser.setText(user);
         }
     }
-
-
-
 }

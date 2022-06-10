@@ -1,6 +1,5 @@
 package proyecto.golfus.forat19.utils;
 
-import android.util.DebugUtils;
 import android.util.Log;
 
 import java.io.ObjectInputStream;
@@ -44,6 +43,7 @@ public class RequestServer extends Observable {
     private Boolean connectionOK = true;
     private Reply reply;
     private Key clientKey;
+    private Message messageToSend;
 
     /**
      * Recibe un objeto Message, inicia la conexión y la transacción
@@ -53,30 +53,47 @@ public class RequestServer extends Observable {
      */
     public void request(Message message) {
 
-        if (message.getCommand() != null) {
+        messageToSend = message;
+
+        if (messageToSend.getCommand() != null) {
             Thread thread = new Thread(() -> {
-                if (message.getCommand().equals(Global.LOGIN) || message.getCommand().equals(Global.VALIDATE_TOKEN)) {
+                if (messageToSend.getCommand().equals(Global.LOGIN) || messageToSend.getCommand().equals(Global.VALIDATE_TOKEN)) {
                     getKey();
-                    message.setObject(clientKey);
+                    messageToSend.setObject(clientKey);
+                } else if (messageToSend.getCommand().equals(Global.ADD_USER)){
+                    getKey();
                 }
-                initializeTransaction(message);
+                if (connectionOK){initializeTransaction();}
             });
             thread.start();
+            /*try {
+                thread.join(3000);
+            } catch (InterruptedException e) {
+                reply = new Reply(true, R.string.it_was_impossible_to_make_connection);
+                this.setChanged();
+                this.notifyObservers(reply);
+                this.clearChanged();
+                e.printStackTrace();
+            }*/
+
         }
     }
+
+    public void request (TypeRequest typeRequest){}
 
     /**
      * Envia el objeto Message al servidor y recibe una respuesta
      *
-     * @param message mensaje recibido
      * @author Antonio Rodríguez Sirgado
      */
-    public void initializeTransaction(Message message) {
+    public void initializeTransaction() {
         Log.d(Global.TAG, "La conexión esta: " + connectionOK);
 
         try {
-            send(message);
-            if (connectionOK) {retrieveData();}
+            send(messageToSend);
+            if (connectionOK) {
+                retrieveData();
+            }
 
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
             e.printStackTrace();
@@ -138,6 +155,7 @@ public class RequestServer extends Observable {
             this.notifyObservers(reply);
             this.clearChanged();
             connectionOK = false;
+
         }
     }
 
@@ -190,9 +208,8 @@ public class RequestServer extends Observable {
 
 
     /**
-     * Recoge del servidor un obeto Message y lo registra en el observador
+     * Recoge del servidor un obeto Message y lo registra en el observador    *
      *
-     * @return Mensaje recibido
      * @author Antonio Rodriguez Sirgado
      */
     public void retrieveData() throws
@@ -292,6 +309,8 @@ public class RequestServer extends Observable {
             input = sealed.getObject(dcipher);
         } catch (BadPaddingException ex) {
             Log.d(Global.TAG, "Clave recibida erronea");
+            getKey();
+            initializeTransaction();
         }
         Message returnMessage = (Message) input;
         Log.d(Global.TAG, "Mensaje desencriptado");

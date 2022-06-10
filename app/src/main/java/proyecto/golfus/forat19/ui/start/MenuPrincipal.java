@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,7 +40,7 @@ import proyecto.golfus.forat19.ui.screens.MyAccount;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.Utils;
 
-import proyecto.golfus.forat19.R.id;
+import proyecto.golfus.forat19.R.*;
 
 /**
  * Pantalla de menú principal
@@ -103,7 +104,7 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                 return true;
 
             case id.toolbar_home:
-                loadFragment(new Principal());
+                loadFragment(new Principal(), "principal");
                 return true;
         }
 
@@ -139,24 +140,24 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
 
                 case R.id.createPlayer:
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new AddPlayer());
+                    loadFragment(new AddPlayer(), "AddPlayer");
                     break;
                 case R.id.createGame:
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new AddGame());
+                    loadFragment(new AddGame(), "addGame");
                     break;
                 case R.id.searchGreen:
                 case R.id.manageGreens:
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new InstallationsList());
+                    loadFragment(new InstallationsList(), "installationsList");
                     break;
                 case R.id.manageUSers:
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new UsersList());
+                    loadFragment(new UsersList(), "usersList");
                     break;
                 case R.id.myAccount:
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    loadFragment(new MyAccount());
+                    loadFragment(new MyAccount(), "myAcount");
                     break;
                 case R.id.closeSession:
                     closeSession();
@@ -176,6 +177,8 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
+        ab.setTitle("");
+
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -207,18 +210,15 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        Log.d("INFO", "BackStacks: " + count);
-
         if (count == 0) {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else {
-                loadFragment(new Principal());
+                //loadFragment(new Principal(), "principal");
             }
 
         } else {
             super.onBackPressed();
-            //getSupportFragmentManager().popBackStack();
         }
 
 
@@ -240,8 +240,28 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
      * @param fragment fragmento recibido
      * @author Antonio Rodríguez Sirgado
      */
-    private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+    private void loadFragment(Fragment fragment, String tag) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(id.fragmentContainer);
+
+        if (fragment.isAdded()) {
+            transaction
+                    .hide(currentFragment)
+                    .show(fragment);
+        } else {
+            transaction
+                    .hide(currentFragment)
+                    .replace(id.fragmentContainer, fragment, tag);
+        }
+
+        if (tag.equals("principal")){
+            transaction.commit();
+        } else {
+            transaction.addToBackStack(null).commit();
+        }
+
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
 
     /**
@@ -269,6 +289,9 @@ public class MenuPrincipal extends AppCompatActivity implements Observer {
                         Utils.setActiveUser(this, null);
                         Utils.setActiveToken(this, null);
                         Utils.setActiveTypeUser(this, Global.TYPE_NORMAL_USER);
+                        Global.activeUser = null;
+                        Global.activePlayer = null;
+                        Global.setGolfGameResults(null);
 
                         Intent intent = new Intent(MenuPrincipal.this, LoginScreen.class);
                         startActivity(intent);

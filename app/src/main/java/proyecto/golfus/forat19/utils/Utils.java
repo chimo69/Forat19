@@ -20,7 +20,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.util.Observable;
 import java.util.Observer;
+import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import Forat19.Message;
 import Forat19.Users;
@@ -35,6 +41,7 @@ public class Utils extends AppCompatActivity {
 
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
+
 
     /**
      * Comprueba si el dispositivo es una tablet
@@ -310,6 +317,31 @@ public class Utils extends AppCompatActivity {
     }
 
     /**
+     * Guarda en el movil el id del usuario activo
+     *
+     * @param activity actividad desde donde es llamado
+     * @param status       estado del switch de mostrar partidos finalizados
+     */
+    public static void setShowEndedStatus(Activity activity, boolean status) {
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putBoolean(Global.PREF_SHOW_ENDED_STATUS, status);
+        editor.apply();
+    }
+
+    /**
+     * Devuelve si esta definido mostrar los partidos acabados
+     *
+     * @param activity activity donde se llama
+     * @return true si esta activo
+     */
+    public static Boolean getShowEndedStatus(Activity activity) {
+        preferences = activity.getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+        boolean status = preferences.getBoolean(Global.PREF_SHOW_ENDED_STATUS, false);
+        return status;
+    }
+
+    /**
      * Cambia el formato entero americano a texto español
      * @param date fecha a formatear
      * @return fecha formateada
@@ -338,11 +370,32 @@ public class Utils extends AppCompatActivity {
         return Integer.parseInt(dateInt);
     }
 
+    /**
+     * Convierte en Int la fecha pasada por argumento
+     * @param date fecha en formato string
+     * @param t parte de la fecha a coger (d=day;m=month,y=year)
+     * @return fecha convertida a int
+     * @author Antonio Rodríguez Sirgado
+     */
+    public static int dateToInt (String date, String t){
+        switch (t){
+            case "d":
+                String day = date.substring(0,2);
+                return Integer.parseInt(day);
+            case "m":
+                String month = date.substring(3,5);
+                return Integer.parseInt(month);
+            case "y":
+                String year = date.substring(6,10);
+                return Integer.parseInt(year);
+        }
+        return 0;
+    }
 
 
     /**
      * Convierte en Int la fecha pasada por argumento
-     * @param date fecha en formato string
+     * @param date fecha en formato int
      * @param t parte de la fecha a coger (d=day;m=month,y=year)
      * @return fecha convertida a int
      * @author Antonio Rodríguez Sirgado
@@ -382,6 +435,29 @@ public class Utils extends AppCompatActivity {
         return 0;
     }
 
+    /**
+     * Calcula el tiempo transcurrido y lo pasa a formato String
+     * @param initialTime tiempo inicial
+     * @param endTime tiempo final
+     * @return tiempo en formato string
+     * @author Antonio Rodriguez Sirgado
+     */
+    public static String calculeTime(long initialTime, long endTime, long elapsedTime) {
+
+        long tiempoTranscurrido = ( endTime - initialTime )+ elapsedTime;
+
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        formatoHora.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return formatoHora.format(tiempoTranscurrido);
+    }
+
+    public static String formatTime(long elapsedTime){
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+        formatoHora.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+    return formatoHora.format(elapsedTime);
+    }
 
 
 

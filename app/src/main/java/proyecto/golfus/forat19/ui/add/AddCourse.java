@@ -614,6 +614,7 @@ public class AddCourse extends Fragment implements Observer {
      * Muestra un error y pone el foco en el TextView enviado
      *
      * @param textView Donde debe poner el foco
+     * @param textError Mensaje de error
      * @author Antonio Rodríguez Sirgado
      */
     public void showError(TextView textView, String textError) {

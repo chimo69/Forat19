@@ -178,7 +178,7 @@ public class InstallationsList extends Fragment implements Observer, SearchView.
     /**
      * <b>Pide al servidor informacion de los recorridos</b><br>
      * Mensaje = (token¬device, listGolfCourse, id instalacion, null)
-     *
+     * @param installationId id de la instalación
      * @author Antonio Rodríguez Sirgado
      */
     public void loadGolfCourse(int installationId) {

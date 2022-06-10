@@ -12,9 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,8 +28,9 @@ import Forat19.Golf_Games;
 import Forat19.Message;
 import proyecto.golfus.forat19.adapterList.AdapterHoleList;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterResultList;
+import proyecto.golfus.forat19.adapterList.AdapterUserList;
 import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
 import proyecto.golfus.forat19.utils.RequestServer;
@@ -42,17 +40,16 @@ import proyecto.golfus.forat19.utils.Utils;
  * Fragment para mostrar resultados del partido
  */
 public class Results extends Fragment implements Observer {
-    private RecyclerView rvResults, rvHoles;
+    private RecyclerView rv_Results, rv_Holes, rv_Users;
     private ProgressBar loading;
     private Golf_Games currentGame;
     private Message request;
     private AdapterResultList adapterResultList;
     private AdapterHoleList adapterHoleList;
-    private TextView txtCourse, txtCourseType;
+    private AdapterUserList adapterUserList;
+    private TextView txt_course, txt_courseType, txt_selectPlayer, txt_selectHole;
     private List<String> listNamePlayers = new ArrayList<>();
     private List<String> listHoles = new ArrayList<>();
-    private ArrayAdapter<String> adapterPlayersList;
-    private ListView listPlayersView;
 
     public Results(Golf_Games golf_games) {
         currentGame = golf_games;
@@ -63,11 +60,28 @@ public class Results extends Fragment implements Observer {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        adapterResultList.filterPlayer("");
+        updateResults();
+        Log.d(Global.TAG,"Pausado: guardando resultados");
+    }
+
+    /*@Override
+    public void onStop() {
+        super.onStop();
+        adapterResultList.filterPlayer("");
+        updateResults();
+        Log.d(Global.TAG,"Parado: guardando resultados");
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         adapterResultList.filterPlayer("");
-        Log.d(Global.TAG, "Hasta luego");
-    }
+        updateResults();
+        Log.d(Global.TAG,"Parado: guardando resultados");
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,26 +95,24 @@ public class Results extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_results, container, false);
-        txtCourse = view.findViewById(R.id.txt_result_course);
-        txtCourseType = view.findViewById(R.id.txt_result_typeCourse);
+        txt_course = view.findViewById(R.id.txt_result_course);
+        txt_courseType = view.findViewById(R.id.txt_result_typeCourse);
+        txt_selectHole = view.findViewById(R.id.txt_result_selectHole);
+        txt_selectPlayer= view.findViewById(R.id.txt_result_selectPlayer);
         loading = view.findViewById(R.id.pb_result_loading);
-        listPlayersView = view.findViewById(R.id.lv_result_players);
-        rvHoles = view.findViewById(R.id.rv_result_holes);
-        rvHoles.setLayoutManager(new GridLayoutManager(getContext(), 9));
-        rvResults = view.findViewById(R.id.rv_result_results);
-        rvResults.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
+        rv_Holes = view.findViewById(R.id.rv_result_holes);
+        rv_Holes.setLayoutManager(new GridLayoutManager(getContext(), 9));
+        rv_Results = view.findViewById(R.id.rv_result_results);
+        rv_Results.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rv_Users =view.findViewById(R.id.rv_results_users);
+        rv_Users.setLayoutManager(new GridLayoutManager(getContext(), 4));
         loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
 
+        txt_course.setText(R.string.loading_game);
+        txt_courseType.setText(currentGame.getGolf_course().getGolf_course());
 
-        if (Global.getGolfGameResults() != null) {
-            Log.d(Global.TAG,"Tamaño: "+ Global.getGolfGameResults().size());
-            for (Golf_Game_Results g : Global.getGolfGameResults()) {
-                Log.d(Global.TAG, " Info: " + g.getGolf_course_hole().getId_golf_course_hole());
-            }
-        }
-
-        showResults();
+        listResults();
+        //showResults();
 
         return view;
     }
@@ -130,9 +142,7 @@ public class Results extends Fragment implements Observer {
                         case Global.LIST_GOLF_GAME_RESULT:
                             if (parameter.equals(Global.OK)) {
                                 Global.setGolfGameResults((List<Golf_Game_Results>) request.getObject());
-
                                 showResults();
-
                             }
                     }
                 }
@@ -146,70 +156,79 @@ public class Results extends Fragment implements Observer {
      *
      * @author Antonio Rodríguez Sirgado
      */
-    private void ListResults() {
+    private void listResults() {
         Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.LIST_GOLF_GAME_RESULT, Integer.toString(currentGame.getId_golf_game()), null);
         RequestServer request = new RequestServer();
         request.request(message);
         request.addObserver(this);
     }
 
+    /**
+     * Muestra los resultados por pantalla
+     * @author Antonio Rodríguez Sirgado
+     */
     private void showResults() {
 
-        if (Global.getGolfGameResults() == null ) {
-            ListResults();
-        } else {
-            if (Global.getGolfGameResults().get(0).getGolf_game().getId_golf_game() == currentGame.getId_golf_game()){
-                getActivity().runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                txt_course.setText(currentGame.getGolf_course().getGolf_course());
+                txt_courseType.setText(Global.getGolfGameResults().get(0).getGolf_course().getGolf_course_type().getGolf_course_type());
+
+                for (Golf_Game_Players ggp : currentGame.getGolf_game_players()) {
+                    listNamePlayers.add(ggp.getPlayer().getUser().getUsername());
+                }
+
+                for (int i = 1; i < currentGame.getGolf_course().getHoles() + 1; i++) {
+                    listHoles.add(String.valueOf(i));
+                }
+
+                adapterUserList = new AdapterUserList(listNamePlayers);
+                rv_Users.setAdapter(adapterUserList);
+                txt_selectPlayer.setVisibility(View.VISIBLE);
+
+                adapterHoleList = new AdapterHoleList(listHoles);
+                rv_Holes.setAdapter(adapterHoleList);
+                txt_selectHole.setVisibility(View.VISIBLE);
+
+                adapterResultList = new AdapterResultList(Global.getGolfGameResults());
+                rv_Results.setAdapter(adapterResultList);
+                rv_Results.setVisibility(View.VISIBLE);
+
+
+                adapterHoleList.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void run() {
-
-                        txtCourse.setText(currentGame.getGolf_course().getGolf_course());
-                        //txtCourseType.setText(currentGame.getGolf_course().getGolf_course_type().getGolf_course_type());
-
-                        for (Golf_Game_Players ggp : currentGame.getGolf_game_players()) {
-                            listNamePlayers.add(ggp.getPlayer().getUser().getUsername());
-                        }
-
-                        for (int i = 1; i < currentGame.getGolf_course().getHoles() + 1; i++) {
-                            listHoles.add(String.valueOf(i));
-                        }
-
-                        adapterPlayersList = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listNamePlayers);
-                        listPlayersView.setAdapter(adapterPlayersList);
-
-                        adapterHoleList = new AdapterHoleList(listHoles);
-                        rvHoles.setAdapter(adapterHoleList);
-
-                        adapterResultList = new AdapterResultList(Global.getGolfGameResults());
-                        rvResults.setAdapter(adapterResultList);
-
-                        adapterHoleList.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                adapterResultList.filterHole(listHoles.get(rvHoles.getChildAdapterPosition(v)));
-                                Log.d(Global.TAG, "Pulsando: " + listHoles.get(rvHoles.getChildAdapterPosition(v)));
-                                rvResults.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-                        listPlayersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                rvResults.setVisibility(View.VISIBLE);
-                                adapterResultList.filterPlayer(listNamePlayers.get(position));
-                            }
-                        });
-
-                        listPlayersView.setVisibility(View.VISIBLE);
-                        loading.setVisibility(View.GONE);
+                    public void onClick(View v) {
+                        adapterResultList.filterHole(listHoles.get(rv_Holes.getChildAdapterPosition(v)));
                     }
                 });
-            } else {
-                ListResults();
+
+                adapterUserList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rv_Results.setVisibility(View.VISIBLE);
+                        adapterResultList.filterPlayer(listNamePlayers.get(rv_Users.getChildAdapterPosition(v)));
+                    }
+                });
+
+                rv_Users.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.GONE);
             }
+        });
 
+    }
 
-        }
-
+    /**
+     * <b>Envia el mensaje para parar el partido seleccionado</b><br>
+     * Mensaje = (token¬device, EndGolfGame, id golf game, null)
+     *
+     * @author Antonio Rodríguez Sirgado
+     */
+    private void updateResults() {
+        Message message = new Message(Utils.getActiveToken(getActivity()) + "¬" + Utils.getDevice(getActivity()), Global.UPDATE_GOLF_GAME_RESULTS, null, Global.getGolfGameResults());
+        RequestServer request = new RequestServer();
+        request.request(message);
+        request.addObserver(this);
     }
 }

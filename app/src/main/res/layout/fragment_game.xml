@@ -26,7 +26,6 @@
                 android:background="@color/grey"
                 android:gravity="center"
                 android:paddingVertical="10dp"
-                android:text="Installation"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="Installation" />

@@ -28,7 +28,7 @@ import Forat19.Player_Information;
 import Forat19.Player_Types;
 import Forat19.Players;
 import proyecto.golfus.forat19.Global;
-import proyecto.golfus.forat19.R;
+import proyecto.golfus.forat19.*;
 import proyecto.golfus.forat19.adapterList.AdapterDataList;
 import proyecto.golfus.forat19.ui.start.Principal;
 import proyecto.golfus.forat19.utils.Reply;
@@ -159,8 +159,13 @@ public class AddPlayer extends Fragment implements Observer {
                             }
                             break;
                         case Global.ADD_PLAYER:
-                            Fragment fragment = new Principal();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                            if (parameter.equals(Global.OK)){
+                                Utils.showSnack(getView(), getString(R.string.gamer_succesfully_added), Snackbar.LENGTH_LONG);
+                                Fragment fragment = new Principal();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "principal").commit();
+                            } else if (parameter.equals(Global.ERROR2)){
+                                Utils.showSnack(getView(), getString(R.string.You_already_have_that_type_of_player), Snackbar.LENGTH_LONG);
+                            }
                             break;
                     }
                 }

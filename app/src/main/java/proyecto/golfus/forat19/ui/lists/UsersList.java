@@ -38,7 +38,7 @@ import proyecto.golfus.forat19.utils.Utils;
  *
  * @author Antonio Rodríguez Sirgado
  */
-public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener {
+public class UsersList extends Fragment implements Observer, SearchView.OnQueryTextListener, View.OnClickListener {
 
     private Message request;
     private ArrayList<Users> listUsers;
@@ -77,43 +77,40 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         btn_allUsers.setBackgroundColor(getResources().getColor(R.color.green));
 
-        // boton Todos los usuarios
-        btn_allUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideKeyboard(getActivity());
-                changeButtonColor(btn_allUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_ALL_USERS);
-            }
-        });
-        // boton usuarios activos
-        btn_activeUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideKeyboard(getActivity());
-                changeButtonColor(btn_activeUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_ACTIVE_USERS);
-            }
-        });
-        // boton usuarios inactivos
-        btn_inactiveUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideKeyboard(getActivity());
-                changeButtonColor(btn_inactiveUsers);
-                loading.setVisibility(View.VISIBLE);
-                loadUsers(Global.LIST_INACTIVE_USERS);
-
-            }
-        });
+        btn_activeUsers.setOnClickListener(this);
+        btn_allUsers.setOnClickListener(this);
+        btn_inactiveUsers.setOnClickListener(this);
 
         searchUserList.setOnQueryTextListener(this);
 
         loading.setVisibility(View.VISIBLE);
         loadUsers(Global.LIST_ALL_USERS);
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_allUsers:
+                Utils.hideKeyboard(getActivity());
+                changeButtonColor(btn_allUsers);
+                loading.setVisibility(View.VISIBLE);
+                loadUsers(Global.LIST_ALL_USERS);
+                break;
+            case R.id.btn_ActiveUsers:
+                Utils.hideKeyboard(getActivity());
+                changeButtonColor(btn_activeUsers);
+                loading.setVisibility(View.VISIBLE);
+                loadUsers(Global.LIST_ACTIVE_USERS);
+                break;
+            case R.id.btn_InactiveUsers:
+                Utils.hideKeyboard(getActivity());
+                changeButtonColor(btn_inactiveUsers);
+                loading.setVisibility(View.VISIBLE);
+                loadUsers(Global.LIST_INACTIVE_USERS);
+                break;
+
+        }
     }
 
 
@@ -211,4 +208,6 @@ public class UsersList extends Fragment implements Observer, SearchView.OnQueryT
         request.request(message);
         request.addObserver(this);
     }
+
+
 }

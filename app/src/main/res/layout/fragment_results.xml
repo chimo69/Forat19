@@ -52,31 +52,35 @@
             android:indeterminate="true" />
 
         <TextView
-            android:id="@+id/textView61"
+            android:id="@+id/txt_result_selectPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/select_player" />
+            android:text="@string/select_player"
+            android:visibility="gone" />
 
-        <ListView
-            android:id="@+id/lv_result_players"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_results_users"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginHorizontal="10dp"
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView47"
+            android:id="@+id/txt_result_selectHole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Select hole" />
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/select_hole"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_result_holes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_result_results"
